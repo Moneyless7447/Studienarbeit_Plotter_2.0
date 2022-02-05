@@ -12,3 +12,7 @@ if __name__ == '__main__':
     treestructure = robot.restructure_json("example_robot_dh.json")
     print('Start robot: \n')
     print(f"treestructure: {treestructure}")
+    print(f"rootelements von robot: {getattr(robot, 'rootelements')}")
+    print(f"kin_chain_list test: {robot.init_kin_chain('1')}")
+
+    print(f"test twist {treestructure['1.1.1'].offset}")
