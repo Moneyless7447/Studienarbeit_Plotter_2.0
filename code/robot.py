@@ -24,6 +24,16 @@ class Robot:
     def __init__(self, robot_name):
         self.name: str = robot_name
         self.rootelements = []
+        self.treestructure = {}
+
+
+
+    #     def init_robot(self, file_name: str):
+    #         self.treestructure = self.restructure_json(file_name)
+    #         print(f"bla bla: {self.treestructure}")
+    #
+    # init_robot("example_robot_dh.json")
+
     """
     # Einlesen der JSON Datenstruktur und Erstellung von doppelt verketteten Jointobjekten
     def restructure_json(self, filename: str):
@@ -140,9 +150,12 @@ class Robot:
         '''
 
         kin_chain_list = [[key_leg]]
-        #for i in range(len())
-        
+
+        #for i in range(len(joint.))
+
+
         return kin_chain_list
 
-
+    # def init_robot(self, file_name:str):
+    #     self.treestructure = self.restructure_json(file_name)
 
