@@ -1,11 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
-# from robot import *
+from robot import *
+from joint import *
 import json
-from joint import Joint
 from mpl_toolkits.mplot3d import Axes3D
 import os
 
 if __name__ == '__main__':
-    joint1 = Joint("1", 1, 1, 0, 0, "alpha", "rotation", "", "")
+    robot = Robot("test_roboter")
+    treestructure = robot.restructure_json("example_robot_dh.json")
+    print('Start robot: \n')
+    print(f"treestructure: {treestructure}")
