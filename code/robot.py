@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from urllib import robotparser
+
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -21,141 +23,44 @@ class Joint:
 
 class Robot:
 
-    def __init__(self, robot_name):
+    def __init__(self, robot_name, file_name):
         self.name: str = robot_name
-        self.rootelements = []
-        self.treestructure = {}
+        #self.rootelements = []
+        #self.init_kin_chain("1")
+        self.root = Joint(name="0", angle=0, length=0, offset=0, twist=0, title="root", type=None, children=[], previous=None)
+        self.build_from_json(file_name)
+        self.root.generate_dh_matrices_to_children()
 
 
-
-    #     def init_robot(self, file_name: str):
-    #         self.treestructure = self.restructure_json(file_name)
-    #         print(f"bla bla: {self.treestructure}")
-    #
-    # init_robot("example_robot_dh.json")
-
-    """
-    # Einlesen der JSON Datenstruktur und Erstellung von doppelt verketteten Jointobjekten
-    def restructure_json(self, filename: str):
+    def build_from_json(self, file_name: str):
         '''
         Rekursives Durchlaufen der Baumstruktur um verkettete Objekte zu erzeugen
-        :param filename: Name der JSON Roboter Datei
+        :param file_name: Name der JSON Roboter Datei
         :return: Liste aus allein erstellten Jointobjekten mit jeweiligen Attributen
         '''
         # laden der Daten
-        with open(os.path.join(".", filename)) as data:
+        with open(os.path.join(".", file_name)) as data:
             test_data = json.load(data)
+        self.append_children(self.root, test_data["robot"])
 
 
-        def build_tree(data_list: list):
-            # rekursive Funktion
-            def _build_tree(data: dict, result: list = list(), key: str = "1", previous_key: str = "0"):
-                # wenn keine children angegeben sind, muss es sich um ein aeusseren Knoten/ Blatt handeln,
-                # letzte Rekursionsstufe
-                if 'children' not in data:
-                    # Erzeugen des Joint Objektes
-                    child = Joint(key, data["angle"], data["length"], data["offset"], data["twist"], data["title"],
-                                  data["type"],
-                                  list(), previous_key)
-                    result.append(child)
-                    # Eintragen der Rootelemente in rootelements (Liste)
-                    if previous_key == "0":
-                        self.rootelements.append(key)
-                    return child
-                else:
-                    # Erzeugen des Joint Objektes
-                    parent = Joint(key, data["angle"], data["length"], data["offset"], data["twist"], data["title"],
-                                   data["type"],
-                                   list(), previous_key)
-                    # Eintragen der Rootelemente in rootelements (Liste)
-                    if previous_key == "0":
-                        self.rootelements.append(key)
-                    # Rekursiver Funktionsaufruf für Kinder
-                    for index, value in enumerate(data['children']):
-                        new_key = f"{key}.{index + 1}"
-                        child = _build_tree(data=value, result=result, key=new_key, previous_key=key)
-                        parent.children.append(child.name if child is not None else "")
-                    result.append(parent)
-                    return
-
-            result = list()
-            # iteratives Aufrufen der rekursiven Funktion für jedes Kind der Wurzel
-            for index, value in enumerate(data_list):
-                _build_tree(data=value, result=result, key=f"{index + 1}")
-            return result
-
-        robot = test_data['robot']
-        joints = build_tree(robot)
-        return joints
-    """
-
-    def restructure_json(self, filename: str):
-        '''
-        Rekursives Durchlaufen der Baumstruktur um verkettete Objekte zu erzeugen
-        :param filename: Name der JSON Roboter Datei
-        :return: Liste aus allein erstellten Jointobjekten mit jeweiligen Attributen
-        '''
-        # laden der Daten
-        with open(os.path.join(".", filename)) as data:
-            test_data = json.load(data)
-
-        def build_tree(data_list: list):
-            # rekursive Funktion
-            def _build_tree(data: dict, result: dict = dict(), key: str = "1", previous_key: str = "0"):
-                # wenn keine children angegeben sind, muss es sich um ein aeusseren Knoten/ Blatt handeln,
-                # letzte Rekursionsstufe
-                if 'children' not in data:
-                    # Erzeugen des Joint Objektes
-                    child = Joint(key, data["angle"], data["length"], data["offset"], data["twist"], data["title"],
-                                  data["type"],
-                                  list(), previous_key)
-                    result.update({key: child})
-                    # Eintragen der Rootelemente in rootelements (Liste)
-                    if previous_key == "0":
-                        self.rootelements.append(key)
-                    return child
-                else:
-                    # Erzeugen des Joint Objektes
-                    parent = Joint(key, data["angle"], data["length"], data["offset"], data["twist"], data["title"],
-                                   data["type"],
-                                   list(), previous_key)
-                    # Eintragen der Rootelemente in rootelements (Liste)
-                    if previous_key == "0":
-                        self.rootelements.append(key)
-                    # Rekursiver Funktionsaufruf für Kinder
-                    for index, value in enumerate(data['children']):
-                        new_key = f"{key}.{index + 1}"
-                        child = _build_tree(data=value, result=result, key=new_key, previous_key=key)
-                        parent.children.append(child.name if child is not None else "")
-                    result.update({key: parent})
-                    return
-
-            result = dict()
-            # iteratives Aufrufen der rekursiven Funktion für jedes Kind der Wurzel
-            for index, value in enumerate(data_list):
-                _build_tree(data=value, result=result, key=f"{index + 1}")
-            return result
-
-        robot = test_data['robot']
-        joints = build_tree(robot)
-        return joints
-    # Erzeugt für geg. Rootelement (z.B. Beinansatz) eine kinematische Kette aller Gelenke für diesen Teilbaum
-    def init_kin_chain(self, key_leg):
-        '''
-        Eine Liste aus Listen für Gelenk 1 bis n mit der kinematischen Kette fuer das jeweilige Gelenk bis zum
-        Basiskoordinatensystem (oberste Wurzel -> Körper)
-        :param key_leg: key des Rootelements der zu untersuchenden Struktur (z.B. 1. Gelenk von Bein 1)
-        :return: Bsp.: [['0', '1'], ['0', '1', '1.1'], ['0', '1', '1.2'], ['0', '1', '1.1', '1.1.1],
-                        ['0', '1', '1.1', '1.1.2']]
-        '''
-
-        kin_chain_list = [[key_leg]]
-
-        #for i in range(len(joint.))
+    def append_children(self,parent, children_list):
+        if not children_list:
+            return
+        for index, child in enumerate(children_list):
+            child_object = Joint(name=f"{parent.name}.{(index+1)}", angle=child["angle"], length=child["length"], offset=child["offset"],
+                              twist=child["twist"], title=child["title"],
+                              type=child["type"], children=list(), previous=None)
+            if "children" in child:
+                self.append_children(child_object, child["children"])
+            parent.append(child_object)
 
 
-        return kin_chain_list
+    def generate_dh_matrix_from_to(self, _from, _to):
+        return self.root[_from].generate_dh_matrix_to(_to)
 
-    # def init_robot(self, file_name:str):
-    #     self.treestructure = self.restructure_json(file_name)
+    def set_joint(self, title, value):
+        self.root[title].set_joint(value)
+
+
 
