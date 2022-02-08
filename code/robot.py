@@ -14,11 +14,6 @@ Konvertiert eine gegebene Baumstruktur (JSON Format) in eine Objektbaumstruktur
 (nutzt die Klasse Joints)
 '''
 
-"""
-class Joint:
-    def __init__(self, **kwargs):
-        
-"""
 
 
 class Robot:
@@ -26,7 +21,6 @@ class Robot:
     def __init__(self, robot_name, file_name):
         self.name: str = robot_name
         #self.rootelements = []
-        #self.init_kin_chain("1")
         self.root = Joint(name="0", angle=0, length=0, offset=0, twist=0, title="root", type=None, children=[], previous=None)
         self.build_from_json(file_name)
         self.root.generate_dh_matrices_to_children()
@@ -48,6 +42,8 @@ class Robot:
         if not children_list:
             return
         for index, child in enumerate(children_list):
+
+
             child_object = Joint(name=f"{parent.name}.{(index+1)}", angle=child["angle"], length=child["length"], offset=child["offset"],
                               twist=child["twist"], title=child["title"],
                               type=child["type"], children=list(), previous=None)

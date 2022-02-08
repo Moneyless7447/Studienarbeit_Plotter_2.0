@@ -9,15 +9,15 @@ class Plotter:
         self.fig = plt.figure()
         #plt.ion()
         self.axes = self.fig.add_subplot(111, projection='3d')
-        # self.plot(self.robot.root, self.axes, root=True)
+        self.plot(self.robot.root, self.axes, root=True)
         self.axes.set_xlim3d([-7, 7])
         self.axes.set_ylim3d([-7, 7])
         self.axes.set_zlim3d([-7, 7])
-        #plt.show()
-        # plt.plot()
+        plt.show()
+        plt.plot()
 
     def plot(self, joint, axes, matrix=np.identity(4), root=False):
-        axes.clear()
+        #axes.clear()   #Clear ist falsch an der Stelle
 
         scale = 1 if not root else 2.1
         origin_point = np.dot(matrix, [0, 0, 0, 1])[:3]
@@ -26,7 +26,7 @@ class Plotter:
         z_axis_point = np.dot(matrix, [0, 0, scale, 1])[:3]
 
         axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'k.')
-        axes.plot([origin_point[0],x_axis_point[0]], [origin_point[1], x_axis_point[1]],
+        axes.plot([origin_point[0], x_axis_point[0]], [origin_point[1], x_axis_point[1]],
                   [origin_point[2], x_axis_point[2]], 'r-', linewidth=0.5*scale)
         axes.plot([origin_point[0], y_axis_point[0]], [origin_point[1], y_axis_point[1]],
                   [origin_point[2], y_axis_point[2]], 'g-', linewidth=0.5*scale)

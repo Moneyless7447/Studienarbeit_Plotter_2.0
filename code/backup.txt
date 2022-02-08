@@ -106,3 +106,50 @@
         joints = build_tree(robot)
         return joints
     """
+
+
+if __name__ == "__main__":
+    branch_2_data = {"name": "name2",
+                     "angle": "angle",
+                     "length": "length",
+                     "offset": "offset",
+                     "twist": "twist",
+                     "title": "title",
+                     "type": "type",
+                     "children": [],
+                     "previous": "previous"}
+
+    j2 = Joint(**branch_2_data)
+
+    branch_1_data = {"name": "name1",
+                     "angle": "angle",
+                     "length": "length",
+                     "offset": "offset",
+                     "twist": "twist",
+                     "title": "title",
+                     "type": "type",
+                     "children": [],
+                     "previous": "previous"}
+
+    j1 = Joint(**branch_1_data)
+
+    root_data = {"name": "name",
+                 "angle": "angle",
+                 "length": "length",
+                 "offset": "offset",
+                 "twist": "twist",
+                 "title": "title",
+                 "type": "type",
+                 "children": [j1, j2],
+                 "previous": "previous"}
+
+    j = Joint(**root_data)
+    pprint(j.next().name)
+    pprint(j.next().name)
+    pprint(j.next().name)
+    pprint(j.next().name)
+    j1.name="neuer Name"
+    pprint(j.next().name)
+    pprint(j.next().name)
+    pprint(j.next().name)
+    pprint(j.next().name)

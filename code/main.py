@@ -15,20 +15,20 @@ if __name__ == '__main__':
     robot = Robot("test_roboter", "example_robot_dh.json")
     print(f"robot: {robot.root}")
     print(f"dh to A: {robot.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
-    robot.set_joint("Alpha1-Gelenk", math.radians(180))
-    print(f"dh to A: {robot.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
+    # robot.set_joint("Alpha1-Gelenk", math.radians(45))
+    # print(f"dh to A: {robot.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
     plotter = Plotter(robot)
-    plotter.update()
+    # plotter.update()
     counter = 0
     direction = 1
-    while True:
-        time.sleep(3)
-        robot.set_joint("Alpha1-Gelenk", math.radians(90)*counter)
-        print(f"dh to A: {robot.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
-        plotter.update()
-        counter = counter+(0.1*direction)
-        if counter >= 1:
-            direction = -1
-        elif counter <= 0:
-            direction = 1
-        print(counter)
+    # while True:
+    #     time.sleep(3)
+    #     robot.set_joint("Alpha1-Gelenk", math.radians(90)*counter)
+    #     print(f"dh to A: {robot.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
+    #     plotter.update()
+    #     counter = counter+(0.1*direction)
+    #     if counter >= 1:
+    #         direction = -1
+    #     elif counter <= 0:
+    #         direction = 1
+    #     print(counter)
