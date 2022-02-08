@@ -10,6 +10,11 @@ import os
 import time
 
 
+"""
+Hauptdatei, von hier aus können Roboter Objekte und die 
+dazugehörigen Plotter Objekte erzeugt werden. 
+"""
+
 if __name__ == '__main__':
     print('Start robot: \n')
     robot = Robot("test_roboter", "example_robot_dh.json")

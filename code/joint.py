@@ -2,19 +2,7 @@ from dataclasses import dataclass
 from pprint import pprint
 import numpy as np
 
-#
-# @dataclass
-# class Joint:
-#     name: str
-#     angle: float
-#     length: float
-#     offset: float
-#     twist: float
-#     title: str
-#     type: str
-#     children: list
-#     previous: str
-#
+
 
 class Joint:
     def __init__(self, **kwargs):
@@ -50,7 +38,9 @@ class Joint:
                 return res
 
     def append(self, joint):
+        # setzt Elter als Elter für Kind
         joint.previous = self
+        # Setzt Kind als Kind von Elter (Eintragen von Objekt in Liste Children)
         self.children.append(joint)
         self.transformationmatrices_to_children.append(None)
 
@@ -70,6 +60,12 @@ class Joint:
 
 
     def generate_dh_matrix_to(self, title):
+        '''
+        Sucht angegebenes Objekt mit dem angegebenem Titel.
+        Erzeugt Transformationsmatrix bis zu diesem Objekt.
+        :param title: Titel vo. Zielobjekt
+        :return: Transformationsmatrix von Objekt zu Zielobjekt
+        '''
         if not self.children:
             return None
         for index, child in enumerate(self.children):
