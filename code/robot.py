@@ -111,11 +111,12 @@ class Robot:
     def generate_dh_matrix_from_to(self, _from, _to):
         '''
         Erzeugt DH Transformationsmatrix von Objekt A zu Objekt B.
-        Voraussetzung Objekt B ist Kind bzw. Nachkomme von Objekt A.
-        :param _from: Objekt A
+        Voraussetzung: Objekt B ist Kind bzw. Nachkomme von Objekt A.
+        :param _from: Titel von Objekt A
         :param _to: Titel von objekt B
         :return: Transformationsmatirx_A_B
         '''
+        # Zugriff auf __getitem__
         return self.root[_from].generate_dh_matrix_to(_to)
 
     def set_joint(self, title, value):
