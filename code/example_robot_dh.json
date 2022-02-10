@@ -3,7 +3,7 @@
     {
       "title": "Alpha1-Gelenk",
       "type": "rotation",
-      "angle": "pi/2",
+      "angle": "1.5707963",
       "length": "1.2",
       "offset": "1.3",
       "twist": "0",
@@ -14,7 +14,7 @@
           "angle": "0",
           "length": "2.3",
           "offset": "1",
-          "twist": "pi",
+          "twist": "3.14159",
           "children": [
             {
               "title": "Gamma1-Gelenk",

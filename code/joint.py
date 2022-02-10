@@ -6,7 +6,7 @@ import numpy as np
 
 class Joint:
     def __init__(self, **kwargs):
-        self.iterator = 0
+        #self.iterator = 0
         self.name = kwargs["name"]
         self.angle = float(kwargs["angle"])
         self.length = float(kwargs["length"])
@@ -79,10 +79,19 @@ class Joint:
 
     def set_joint(self, value):
         if self.type == "rotation":
+            self.angle_offset += value
+        elif self.type == "translate":
+            self.length_offset += value
+        self.previous.generate_dh_matrices_to_children()
+
+    def set_joint_to_absolute(self, value):
+        if self.type == "rotation":
             self.angle_offset = value
         elif self.type == "translate":
             self.length_offset = value
         self.previous.generate_dh_matrices_to_children()
 
-
-
+    def reset_joint_offsets(self):
+        self.angle_offset = 0
+        self.length_offset = 0
+        self.previous.generate_dh_matrices_to_children()

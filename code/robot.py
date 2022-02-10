@@ -19,7 +19,8 @@ Konvertiert eine gegebene Baumstruktur (JSON Format) in eine Objektbaumstruktur 
 class Robot:
 
     def __init__(self, robot_name, file_name):
-        self.name: str = robot_name
+        self.name = robot_name
+        #self.name: str = robot_name
         #setze Dummygelenk als Ursprung/Basis
         self.root = Joint(name="0", angle=0, length=0, offset=0, twist=0, title="root", type=None, children=[], previous=None)
         self.build_from_json(file_name)
