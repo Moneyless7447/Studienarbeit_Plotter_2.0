@@ -123,5 +123,7 @@ class Robot:
     def set_joint(self, title, value):
         self.root[title].set_joint(value)
 
+    def reset_joint_offsets(self, title):
+        self.root[title].reset_joint_offsets()
 
 

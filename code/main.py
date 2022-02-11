@@ -31,12 +31,16 @@ if __name__ == '__main__':
     plotter.plot(plotter.robot.root, plotter.axes, root=True)
     print("+n+n+n+n+n+")
 
+    # while True:
+    #     robot2.set_joint("Alpha1-Gelenk", math.radians(45))
+    #     plotter.update()
+    #     robot2.reset_joint_offsets("Alpha1-Gelenk")
+    #     plotter.update()
+    #     #plotter.plotter_show()
+    #     #plotter.update()
     robot2.set_joint("Alpha1-Gelenk", math.radians(45))
-    plotter.update()
-
+    plotter.update("bla")
     plotter.plotter_show()
-        #plotter.update()
-
 
     # time.sleep(3)
     # plotter.wait(3)
@@ -44,9 +48,9 @@ if __name__ == '__main__':
     # counter = 0
     # direction = 1
     # plotter.fig.show()
-    while True:
-       plotter.fig.show()
-       
+    # while True:
+    #     plotter.fig.show()
+
         #plotter.fig.canvas.draw()
 
     #     robot2.set_joint("Alpha1-Gelenk", math.radians(90)*counter)

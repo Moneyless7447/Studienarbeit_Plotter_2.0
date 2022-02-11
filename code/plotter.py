@@ -23,14 +23,14 @@ class Plotter:
 
         axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
         bnext = Button(axnext, 'Next')
-        bnext.on_clicked(self.update())
+        bnext.on_clicked(self.update)
         #bnext.on_clicked(print("button clicked"))
         ###plt.show()
 
         plt.ion()
         plt.show()
         plt.draw()
-        #plt.pause(0.111)
+        plt.pause(3)
         #bnext.on_clicked(self.update)
 
     def plot(self, joint, axes, matrix=np.identity(4), root=False):
@@ -62,7 +62,7 @@ class Plotter:
 
 
 
-    def update(self):
+    def update(self, argument1):
         self.axes.clear()
         self.plot(self.robot.root, self.axes, root=True)
         self.axes.set(xlim3d=(-7, 7), xlabel='x')
@@ -71,12 +71,13 @@ class Plotter:
              #plt.show()
         # self.fig.show()
         plt.draw()
-        plt.pause(0.1)
+        plt.pause(2)
         plt.show(block=False)
-        print("++++++++++++1+++")
+
+
 
     def plotter_show(self):
-        print(".....")
+
         plt.show(block=True)
 
     def wait(self, time_in_sec):
