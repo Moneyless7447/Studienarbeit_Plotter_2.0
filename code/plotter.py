@@ -4,11 +4,12 @@ import matplotlib.animation as animation
 import time
 from matplotlib.widgets import Button
 
+
 class Plotter:
     def __init__(self, robot):
         self.robot = robot
         #plt.ion()
-        self.fig = plt.figure()
+        self.fig = plt.figure() ###
         #plt.ion()
         self.axes = self.fig.add_subplot(111, projection='3d')
 
@@ -17,21 +18,22 @@ class Plotter:
         self.axes.set(xlim3d=(-7, 7), xlabel='x')
         self.axes.set(ylim3d=(-7, 7), ylabel='y')
         self.axes.set(zlim3d=(-7, 7), zlabel='z')
-        #
-        # plt.show()
-        # plt.plot()
-        #hier
-        #self.fig.canvas.draw()
-        #self.fig.canvas.flush_events()
+
+
+
         axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
         bnext = Button(axnext, 'Next')
-        bnext.on_clicked((self.update()))
+        bnext.on_clicked(self.update())
+        #bnext.on_clicked(print("button clicked"))
+        ###plt.show()
+
+        plt.ion()
         plt.show()
-
-
+        plt.draw()
+        #plt.pause(0.111)
+        #bnext.on_clicked(self.update)
 
     def plot(self, joint, axes, matrix=np.identity(4), root=False):
-        #axes.clear() #falsche stelle, durch rekursiven Ansatz löscht es vorherige Gelenke
 
         scale = 1 if not root else 2.1
         origin_point = np.dot(matrix, [0, 0, 0, 1])[:3]
@@ -58,9 +60,7 @@ class Plotter:
 
             self.plot(child, axes, child_matrix)
 
-        self.fig.show()
-        #hier
-        #self.fig.canvas.draw()
+
 
     def update(self):
         self.axes.clear()
@@ -69,10 +69,16 @@ class Plotter:
         self.axes.set(ylim3d=(-7, 7), ylabel='y')
         self.axes.set(zlim3d=(-7, 7), zlabel='z')
              #plt.show()
-        self.fig.show()
-        #hier
-        # self.fig.canvas.draw()
-        # self.fig.canvas.flush_events()
+        # self.fig.show()
+        plt.draw()
+        plt.pause(0.1)
+        plt.show(block=False)
+        print("++++++++++++1+++")
+
+    def plotter_show(self):
+        print(".....")
+        plt.show(block=True)
 
     def wait(self, time_in_sec):
         time.sleep(time_in_sec)
+
