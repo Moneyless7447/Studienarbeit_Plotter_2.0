@@ -8,7 +8,7 @@ import json
 from mpl_toolkits.mplot3d import Axes3D
 import os
 import time
-import matplotlib.animation as animation
+
 
 """
 Hauptdatei, von hier aus können Roboter Objekte und die 
@@ -29,6 +29,7 @@ if __name__ == '__main__':
 
 
     plotter.plot(plotter.robot.root, plotter.axes, root=True)
+    plotter.plotter_show()
     print("+n+n+n+n+n+")
 
     # while True:
@@ -38,10 +39,14 @@ if __name__ == '__main__':
     #     plotter.update()
     #     #plotter.plotter_show()
     #     #plotter.update()
-    robot2.set_joint("Alpha1-Gelenk", math.radians(45))
-    plotter.update("bla")
-    plotter.plotter_show()
 
+    #funktioniert:
+    #robot2.set_joint("Alpha1-Gelenk", math.radians(45))
+    #plotter.update("bla")
+
+
+
+    plotter.plotter_show()
     # time.sleep(3)
     # plotter.wait(3)
     #plotter.update()

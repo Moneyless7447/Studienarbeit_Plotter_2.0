@@ -3,14 +3,17 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import time
 from matplotlib.widgets import Button
+import math
 
 
 class Plotter:
     def __init__(self, robot):
         self.robot = robot
         #plt.ion()
-        self.fig = plt.figure() ###
+        self.fig = plt.figure()
+
         #plt.ion()
+
         self.axes = self.fig.add_subplot(111, projection='3d')
 
         self.plot(self.robot.root, self.axes, root=True)
@@ -21,16 +24,15 @@ class Plotter:
 
 
 
-        axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
-        bnext = Button(axnext, 'Next')
-        bnext.on_clicked(self.update)
-        #bnext.on_clicked(print("button clicked"))
-        ###plt.show()
+        self.axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
+        self.bnext = Button(self.axnext, 'Next')
+        self.bnext.on_clicked(self.set_joint_and_update)
+
 
         plt.ion()
         plt.show()
         plt.draw()
-        plt.pause(3)
+        #plt.pause(3)
         #bnext.on_clicked(self.update)
 
     def plot(self, joint, axes, matrix=np.identity(4), root=False):
@@ -71,8 +73,9 @@ class Plotter:
              #plt.show()
         # self.fig.show()
         plt.draw()
-        plt.pause(2)
+        #plt.pause(2)
         plt.show(block=False)
+        #plt.show()
 
 
 
@@ -83,3 +86,10 @@ class Plotter:
     def wait(self, time_in_sec):
         time.sleep(time_in_sec)
 
+    def print_button_clicked(self, _):
+        print("button_clicked")
+
+
+    def set_joint_and_update(self, _):
+        self.robot.set_joint("Alpha1-Gelenk", math.radians(45))
+        self.update(None)
