@@ -15,6 +15,7 @@
           "length": "2.3",
           "offset": "1",
           "twist": "pi",
+          "closed_kin_title" : ["Alpha1-Gelenk"],
           "children": [
             {
               "title": "Gamma1-Gelenk",
