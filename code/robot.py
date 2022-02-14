@@ -97,8 +97,34 @@ class Robot:
             #########################################################################
             # </editor-fold>
 
+            parent_dh_depth = parent.name.split("_")[-1]
+            # if parent.name == "root":
+            #     if len(children_list) > 1:
+            #         c_name = f"test"
+            #         #c_name = f"{index}" + f"_{parent_dh_depth + 1}"
+            #     else:
+            #         c_name = f"{index}"
+            # else:
+
+            if parent.title != "root":
+                if len(children_list) == 1:
+                    if "_" in parent.name:
+                        c_name = parent.name.split('_')[0]+ f"_{int(parent_dh_depth) + 1}"
+                    else:
+                        c_name = f"{int(parent_dh_depth) + 1}"
+                else:
+                    if "_" in parent.name:
+                        c_name = parent.name.split('_')[0] + f".{index}" + f"_{int(parent_dh_depth) + 1}"
+                    else:
+                        c_name = f"{index}" + f"_{int(parent_dh_depth) + 1}"
+            else:
+                if len(children_list) == 1:
+                    c_name = "1"
+                else:
+                    c_name = f"{index}_"+"1"
+
             # Joint Objekt wird erzeugt
-            child_object = Joint(name=f"{parent.name}.{(index+1)}", angle=tmp_angle, length=child["length"], offset=child["offset"],
+            child_object = Joint(name=c_name, angle=tmp_angle, length=child["length"], offset=child["offset"],
                               twist=tmp_twist, title=child["title"],
                               type=child["type"], children=list(), previous=None)
 
@@ -122,6 +148,9 @@ class Robot:
 
     def set_joint(self, title, value):
         self.root[title].set_joint(value)
+
+    def set_joint_to_absolute(self, title, value):
+        self.root[title].set_joint_to_absolute(value)
 
     def reset_joint_offsets(self, title):
         self.root[title].reset_joint_offsets()

@@ -51,6 +51,7 @@ class Plotter:
         axes.plot([origin_point[0], z_axis_point[0]], [origin_point[1], z_axis_point[1]],
                   [origin_point[2], z_axis_point[2]], 'b-', linewidth=0.5*scale)
         #axes.text(origin_point[0], origin_point[1], origin_point[2], joint.title)
+        axes.text(origin_point[0], origin_point[1], origin_point[2], joint.name, fontsize = 'small')
 
         if joint.children is None:
             return
@@ -91,5 +92,7 @@ class Plotter:
 
 
     def set_joint_and_update(self, _):
-        self.robot.set_joint("Alpha1-Gelenk", math.radians(45))
+        self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
+        #self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         self.update(None)
+

@@ -52,7 +52,7 @@ class Joint:
             return
         for index, child in enumerate(self.children):
 
-            self.transformationmatrices_to_children[index] = np.array([[np.cos(child.angle+child.angle_offset), -np.sin(child.angle+child.angle_offset)*np.cos(child.twist), np.sin(child.angle+child.angle_offset)*np.sin(child.twist), child.length*np.cos(child.angle+child.angle_offset)],
+            self.transformationmatrices_to_children[index] = np.array([[np.cos(child.angle+child.angle_offset), -np.sin(child.angle+child.angle_offset)*np.cos(child.twist), np.sin(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.cos(child.angle+child.angle_offset)],
                                                                        [np.sin(child.angle+child.angle_offset), np.cos(child.angle+child.angle_offset)*np.cos(child.twist), -np.cos(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.sin(child.angle+child.angle_offset)],
                                                                        [0, np.sin(child.twist), np.cos(child.twist), child.offset],
                                                                        [0, 0, 0, 1]])
@@ -80,14 +80,14 @@ class Joint:
     def set_joint(self, value):
         if self.type == "rotation":
             self.angle_offset += value
-        elif self.type == "translate":
+        elif self.type == "translation":
             self.length_offset += value
         self.previous.generate_dh_matrices_to_children()
 
     def set_joint_to_absolute(self, value):
         if self.type == "rotation":
             self.angle_offset = value
-        elif self.type == "translate":
+        elif self.type == "translation":
             self.length_offset = value
         self.previous.generate_dh_matrices_to_children()
 

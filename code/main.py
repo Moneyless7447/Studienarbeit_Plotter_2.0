@@ -29,6 +29,7 @@ if __name__ == '__main__':
 
 
     plotter.plot(plotter.robot.root, plotter.axes, root=True)
+    # plotter.set_joint_and_update()
     plotter.plotter_show()
     print("+n+n+n+n+n+")
 
