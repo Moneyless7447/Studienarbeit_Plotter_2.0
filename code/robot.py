@@ -38,106 +38,106 @@ class Robot:
             print(f"test_data from json: {test_data}")
         self.append_children(self.root, test_data["robot"])
 
-
-    def append_children(self,parent, children_list, fake_children_list):
+    #def append_children(self, parent, children_list, fake_children_list):
+    def append_children(self,parent, children_list):
         '''
         Erzeugt Instanzen von Joint. Und verkettet diese objekte miteinander
         :param parent: Elter Objekt
         '''
-        if not children_list and not fake_children_list:
+        if not children_list:
             return
 
-        if children_list:
-            for index, child in enumerate(children_list):
+        for index, child in enumerate(children_list):
 
-                ############### str:"pi" in json zu float:np.pi umwandeln ###############
-                # <editor-fold desc="str:"pi" in json zu float:np.pi umwandeln">
-                # Möglichkeiten: 2*pi  pi/6 pi
-                #### ANGLE ####
-                tmp_angle = child['angle']
-                is_angle_pi = False
-                is_angle_div = False
-                #Prüfen, ob "pi" im String vorkommt
-                for i in range(len(child['angle'])):
-                    if (child['angle'][i] == "p") and (child['angle'][i + 1] is not None and "i"):
-                        is_angle_pi = True
-                    elif child['angle'][i] == "/":
-                        is_angle_div = True
+            ############### str:"pi" in json zu float:np.pi umwandeln ###############
+            # <editor-fold desc="str:"pi" in json zu float:np.pi umwandeln">
+            # Möglichkeiten: 2*pi  pi/6 pi
+            #### ANGLE ####
+            tmp_angle = child['angle']
+            is_angle_pi = False
+            is_angle_div = False
+            #Prüfen, ob "pi" im String vorkommt
+            for i in range(len(child['angle'])):
+                if (child['angle'][i] == "p") and (child['angle'][i + 1] is not None and "i"):
+                    is_angle_pi = True
+                elif child['angle'][i] == "/":
+                    is_angle_div = True
 
-                if is_angle_pi == True:
-                    if is_angle_div == True:
-                        tmp_float = float(child['angle'][3:])
-                        tmp_angle = float(np.pi / tmp_float)
-                    else:
-                        if len(child['angle']) >= 4:
-                            tmp_float = float(child['angle'][0:-3])
-                            tmp_angle = float(np.pi * tmp_float)
-                        elif len(child['angle']) == 2:
-                            tmp_angle = np.pi
-
-                #### TWIST ####
-                tmp_twist = child['twist']
-                is_twist_pi = False
-                is_twist_div = False
-                # Prüfen, ob "pi" im String vorkommt
-                for i in range(len(child['twist'])):
-                    if (child['twist'][i] == "p") and (child['twist'][i + 1] is not None and "i"):
-                        is_twist_pi = True
-                    elif child['twist'][i] == "/":
-                        is_twist_div = True
-
-                if is_twist_pi == True:
-                    if is_twist_div == True:
-                        tmp_float = float(child['twist'][3:])
-                        tmp_twist = float(np.pi / tmp_float)
-                    else:
-                        if len(child['twist']) >= 4:
-                            tmp_float = float(child['twist'][0:-3])
-                            tmp_twist = float(np.pi * tmp_float)
-                        elif len(child['twist']) == 2:
-                            tmp_twist = np.pi
-                #########################################################################
-                # </editor-fold>
-
-                parent_dh_depth = parent.name.split("_")[-1]
-                # if parent.name == "root":
-                #     if len(children_list) > 1:
-                #         c_name = f"test"
-                #         #c_name = f"{index}" + f"_{parent_dh_depth + 1}"
-                #     else:
-                #         c_name = f"{index}"
-                # else:
-
-                if parent.title != "root":
-                    if len(children_list) == 1:
-                        if "_" in parent.name:
-                            c_name = parent.name.split('_')[0]+ f"_{int(parent_dh_depth) + 1}"
-                        else:
-                            c_name = f"{int(parent_dh_depth) + 1}"
-                    else:
-                        if "_" in parent.name:
-                            c_name = parent.name.split('_')[0] + f".{index}" + f"_{int(parent_dh_depth) + 1}"
-                        else:
-                            c_name = f"{index}" + f"_{int(parent_dh_depth) + 1}"
+            if is_angle_pi == True:
+                if is_angle_div == True:
+                    tmp_float = float(child['angle'][3:])
+                    tmp_angle = float(np.pi / tmp_float)
                 else:
-                    if len(children_list) == 1:
-                        c_name = "1"
-                    else:
-                        c_name = f"{index}_"+"1"
+                    if len(child['angle']) >= 4:
+                        tmp_float = float(child['angle'][0:-3])
+                        tmp_angle = float(np.pi * tmp_float)
+                    elif len(child['angle']) == 2:
+                        tmp_angle = np.pi
 
+            #### TWIST ####
+            tmp_twist = child['twist']
+            is_twist_pi = False
+            is_twist_div = False
+            # Prüfen, ob "pi" im String vorkommt
+            for i in range(len(child['twist'])):
+                if (child['twist'][i] == "p") and (child['twist'][i + 1] is not None and "i"):
+                    is_twist_pi = True
+                elif child['twist'][i] == "/":
+                    is_twist_div = True
+
+            if is_twist_pi == True:
+                if is_twist_div == True:
+                    tmp_float = float(child['twist'][3:])
+                    tmp_twist = float(np.pi / tmp_float)
+                else:
+                    if len(child['twist']) >= 4:
+                        tmp_float = float(child['twist'][0:-3])
+                        tmp_twist = float(np.pi * tmp_float)
+                    elif len(child['twist']) == 2:
+                        tmp_twist = np.pi
+            #########################################################################
+            # </editor-fold>
+
+            parent_dh_depth = parent.name.split("_")[-1]
+
+
+            if parent.title != "root":
+                if len(children_list) == 1:
+                    if "_" in parent.name:
+                        c_name = parent.name.split('_')[0]+ f"_{int(parent_dh_depth) + 1}"
+                    else:
+                        c_name = f"{int(parent_dh_depth) + 1}"
+                else:
+                    if "_" in parent.name:
+                        c_name = parent.name.split('_')[0] + f".{index}" + f"_{int(parent_dh_depth) + 1}"
+                    else:
+                        c_name = f"{index}" + f"_{int(parent_dh_depth) + 1}"
+            else:
+                if len(children_list) == 1:
+                    c_name = "1"
+                else:
+                    c_name = f"{index}_"+"1"
+
+            reference_child = self.root[child["title"]]
+            if reference_child is None:
                 # Joint Objekt wird erzeugt
                 child_object = Joint(name=c_name, angle=tmp_angle, length=child["length"], offset=child["offset"],
                                   twist=tmp_twist, title=child["title"],
                                   type=child["type"], children=list(), previous=None)
 
                 # rekursiver Aufruf der Funktion für Kinder
+                parent.append(child_object)
                 if "children" in child:
                     self.append_children(child_object, child["children"])
                 # Doppelte Verlinkung: Neues Kind wird als Kind von Elter gesetzt und Elter wird als Elter von neuem Kind gesetzt
-                parent.append(child_object)
+                # parent.append(child_object)
+            else:
+                reference_child.reference_parents.append(parent)
+                reference_child.reference_dh_parameters.append({"angle": float(tmp_angle), "length": float(child["length"]),
+                                                                "offset": float(child["offset"]), "twist": float(tmp_twist), "type": child["type"], "angle_offset": 0.0, "length_offset": 0.0})
+                parent.children.append(reference_child)
+                parent.transformationmatrices_to_children.append(None)
 
-        if attribute:
-            .....
 
     def generate_dh_matrix_from_to(self, _from, _to):
         '''

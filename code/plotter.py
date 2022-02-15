@@ -36,32 +36,50 @@ class Plotter:
         #bnext.on_clicked(self.update)
 
     def plot(self, joint, axes, matrix=np.identity(4), root=False):
-
         scale = 1 if not root else 2.1
+        # Punkte für Ursprung und Koordinatenachsen für Koordinatenursprünge
         origin_point = np.dot(matrix, [0, 0, 0, 1])[:3]
         x_axis_point = np.dot(matrix, [scale, 0, 0, 1])[:3]
         y_axis_point = np.dot(matrix, [0, scale, 0, 1])[:3]
         z_axis_point = np.dot(matrix, [0, 0, scale, 1])[:3]
 
+        # Ursprünge als Punkte
         axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'k.')
+        # Achsen als Geraden
         axes.plot([origin_point[0], x_axis_point[0]], [origin_point[1], x_axis_point[1]],
                   [origin_point[2], x_axis_point[2]], 'r-', linewidth=0.5*scale)
         axes.plot([origin_point[0], y_axis_point[0]], [origin_point[1], y_axis_point[1]],
                   [origin_point[2], y_axis_point[2]], 'g-', linewidth=0.5*scale)
         axes.plot([origin_point[0], z_axis_point[0]], [origin_point[1], z_axis_point[1]],
                   [origin_point[2], z_axis_point[2]], 'b-', linewidth=0.5*scale)
+        # Namen bzw. Titel anzeigen
         #axes.text(origin_point[0], origin_point[1], origin_point[2], joint.title)
         axes.text(origin_point[0], origin_point[1], origin_point[2], joint.name, fontsize = 'small')
 
+        # 3D Körper (Zylinder, Würfel) für verschiedene Gelenktypen
+        # scale_cylinder = 0.3
+        #
+        # u = np.linspace(0, 2 * np.pi, num=20)
+        # v = np.linspace(0, 2 * np.pi, num=20)
+        #
+        # x = np.outer(np.cos(u), np.sin(scale_cylinder))
+        # y = np.outer(np.sin(u), np.sin(scale_cylinder))
+        # z = np.outer(np.zeros(np.size(1)), np.cos(scale_cylinder))
+        # axes.plot_surface(x, y , z, color='b')
+
+
+
         if joint.children is None:
             return
+
+        # Verbindungslinien zwischen Koordinatenursprüngen
         for index, child in enumerate(joint.children):
             child_matrix = np.dot(matrix, joint.transformationmatrices_to_children[index])
             child_point = np.dot(child_matrix, [0, 0, 0, 1])[:3]
             axes.plot([origin_point[0], child_point[0]], [origin_point[1], child_point[1]], [origin_point[2], child_point[2]],
                       'k:', linewidth=0.4)
-
-            self.plot(child, axes, child_matrix)
+            if not joint.is_reference_child(child.title):
+                self.plot(child, axes, child_matrix)
 
 
 

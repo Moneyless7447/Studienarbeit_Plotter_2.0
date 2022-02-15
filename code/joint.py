@@ -19,6 +19,8 @@ class Joint:
         self.transformationmatrices_to_children = []
         self.angle_offset = 0
         self.length_offset = 0
+        self.reference_parents = []
+        self.reference_dh_parameters = []
 
     # def next(self):
     #     iterator = self.iterator
@@ -51,13 +53,26 @@ class Joint:
         if not self.children:
             return
         for index, child in enumerate(self.children):
+            if not self.is_reference_child(child.title):
+                self.transformationmatrices_to_children[index] = np.array([[np.cos(child.angle+child.angle_offset), -np.sin(child.angle+child.angle_offset) *np.cos(child.twist), np.sin(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.cos(child.angle+child.angle_offset)],
+                                                                           [np.sin(child.angle+child.angle_offset), np.cos(child.angle+child.angle_offset)*np.cos(child.twist), -np.cos(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.sin(child.angle+child.angle_offset)],
+                                                                           [0, np.sin(child.twist), np.cos(child.twist), child.offset],
+                                                                           [0, 0, 0, 1]])
+                child.generate_dh_matrices_to_children()
+            else:
+                child_reference_dh = child.get_reference_dh_for_parent(self.title)
+                self.transformationmatrices_to_children[index] = np.array([[np.cos(child_reference_dh["angle"] + child_reference_dh["angle_offset"]), -np.sin(child_reference_dh["angle"]+child_reference_dh["angle_offset"]) *np.cos(child_reference_dh["twist"]), np.sin(child_reference_dh["angle"]+child_reference_dh["angle_offset"])*np.sin(child_reference_dh["twist"]), (child_reference_dh["length"] + child_reference_dh["length_offset"]) * np.cos(child_reference_dh["angle"]+child_reference_dh["angle_offset"])],
+                                                                           [np.sin(child_reference_dh["angle"] + child_reference_dh["angle_offset"]), np.cos(child_reference_dh["angle"] + child_reference_dh["angle_offset"]) * np.cos(child_reference_dh["twist"]), -np.cos(child_reference_dh["angle"] + child_reference_dh["angle_offset"]) * np.sin(child_reference_dh["twist"]), (child_reference_dh["length"] + child_reference_dh["length_offset"]) * np.sin(child_reference_dh["angle"] + child_reference_dh["angle_offset"])],
+                                                                           [0, np.sin(child_reference_dh["twist"]), np.cos(child_reference_dh["twist"]), child_reference_dh["offset"]],
+                                                                           [0, 0, 0, 1]])
 
-            self.transformationmatrices_to_children[index] = np.array([[np.cos(child.angle+child.angle_offset), -np.sin(child.angle+child.angle_offset)*np.cos(child.twist), np.sin(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.cos(child.angle+child.angle_offset)],
-                                                                       [np.sin(child.angle+child.angle_offset), np.cos(child.angle+child.angle_offset)*np.cos(child.twist), -np.cos(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.sin(child.angle+child.angle_offset)],
-                                                                       [0, np.sin(child.twist), np.cos(child.twist), child.offset],
-                                                                       [0, 0, 0, 1]])
-            child.generate_dh_matrices_to_children()
 
+
+    def get_reference_dh_for_parent(self, title):
+        for parent, dh in zip(self.reference_parents, self.reference_dh_parameters):
+            if parent.title == title:
+                return dh
+        return None
 
     def generate_dh_matrix_to(self, title):
         '''
@@ -95,3 +110,9 @@ class Joint:
         self.angle_offset = 0
         self.length_offset = 0
         self.previous.generate_dh_matrices_to_children()
+
+    def is_reference_child(self, title):
+        for child in self.children:
+            if child.title == title:
+                return child.previous.title != self.title
+        return True
