@@ -53,8 +53,12 @@ class Joint:
         if not self.children:
             return
         for index, child in enumerate(self.children):
-            if not self.is_reference_child(child.title):
-                self.transformationmatrices_to_children[index] = np.array([[np.cos(child.angle+child.angle_offset), -np.sin(child.angle+child.angle_offset) *np.cos(child.twist), np.sin(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.cos(child.angle+child.angle_offset)],
+            if not self.has_reference_child(child.title):
+                self.transformationmatrices_to_children[index] = \
+                    np.array([[np.cos(child.angle+child.angle_offset),
+                               -np.sin(child.angle+child.angle_offset) *np.cos(child.twist),
+                               np.sin(child.angle+child.angle_offset)*np.sin(child.twist),
+                               (child.length+child.length_offset) * np.cos(child.angle+child.angle_offset)],
                                                                            [np.sin(child.angle+child.angle_offset), np.cos(child.angle+child.angle_offset)*np.cos(child.twist), -np.cos(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.sin(child.angle+child.angle_offset)],
                                                                            [0, np.sin(child.twist), np.cos(child.twist), child.offset],
                                                                            [0, 0, 0, 1]])
@@ -92,26 +96,51 @@ class Joint:
         return None
 
 
-    def set_joint(self, value):
+    def set_joint(self, *args):
         if self.type == "rotation":
-            self.angle_offset += value
+            self.angle_offset += args[0][0]
         elif self.type == "translation":
-            self.length_offset += value
+            self.length_offset += args[0][0]
         self.previous.generate_dh_matrices_to_children()
+        for index, arg in enumerate(args[0][1:]):
+            if self.reference_dh_parameters:
+                if self.reference_dh_parameters[index]["type"] == "rotation":
+                    self.reference_dh_parameters[index]["angle_offset"] += float(arg)
+                elif self.reference_dh_parameters[index]["type"] == "translation":
+                    self.reference_dh_parameters[index]["length_offset"] += float(arg)
+                self.reference_parents[index].generate_dh_matrices_to_children()
+            else:
+                break
 
-    def set_joint_to_absolute(self, value):
+
+    def set_joint_to_absolute(self, *args):
         if self.type == "rotation":
-            self.angle_offset = value
+            self.angle_offset = args[0][0]
         elif self.type == "translation":
-            self.length_offset = value
+            self.length_offset = args[0][0]
         self.previous.generate_dh_matrices_to_children()
+        for index, arg in enumerate(args[0][1:]):
+            if self.reference_dh_parameters:
+                if self.reference_dh_parameters[index]["type"] == "rotation":
+                    self.reference_dh_parameters[index]["angle_offset"] = float(arg)
+                elif self.reference_dh_parameters[index]["type"] == "translation":
+                    self.reference_dh_parameters[index]["length_offset"] = float(arg)
+                self.reference_parents[index].generate_dh_matrices_to_children()
+            else:
+                break
 
     def reset_joint_offsets(self):
         self.angle_offset = 0
         self.length_offset = 0
+        for dh in self.reference_dh_parameters:
+            dh["angle_offset"] = 0
+            dh["length_offset"] = 0
+        for parent in self.reference_parents:
+            parent.generate_dh_matrices_to_children()
         self.previous.generate_dh_matrices_to_children()
 
-    def is_reference_child(self, title):
+
+    def has_reference_child(self, title):
         for child in self.children:
             if child.title == title:
                 return child.previous.title != self.title

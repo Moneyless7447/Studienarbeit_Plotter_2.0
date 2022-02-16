@@ -37,7 +37,7 @@
             {
               "title": "Gamma1-Gelenk",
               "type": "rotation",
-              "angle": "0",
+              "angle": "30",
               "length": "1",
               "offset": "3",
               "twist": "0.7854"

@@ -150,8 +150,8 @@ class Robot:
         # Zugriff auf __getitem__
         return self.root[_from].generate_dh_matrix_to(_to)
 
-    def set_joint(self, title, value):
-        self.root[title].set_joint(value)
+    def set_joint(self, title, *args):
+        self.root[title].set_joint(args)
 
     def set_joint_to_absolute(self, title, value):
         self.root[title].set_joint_to_absolute(value)

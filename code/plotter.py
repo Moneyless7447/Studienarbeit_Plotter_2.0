@@ -66,7 +66,7 @@ class Plotter:
         # y = np.outer(np.sin(u), np.sin(scale_cylinder))
         # z = np.outer(np.zeros(np.size(1)), np.cos(scale_cylinder))
         # axes.plot_surface(x, y , z, color='b')
-
+    
 
 
         if joint.children is None:
@@ -78,7 +78,7 @@ class Plotter:
             child_point = np.dot(child_matrix, [0, 0, 0, 1])[:3]
             axes.plot([origin_point[0], child_point[0]], [origin_point[1], child_point[1]], [origin_point[2], child_point[2]],
                       'k:', linewidth=0.4)
-            if not joint.is_reference_child(child.title):
+            if not joint.has_reference_child(child.title):
                 self.plot(child, axes, child_matrix)
 
 
@@ -110,7 +110,10 @@ class Plotter:
 
 
     def set_joint_and_update(self, _):
-        self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
+        #self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
+        # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
+        # self.robot.set_joint("Beta2-Gelenk", math.radians(-20))
+        self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
         #self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         self.update(None)
 
