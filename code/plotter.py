@@ -80,7 +80,7 @@ class Plotter:
         # axes.plot_surface(x, y, z, color='b')
 
         #self.plot_plane()
-        self.plot_cylinder(origin_point)
+        self.plot_cylinder(origin_point, matrix)
 
         if joint.children is None:
             return
@@ -124,33 +124,88 @@ class Plotter:
 
 
     def set_joint_and_update(self, _):
-        #self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
+        # self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
         # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         # self.robot.set_joint("Beta2-Gelenk", math.radians(-20))
         self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
-        #self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
+        # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         self.update(None)
 
     def plot_plane(self):
-        x = [1, 0, 3, 4]
-        y = [0, 5, 5, 1]
-        z = [1, 3, 4, 0]
+        # x = [1, 0, 3, 4]
+        # y = [0, 5, 5, 1]
+        # z = [1, 3, 4, 0]
+        # x_2 = [8, 7, 5, 5]
+        # y_2 = [3, 3, 2, 5]
+        # z_2 = [2, 1.3, 2, 0]
+        # x_3 = [0, 0, 5, 5]
+        # y_3 = [-2, 0, 0, -2]
+        # #y_3 = [0, 0, 0, 0]
+        # z_3 = [0, 4, 0, 4]
+        # x_3 = [0, 4, 0]
+        # y_3 = [0, 0, 0]
+        # z_3 = [0, 4, 4]
 
-        vertices = [list(zip(x, y, z))]
-        poly = Poly3DCollection(vertices, alpha=0.5)
-        self.axes.add_collection3d(poly)
 
-    def plot_cylinder(self, start_point):
-        r = 1
-        h = 1
-        #1. Seitenflaeche
-        x_1 = [float(start_point[0]+0), start_point[0]+0, start_point[0]+(math.sqrt(2)/2)*r, start_point[0]+(math.sqrt(2)/2)*r]
-        y_1 = [start_point[1]+r, start_point[1]+r, start_point[1]+(math.sqrt(2)/2)*r, start_point[1]+(math.sqrt(2)/2)*r]
-        z_1 = [-h, h, -h, h]
+        #vertices = [list(zip(x, y, z))]
+        #vertices_2 = [list(zip(x_2, y_2, z_2))]
+        #vertices_3 = [list(zip(x_3, y_3, z_3))]
+        #print(vertices)
+        #poly = Poly3DCollection(vertices, alpha=0.5)
+        #self.axes.add_collection3d(poly)
+        #poly_2 = Poly3DCollection(vertices_2, alpha=0.5)
+        #self.axes.add_collection3d(poly_2)
+        #poly_3 = Poly3DCollection(vertices_3, alpha=0.5)
+        #self.axes.add_collection3d(poly_3)
 
-        vertices_1 = [list(zip(x_1, y_1, z_1))]
-        vertices_1 = np.dot(self.joint.transformationmatrices_to_children[index], [0, 0, 0, 1])[:3]
-        print(f"vertices_1: {vertices_1}")
+    def plot_cylinder(self, start_point, trans_matrix):
+        r = 0.3
+        h = 0.5
 
-        poly_1 = Poly3DCollection(vertices_1)
-        self.axes.add_collection3d(poly_1)
+        # # 1_1. Teilseitenflaeche
+        x_1_1 = [0, 0, (math.sqrt(2) / 2) * r]
+        y_1_1 = [r, r, (math.sqrt(2) / 2) * r]
+        z_1_1 = [-h, h, -h]
+
+        ############
+        ############
+        ###########
+        # Das als externe funktion ########
+        vertices_1_1 = [np.dot(trans_matrix, [x_1_1[0], y_1_1[0], z_1_1[0], 1]),
+                        np.dot(trans_matrix, [x_1_1[1], y_1_1[1], z_1_1[1], 1]),
+                        np.dot(trans_matrix, [x_1_1[2], y_1_1[2], z_1_1[2], 1])]
+
+
+        vertices_1_1_2 = [[[]] for i in range(3)]
+        for point in range(3):
+            vertices_1_1_2[point][0].append(vertices_1_1[point][0])
+            vertices_1_1_2[point][0].append(vertices_1_1[point][1])
+            vertices_1_1_2[point][0].append(vertices_1_1[point][2])
+            vertices_1_1[point] = tuple(vertices_1_1_2[point][0])
+
+        vertices_1_1 = [vertices_1_1]
+
+        poly_1_1 = Poly3DCollection(vertices_1_1, alpha=0.5)
+        self.axes.add_collection3d(poly_1_1)
+
+        #1_2 Teilseitenfläche
+        x_1_2 = [0, (math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r]
+        y_1_2 = [r, (math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r]
+        z_1_2 = [h, -h, h]
+
+        vertices_1_2 = [np.dot(trans_matrix, [x_1_2[0], y_1_2[0], z_1_2[0], 1]),
+                        np.dot(trans_matrix, [x_1_2[1], y_1_2[1], z_1_2[1], 1]),
+                        np.dot(trans_matrix, [x_1_2[2], y_1_2[2], z_1_2[2], 1])]
+        # print(f"vertices_1_2 {vertices_1_2}")
+
+        vertices_1_2_2 = [[[]] for i in range(3)]
+        for point in range(3):
+            vertices_1_2_2[point][0].append(vertices_1_2[point][0])
+            vertices_1_2_2[point][0].append(vertices_1_2[point][1])
+            vertices_1_2_2[point][0].append(vertices_1_2[point][2])
+            vertices_1_2[point] = tuple(vertices_1_2_2[point][0])
+
+        vertices_1_2 = [vertices_1_2]
+
+        poly_1_2 = Poly3DCollection(vertices_1_2, alpha=0.5)
+        self.axes.add_collection3d(poly_1_2)
