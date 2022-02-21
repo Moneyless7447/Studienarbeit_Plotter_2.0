@@ -80,7 +80,8 @@ class Plotter:
         # axes.plot_surface(x, y, z, color='b')
 
         #self.plot_plane()
-        self.plot_cylinder(origin_point, matrix)
+        #self.plot_cylinder(matrix)
+        self.plot_quader(matrix)
 
         if joint.children is None:
             return
@@ -131,81 +132,367 @@ class Plotter:
         # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         self.update(None)
 
-    def plot_plane(self):
-        # x = [1, 0, 3, 4]
-        # y = [0, 5, 5, 1]
-        # z = [1, 3, 4, 0]
-        # x_2 = [8, 7, 5, 5]
-        # y_2 = [3, 3, 2, 5]
-        # z_2 = [2, 1.3, 2, 0]
-        # x_3 = [0, 0, 5, 5]
-        # y_3 = [-2, 0, 0, -2]
-        # #y_3 = [0, 0, 0, 0]
-        # z_3 = [0, 4, 0, 4]
-        # x_3 = [0, 4, 0]
-        # y_3 = [0, 0, 0]
-        # z_3 = [0, 4, 4]
+
+    def plot_quader(self, trans_matrix):
+        h = 0.3
+
+        # 1_1 Teilflaeche
+        x_1_1 = [h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        y_1_1 = [-(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_1_1 = [h, h, h]
+
+        # 1_2 Teilflaeche
+        x_1_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        y_1_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_1_2 = [h, h, h]
+
+        # 2_1 teilflaeche
+        x_2_1 = [h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        y_2_1 = [-(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_2_1 = [-h, -h, -h]
+
+        # 2_2 Teilflaeche
+        x_2_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        y_2_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_2_2 = [-h, -h, -h]
+
+        # 3_1 Teilflaeche
+        x_3_1 = [h, h, h]
+        y_3_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        z_3_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+
+        # 3_2 Teilflaeche
+        x_3_2 = [h, h, h]
+        y_3_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_3_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+
+        # 4_1 Teilflaeche
+        x_4_1 = [-h, -h, -h]
+        y_4_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        z_4_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+
+        # 4_2 Teilflaeche
+        x_4_2 = [-h, -h, -h]
+        y_4_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_4_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+
+        # 5_1 Teilflaeche
+        x_5_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        y_5_1 = [h, h, h]
+        z_5_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+
+        # 5_2 Teilflaeche
+        x_5_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        y_5_2 = [h, h, h]
+        z_5_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+
+        # 6_1 Teilflaeche
+        x_6_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        y_6_1 = [-h, -h, -h]
+        z_6_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+
+        # 6_2 Teilflaeche
+        x_6_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        y_6_2 = [-h, -h, -h]
+        z_6_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+
+        self.plot_triangle(trans_matrix, x_1_1, y_1_1, z_1_1, 1, None)
+        self.plot_triangle(trans_matrix, x_1_2, y_1_2, z_1_2, 1, None)
+        self.plot_triangle(trans_matrix, x_2_1, y_2_1, z_2_1, 1, None)
+        self.plot_triangle(trans_matrix, x_2_2, y_1_2, z_1_2, 1, None)
+        self.plot_triangle(trans_matrix, x_3_1, y_3_1, z_3_1, 1, None)
+        self.plot_triangle(trans_matrix, x_3_2, y_3_2, z_3_2, 1, None)
+        self.plot_triangle(trans_matrix, x_4_1, y_4_1, z_4_1, 1, None)
+        self.plot_triangle(trans_matrix, x_4_2, y_4_2, z_4_2, 1, None)
+        self.plot_triangle(trans_matrix, x_5_1, y_5_1, z_5_1, 1, None)
+        self.plot_triangle(trans_matrix, x_5_2, y_5_2, z_5_2, 1, None)
+        self.plot_triangle(trans_matrix, x_6_1, y_6_1, z_6_1, 1, None)
+        self.plot_triangle(trans_matrix, x_6_2, y_6_2, z_6_2, 1, None)
 
 
-        #vertices = [list(zip(x, y, z))]
-        #vertices_2 = [list(zip(x_2, y_2, z_2))]
-        #vertices_3 = [list(zip(x_3, y_3, z_3))]
-        #print(vertices)
-        #poly = Poly3DCollection(vertices, alpha=0.5)
-        #self.axes.add_collection3d(poly)
-        #poly_2 = Poly3DCollection(vertices_2, alpha=0.5)
-        #self.axes.add_collection3d(poly_2)
-        #poly_3 = Poly3DCollection(vertices_3, alpha=0.5)
-        #self.axes.add_collection3d(poly_3)
-
-    def plot_cylinder(self, start_point, trans_matrix):
+    def plot_cylinder(self, trans_matrix):
         r = 0.3
         h = 0.5
+        t = 5
 
-        # # 1_1. Teilseitenflaeche
+        # Pfeil_1_1_1
+        x_p_1_1_1 = [(1.2 * r), (math.sqrt(2) / 2) * (1.2 * r), (1.2 * r)]
+        y_p_1_1_1 = [0, (math.sqrt(2) / 2) * (1.2 * r), 0]
+        z_p_1_1_1 = [h / t, -h / t, -h / t]
+
+        # Pfeil_1_1_2
+        x_p_1_1_2 = [(1.2 * r), (math.sqrt(2) / 2) * (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
+        y_p_1_1_2 = [0, (math.sqrt(2) / 2) * (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
+        z_p_1_1_2 = [h / t, -h / t, h / t]
+
+        # Pfeil_1_2_1
+        x_p_1_2_1 = [(math.sqrt(2) / 2) * (1.2 * r), 0, (math.sqrt(2) / 2) * (1.2 * r)]
+        y_p_1_2_1 = [(math.sqrt(2) / 2) * (1.2 * r), (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
+        z_p_1_2_1 = [h / t, -h / t, -h / t]
+
+        # Pfeil_1_2_2
+        x_p_1_2_2 = [(math.sqrt(2) / 2) * (1.2 * r), 0, 0]
+        y_p_1_2_2 = [(math.sqrt(2) / 2) * (1.2 * r), (1.2 * r), (1.2 * r)]
+        z_p_1_2_2 = [h / t, -h / t, h / t]
+
+        # Pfeilspitze_1
+        x_ps_1 = [0, 0, -(math.sqrt(2) / 2) * (1.2 * r)]
+        y_ps_1 = [(1.2 * r), (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
+        z_ps_1 = [2 * (h / t), -2 * (h / t), 0]
+
+        # # Pfeil_2_1_1
+        # x_p_2_1_1 = [(1 * r), (math.sqrt(2) / 2) * (1 * r), (1 * r)]
+        # y_p_2_1_1 = [0, (math.sqrt(2) / 2) * (1 * r), 0]
+        # z_p_2_1_1 = [h / t, -h / t, -h / t]
+        #
+        # # Pfeil_2_1_2
+        # x_p_2_1_2 = [(1 * r), (math.sqrt(2) / 2) * (1 * r), (math.sqrt(2) / 2) * (1 * r)]
+        # y_p_2_1_2 = [0, (math.sqrt(2) / 2) * (1 * r), (math.sqrt(2) / 2) * (1 * r)]
+        # z_p_2_1_2 = [h / t, -h / t, h / t]
+        #
+        # # Pfeil_1_2_1
+        # x_p_2_2_1 = [(math.sqrt(2) / 2) * (1 * r), 0, (math.sqrt(2) / 2) * (1 * r)]
+        # y_p_2_2_1 = [(math.sqrt(2) / 2) * (1 * r), (1 * r), (math.sqrt(2) / 2) * (1 * r)]
+        # z_p_2_2_1 = [h / t, -h / t, -h / t]
+        #
+        # # Pfeil_1_2_2
+        # x_p_2_2_2 = [(math.sqrt(2) / 2) * (1 * r), 0, 0]
+        # y_p_2_2_2 = [(math.sqrt(2) / 2) * (1 * r), (1 * r), (1 * r)]
+        # z_p_2_2_2 = [h / t, -h / t, h / t]
+        #
+        # # Pfeilspitze_1
+        # x_ps_2 = [0, 0, -(math.sqrt(2) / 2) * (1 * r)]
+        # y_ps_2 = [(1 * r), (1 * r), (math.sqrt(2) / 2) * (1 * r)]
+        # z_ps_2 = [2 * (h / t), -2 * (h / t), 0]
+
+        # 1_1. Teilseitenflaeche
         x_1_1 = [0, 0, (math.sqrt(2) / 2) * r]
         y_1_1 = [r, r, (math.sqrt(2) / 2) * r]
         z_1_1 = [-h, h, -h]
 
-        ############
-        ############
-        ###########
-        # Das als externe funktion ########
-        vertices_1_1 = [np.dot(trans_matrix, [x_1_1[0], y_1_1[0], z_1_1[0], 1]),
-                        np.dot(trans_matrix, [x_1_1[1], y_1_1[1], z_1_1[1], 1]),
-                        np.dot(trans_matrix, [x_1_1[2], y_1_1[2], z_1_1[2], 1])]
-
-
-        vertices_1_1_2 = [[[]] for i in range(3)]
-        for point in range(3):
-            vertices_1_1_2[point][0].append(vertices_1_1[point][0])
-            vertices_1_1_2[point][0].append(vertices_1_1[point][1])
-            vertices_1_1_2[point][0].append(vertices_1_1[point][2])
-            vertices_1_1[point] = tuple(vertices_1_1_2[point][0])
-
-        vertices_1_1 = [vertices_1_1]
-
-        poly_1_1 = Poly3DCollection(vertices_1_1, alpha=0.5)
-        self.axes.add_collection3d(poly_1_1)
-
-        #1_2 Teilseitenfläche
+        # 1_2. Teilseitenflaeche
         x_1_2 = [0, (math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r]
         y_1_2 = [r, (math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r]
         z_1_2 = [h, -h, h]
 
-        vertices_1_2 = [np.dot(trans_matrix, [x_1_2[0], y_1_2[0], z_1_2[0], 1]),
-                        np.dot(trans_matrix, [x_1_2[1], y_1_2[1], z_1_2[1], 1]),
-                        np.dot(trans_matrix, [x_1_2[2], y_1_2[2], z_1_2[2], 1])]
-        # print(f"vertices_1_2 {vertices_1_2}")
+        # 2_1. Teilseitenflaeche
+        x_2_1 = [(math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r, r]
+        y_2_1 = [(math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r, 0]
+        z_2_1 = [-h, h, -h]
 
-        vertices_1_2_2 = [[[]] for i in range(3)]
+        # 2_2. Teilseitenflaeche
+        x_2_2 = [(math.sqrt(2) / 2) * r, r, r]
+        y_2_2 = [(math.sqrt(2) / 2) * r, 0, 0]
+        z_2_2 = [h, -h, h]
+
+        # 3_1. Teilseitenflaeche
+        x_3_1 = [r, r, (math.sqrt(2) / 2) * r]
+        y_3_1 = [0, 0, -(math.sqrt(2) / 2) * r]
+        z_3_1 = [-h, h, -h]
+
+        # 3_2. Teilseitenflaeche
+        x_3_2 = [r, (math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r]
+        y_3_2 = [0,  -(math.sqrt(2) / 2) * r,  -(math.sqrt(2) / 2) * r]
+        z_3_2 = [h, -h, h]
+
+        # 4_1. Teilseitenflaeche
+        x_4_1 = [(math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r, 0]
+        y_4_1 = [-(math.sqrt(2) / 2) * r, -(math.sqrt(2) / 2) * r, -r]
+        z_4_1 = [-h, h, -h]
+
+        # 4_2. Teilseitenflaeche
+        x_4_2 = [(math.sqrt(2) / 2) * r, 0, 0]
+        y_4_2 = [-(math.sqrt(2) / 2) * r, -r, -r]
+        z_4_2 = [h, -h, h]
+
+        # 5_1. Teilseitenflaeche
+        x_5_1 = [0, 0, -(math.sqrt(2) / 2) * r]
+        y_5_1 = [-r, -r, -(math.sqrt(2) / 2) * r]
+        z_5_1 = [-h, h, -h]
+
+        # 5_2. Teilseitenflaeche
+        x_5_2 = [0, -(math.sqrt(2) / 2) * r, -(math.sqrt(2) / 2) * r]
+        y_5_2 = [-r, -(math.sqrt(2) / 2) * r, -(math.sqrt(2) / 2) * r]
+        z_5_2 = [h, -h, h]
+
+        # 6_1. Teilseitenflaeche
+        x_6_1 = [-(math.sqrt(2) / 2) * r, -(math.sqrt(2) / 2) * r, -r]
+        y_6_1 = [-(math.sqrt(2) / 2) * r, -(math.sqrt(2) / 2) * r, 0]
+        z_6_1 = [-h, h, -h]
+
+        # 6_2. Teilseitenflaeche
+        x_6_2 = [-(math.sqrt(2) / 2) * r, -r, -r]
+        y_6_2 = [-(math.sqrt(2) / 2) * r, 0, 0]
+        z_6_2 = [h, -h, h]
+
+        # 7_1. Teilseitenflaeche
+        x_7_1 = [-r, -r, -(math.sqrt(2) / 2) * r]
+        y_7_1 = [0, 0, (math.sqrt(2) / 2) * r]
+        z_7_1 = [-h, h, -h]
+
+        # 7_2. Teilseitenflaeche
+        x_7_2 = [-r, -(math.sqrt(2) / 2) * r, -(math.sqrt(2) / 2) * r]
+        y_7_2 = [0, (math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r]
+        z_7_2 = [h, -h, h]
+
+        # 8_1. Teilseitenflaeche
+        x_8_1 = [-(math.sqrt(2) / 2) * r, -(math.sqrt(2) / 2) * r, 0]
+        y_8_1 = [(math.sqrt(2) / 2) * r, (math.sqrt(2) / 2) * r, r]
+        z_8_1 = [-h, h, -h]
+
+        # 8_2. Teilseitenflaeche
+        x_8_2 = [-(math.sqrt(2) / 2) * r, 0, 0]
+        y_8_2 = [(math.sqrt(2) / 2) * r, r, r]
+        z_8_2 = [h, -h, h]
+
+        # 1_oben. Teildeckelflaeche
+        x_1_o = [0, 0, (math.sqrt(2) / 2) * r]
+        y_1_o = [0, r, (math.sqrt(2) / 2) * r]
+        z_1_o = [h, h, h]
+
+        # 2_oben. Teildeckelflaeche
+        x_2_o = [0, (math.sqrt(2) / 2) * r, r]
+        y_2_o = [0, (math.sqrt(2) / 2) * r, 0]
+        z_2_o = [h, h, h]
+
+        # 3_oben. Teildeckelflaeche
+        x_3_o = [0, r, (math.sqrt(2) / 2) * r]
+        y_3_o = [0, 0, -(math.sqrt(2) / 2) * r]
+        z_3_o = [h, h, h]
+
+        # 4_oben. Teildeckelflaeche
+        x_4_o = [0, (math.sqrt(2) / 2) * r, 0]
+        y_4_o = [0, -(math.sqrt(2) / 2) * r, -r]
+        z_4_o = [h, h, h]
+
+
+        # 5_oben. Teildeckelflaeche
+        x_5_o = [0, 0, -(math.sqrt(2) / 2) * r]
+        y_5_o = [0, -r, -(math.sqrt(2) / 2) * r]
+        z_5_o = [h, h, h]
+
+        # 6_oben. Teildeckelflaeche
+        x_6_o = [0, -(math.sqrt(2) / 2) * r, -r]
+        y_6_o = [0, -(math.sqrt(2) / 2) * r, 0]
+        z_6_o = [h, h, h]
+
+        # 7_oben. Teildeckelflaeche
+        x_7_o = [0, -r, -(math.sqrt(2) / 2) * r]
+        y_7_o = [0, 0, (math.sqrt(2) / 2) * r]
+        z_7_o = [h, h, h]
+
+        # 8_oben. Teildeckelflaeche
+        x_8_o = [0, -(math.sqrt(2) / 2) * r, 0]
+        y_8_o = [0, (math.sqrt(2) / 2) * r, r]
+        z_8_o = [h, h, h]
+
+        # 1_unten. Teildeckelflaeche
+        x_1_u = [0, 0, (math.sqrt(2) / 2) * r]
+        y_1_u = [0, r, (math.sqrt(2) / 2) * r]
+        z_1_u = [-h, -h, -h]
+
+        # 2_unten. Teildeckelflaeche
+        x_2_u = [0, (math.sqrt(2) / 2) * r, r]
+        y_2_u = [0, (math.sqrt(2) / 2) * r, 0]
+        z_2_u = [-h, -h, -h]
+
+        # 3_unten. Teildeckelflaeche
+        x_3_u = [0, r, (math.sqrt(2) / 2) * r]
+        y_3_u = [0, 0, -(math.sqrt(2) / 2) * r]
+        z_3_u = [-h, -h, -h]
+
+        # 4_unten. Teildeckelflaeche
+        x_4_u = [0, (math.sqrt(2) / 2) * r, 0]
+        y_4_u = [0, -(math.sqrt(2) / 2) * r, -r]
+        z_4_u = [-h, -h, -h]
+
+        # 5_unten. Teildeckelflaeche
+        x_5_u = [0, 0, -(math.sqrt(2) / 2) * r]
+        y_5_u = [0, -r, -(math.sqrt(2) / 2) * r]
+        z_5_u = [-h, -h, -h]
+
+        # 6_unten. Teildeckelflaeche
+        x_6_u = [0, -(math.sqrt(2) / 2) * r, -r]
+        y_6_u = [0, -(math.sqrt(2) / 2) * r, 0]
+        z_6_u = [-h, -h, -h]
+
+        # 7_unten. Teildeckelflaeche
+        x_7_u = [0, -r, -(math.sqrt(2) / 2) * r]
+        y_7_u = [0, 0, (math.sqrt(2) / 2) * r]
+        z_7_u = [-h, -h, -h]
+
+        # 8_unten. Teildeckelflaeche
+        x_8_u = [0, -(math.sqrt(2) / 2) * r, 0]
+        y_8_u = [0, (math.sqrt(2) / 2) * r, r]
+        z_8_u = [-h, -h, -h]
+
+        self.plot_triangle(trans_matrix, x_p_1_1_1, y_p_1_1_1, z_p_1_1_1, 1, None)
+        self.plot_triangle(trans_matrix, x_p_1_1_2, y_p_1_1_2, z_p_1_1_2, 1, None)
+        self.plot_triangle(trans_matrix, x_p_1_2_1, y_p_1_2_1, z_p_1_2_1, 1, None)
+        self.plot_triangle(trans_matrix, x_p_1_2_2, y_p_1_2_2, z_p_1_2_2, 1, None)
+        self.plot_triangle(trans_matrix, x_ps_1, y_ps_1, z_ps_1, 1, None)
+
+        # self.plot_triangle(trans_matrix, x_p_2_1_1, y_p_2_1_1, z_p_2_1_1, 1, None)
+        # self.plot_triangle(trans_matrix, x_p_2_1_2, y_p_2_1_2, z_p_2_1_2, 1, None)
+        # self.plot_triangle(trans_matrix, x_p_2_2_1, y_p_2_2_1, z_p_2_2_1, 1, None)
+        # self.plot_triangle(trans_matrix, x_p_2_2_2, y_p_2_2_2, z_p_2_2_2, 1, None)
+        # self.plot_triangle(trans_matrix, x_ps_2, y_ps_2, z_ps_2, 1, None)
+
+        self.plot_triangle(trans_matrix, x_1_1, y_1_1, z_1_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_1_2, y_1_2, z_1_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_2_1, y_2_1, z_2_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_2_2, y_2_2, z_2_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_3_1, y_3_1, z_3_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_3_2, y_3_2, z_3_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_4_1, y_4_1, z_4_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_4_2, y_4_2, z_4_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_5_1, y_5_1, z_5_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_5_2, y_5_2, z_5_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_6_1, y_6_1, z_6_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_6_2, y_6_2, z_6_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_7_1, y_7_1, z_7_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_7_2, y_7_2, z_7_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_8_1, y_8_1, z_8_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_8_2, y_8_2, z_8_2, 0.2, None)
+
+        self.plot_triangle(trans_matrix, x_1_o, y_1_o, z_1_o, 0.2, None)
+        self.plot_triangle(trans_matrix, x_2_o, y_2_o, z_2_o, 0.2, None)
+        self.plot_triangle(trans_matrix, x_3_o, y_3_o, z_3_o, 0.2, None)
+        self.plot_triangle(trans_matrix, x_4_o, y_4_o, z_4_o, 0.2, None)
+        self.plot_triangle(trans_matrix, x_5_o, y_5_o, z_5_o, 0.2, None)
+        self.plot_triangle(trans_matrix, x_6_o, y_6_o, z_6_o, 0.2, None)
+        self.plot_triangle(trans_matrix, x_7_o, y_7_o, z_7_o, 0.2, None)
+        self.plot_triangle(trans_matrix, x_8_o, y_8_o, z_8_o, 0.2, None)
+
+        self.plot_triangle(trans_matrix, x_1_u, y_1_u, z_1_u, 0.2, None)
+        self.plot_triangle(trans_matrix, x_2_u, y_2_u, z_2_u, 0.2, None)
+        self.plot_triangle(trans_matrix, x_3_u, y_3_u, z_3_u, 0.2, None)
+        self.plot_triangle(trans_matrix, x_4_u, y_4_u, z_4_u, 0.2, None)
+        self.plot_triangle(trans_matrix, x_5_u, y_5_u, z_5_u, 0.2, None)
+        self.plot_triangle(trans_matrix, x_6_u, y_6_u, z_6_u, 0.2, None)
+        self.plot_triangle(trans_matrix, x_7_u, y_7_u, z_7_u, 0.2, None)
+        self.plot_triangle(trans_matrix, x_8_u, y_8_u, z_8_u, 0.2, None)
+
+
+
+
+        #
+        # self.plot_triangle(trans_matrix, x_p_o, y_p_o, z_p_o, 1, 'red')
+
+    def plot_triangle(self, trans_matrix, points_x:list, points_y:list, points_z:list, alpha, col:str):
+        #Transformation zu homogenen Koordinaten und Matrixmultiplikation
+        vertices_1 = [np.dot(trans_matrix, [points_x[0], points_y[0], points_z[0], 1]),
+                        np.dot(trans_matrix, [points_x[1], points_y[1], points_z[1], 1]),
+                        np.dot(trans_matrix, [points_x[2], points_y[2], points_z[2], 1])]
+
+        vertices_2 = [[[]] for i in range(3)]
         for point in range(3):
-            vertices_1_2_2[point][0].append(vertices_1_2[point][0])
-            vertices_1_2_2[point][0].append(vertices_1_2[point][1])
-            vertices_1_2_2[point][0].append(vertices_1_2[point][2])
-            vertices_1_2[point] = tuple(vertices_1_2_2[point][0])
+            vertices_2[point][0].append(vertices_1[point][0])
+            vertices_2[point][0].append(vertices_1[point][1])
+            vertices_2[point][0].append(vertices_1[point][2])
+            vertices_1[point] = tuple(vertices_2[point][0])
 
-        vertices_1_2 = [vertices_1_2]
+        vertices_1 = [vertices_1]
 
-        poly_1_2 = Poly3DCollection(vertices_1_2, alpha=0.5)
-        self.axes.add_collection3d(poly_1_2)
+        poly_1 = Poly3DCollection(vertices_1, alpha=alpha, facecolors=col)
+        self.axes.add_collection3d(poly_1)
