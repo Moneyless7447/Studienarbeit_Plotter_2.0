@@ -10,7 +10,7 @@
       "children": [
         {
           "title": "Beta1-Gelenk",
-          "type": "rotation",
+          "type": "translation",
           "angle": "0",
           "length": "2.3",
           "offset": "3",

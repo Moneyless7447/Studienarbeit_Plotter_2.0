@@ -57,31 +57,10 @@ class Plotter:
         #axes.text(origin_point[0], origin_point[1], origin_point[2], joint.title)
         axes.text(origin_point[0], origin_point[1], origin_point[2], joint.name, fontsize = 'small')
 
-        # # 3D Körper (Zylinder, Würfel) für verschiedene Gelenktypen
-        # scale_cylinder = 0.3
-        # # return evenly spaced numbers of a specified interval
-        # u = np.linspace(0, 2 * np.pi, num=10)
-        # v = np.linspace(0, np.pi, num=10)
-        #
-        # # compute the outer product (Dyadisches Produkt) of two vectors
-        # x = 10 * np.outer(np.cos(u), np.sin(v))
-        # y = 10 * np.outer(np.sin(u), np.sin(v))
-        # z = 10 * np.outer(np.zeros(np.size(u)), np.cos(v))
-        # axes.plot_surface(x, y, z, color='b')
-
-        # Make data
-        # u = np.linspace(0, 2 * np.pi, 10)
-        # v = np.linspace(0, np.pi, 10)
-        # x = 10 * np.outer(np.cos(u), np.sin(v))
-        # y = 10 * np.outer(np.sin(u), np.sin(v))
-        # z = 10 * np.outer(np.ones(np.size(u)), np.cos(v))
-
-        # Plot the surface
-        # axes.plot_surface(x, y, z, color='b')
-
-        #self.plot_plane()
-        #self.plot_cylinder(matrix)
-        self.plot_quader(matrix)
+        if joint.type == "rotation":
+            self.plot_cylinder(matrix)
+        elif joint.type == "translation":
+            self.plot_quader(matrix)
 
         if joint.children is None:
             return
@@ -137,133 +116,123 @@ class Plotter:
         h = 0.3
 
         # 1_1 Teilflaeche
-        x_1_1 = [h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
-        y_1_1 = [-(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        x_1_1 = [h, -h, h]
+        y_1_1 = [h, -h, -h]
         z_1_1 = [h, h, h]
 
         # 1_2 Teilflaeche
-        x_1_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
-        y_1_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        x_1_2 = [h, -h, -h]
+        y_1_2 = [h, -h, h]
         z_1_2 = [h, h, h]
 
         # 2_1 teilflaeche
-        x_2_1 = [h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
-        y_2_1 = [-(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        x_2_1 = [h, -h, h]
+        y_2_1 = [h, -h, -h]
         z_2_1 = [-h, -h, -h]
 
         # 2_2 Teilflaeche
-        x_2_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
-        y_2_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        x_2_2 = [h, -h, -h]
+        y_2_2 = [h, -h, h]
         z_2_2 = [-h, -h, -h]
 
         # 3_1 Teilflaeche
         x_3_1 = [h, h, h]
-        y_3_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
-        z_3_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        y_3_1 = [h, -h, h]
+        z_3_1 = [h, -h, -h]
 
         # 3_2 Teilflaeche
         x_3_2 = [h, h, h]
-        y_3_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
-        z_3_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        y_3_2 = [h, -h, -h]
+        z_3_2 = [h, -h, h]
 
         # 4_1 Teilflaeche
         x_4_1 = [-h, -h, -h]
-        y_4_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
-        z_4_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        y_4_1 = [h, -h, h]
+        z_4_1 = [h, -h, -h]
 
         # 4_2 Teilflaeche
         x_4_2 = [-h, -h, -h]
-        y_4_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
-        z_4_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        y_4_2 = [h, -h, -h]
+        z_4_2 = [h, -h, h]
 
         # 5_1 Teilflaeche
-        x_5_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        x_5_1 = [-h, h, h]
         y_5_1 = [h, h, h]
-        z_5_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_5_1 = [h, -h, h]
 
         # 5_2 Teilflaeche
-        x_5_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        x_5_2 = [-h, h, -h]
         y_5_2 = [h, h, h]
-        z_5_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        z_5_2 = [h, -h, -h]
 
         # 6_1 Teilflaeche
-        x_6_1 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        x_6_1 = [-h, h, h]
         y_6_1 = [-h, -h, -h]
-        z_6_1 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h]
+        z_6_1 = [h, -h, h]
 
         # 6_2 Teilflaeche
-        x_6_2 = [-(math.sqrt(2) / 2) * h, (math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        x_6_2 = [-h, h, -h]
         y_6_2 = [-h, -h, -h]
-        z_6_2 = [(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h, -(math.sqrt(2) / 2) * h]
+        z_6_2 = [h, -h, -h]
 
-        self.plot_triangle(trans_matrix, x_1_1, y_1_1, z_1_1, 1, None)
-        self.plot_triangle(trans_matrix, x_1_2, y_1_2, z_1_2, 1, None)
-        self.plot_triangle(trans_matrix, x_2_1, y_2_1, z_2_1, 1, None)
-        self.plot_triangle(trans_matrix, x_2_2, y_1_2, z_1_2, 1, None)
-        self.plot_triangle(trans_matrix, x_3_1, y_3_1, z_3_1, 1, None)
-        self.plot_triangle(trans_matrix, x_3_2, y_3_2, z_3_2, 1, None)
-        self.plot_triangle(trans_matrix, x_4_1, y_4_1, z_4_1, 1, None)
-        self.plot_triangle(trans_matrix, x_4_2, y_4_2, z_4_2, 1, None)
-        self.plot_triangle(trans_matrix, x_5_1, y_5_1, z_5_1, 1, None)
-        self.plot_triangle(trans_matrix, x_5_2, y_5_2, z_5_2, 1, None)
-        self.plot_triangle(trans_matrix, x_6_1, y_6_1, z_6_1, 1, None)
-        self.plot_triangle(trans_matrix, x_6_2, y_6_2, z_6_2, 1, None)
+        # 7_1 Teilflaeche
+        x_7_1 = [h, -h, h]
+        y_7_1 = [h, -h, -h]
+        z_7_1 = [1.2 * h, 1.2 * h, 1.2 * h]
+
+        # 7_2 Teilflaeche
+        x_7_2 = [h, -h, -h]
+        y_7_2 = [h, -h, h]
+        z_7_2 = [1.2 * h, 1.2 * h, 1.2 * h]
+
+        self.plot_triangle(trans_matrix, x_1_1, y_1_1, z_1_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_1_2, y_1_2, z_1_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_2_1, y_2_1, z_2_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_2_2, y_2_2, z_2_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_3_1, y_3_1, z_3_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_3_2, y_3_2, z_3_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_4_1, y_4_1, z_4_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_4_2, y_4_2, z_4_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_5_1, y_5_1, z_5_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_5_2, y_5_2, z_5_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_6_1, y_6_1, z_6_1, 0.2, None)
+        self.plot_triangle(trans_matrix, x_6_2, y_6_2, z_6_2, 0.2, None)
+        self.plot_triangle(trans_matrix, x_7_1, y_7_1, z_7_1, 0.4, None)
+        self.plot_triangle(trans_matrix, x_7_2, y_7_2, z_7_2, 0.4, None)
 
 
     def plot_cylinder(self, trans_matrix):
         r = 0.3
         h = 0.5
         t = 5
+        p = 1.05
 
         # Pfeil_1_1_1
-        x_p_1_1_1 = [(1.2 * r), (math.sqrt(2) / 2) * (1.2 * r), (1.2 * r)]
-        y_p_1_1_1 = [0, (math.sqrt(2) / 2) * (1.2 * r), 0]
+        x_p_1_1_1 = [(p * r), (math.sqrt(2) / 2) * (p * r), (p * r)]
+        y_p_1_1_1 = [0, (math.sqrt(2) / 2) * (p * r), 0]
         z_p_1_1_1 = [h / t, -h / t, -h / t]
 
         # Pfeil_1_1_2
-        x_p_1_1_2 = [(1.2 * r), (math.sqrt(2) / 2) * (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
-        y_p_1_1_2 = [0, (math.sqrt(2) / 2) * (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
+        x_p_1_1_2 = [(p * r), (math.sqrt(2) / 2) * (p * r), (math.sqrt(2) / 2) * (p * r)]
+        y_p_1_1_2 = [0, (math.sqrt(2) / 2) * (p * r), (math.sqrt(2) / 2) * (p * r)]
         z_p_1_1_2 = [h / t, -h / t, h / t]
 
         # Pfeil_1_2_1
-        x_p_1_2_1 = [(math.sqrt(2) / 2) * (1.2 * r), 0, (math.sqrt(2) / 2) * (1.2 * r)]
-        y_p_1_2_1 = [(math.sqrt(2) / 2) * (1.2 * r), (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
+        x_p_1_2_1 = [(math.sqrt(2) / 2) * (p * r), 0, (math.sqrt(2) / 2) * (p * r)]
+        y_p_1_2_1 = [(math.sqrt(2) / 2) * (p * r), (p * r), (math.sqrt(2) / 2) * (p * r)]
         z_p_1_2_1 = [h / t, -h / t, -h / t]
 
         # Pfeil_1_2_2
-        x_p_1_2_2 = [(math.sqrt(2) / 2) * (1.2 * r), 0, 0]
-        y_p_1_2_2 = [(math.sqrt(2) / 2) * (1.2 * r), (1.2 * r), (1.2 * r)]
+        x_p_1_2_2 = [(math.sqrt(2) / 2) * (p * r), 0, 0]
+        y_p_1_2_2 = [(math.sqrt(2) / 2) * (p * r), (p * r), (p * r)]
         z_p_1_2_2 = [h / t, -h / t, h / t]
 
         # Pfeilspitze_1
-        x_ps_1 = [0, 0, -(math.sqrt(2) / 2) * (1.2 * r)]
-        y_ps_1 = [(1.2 * r), (1.2 * r), (math.sqrt(2) / 2) * (1.2 * r)]
+        x_ps_1 = [0, 0, -(math.sqrt(2) / 2) * (p * r)]
+        y_ps_1 = [(p * r), (p * r), (math.sqrt(2) / 2) * (p * r)]
         z_ps_1 = [2 * (h / t), -2 * (h / t), 0]
 
-        # # Pfeil_2_1_1
-        # x_p_2_1_1 = [(1 * r), (math.sqrt(2) / 2) * (1 * r), (1 * r)]
-        # y_p_2_1_1 = [0, (math.sqrt(2) / 2) * (1 * r), 0]
-        # z_p_2_1_1 = [h / t, -h / t, -h / t]
-        #
-        # # Pfeil_2_1_2
-        # x_p_2_1_2 = [(1 * r), (math.sqrt(2) / 2) * (1 * r), (math.sqrt(2) / 2) * (1 * r)]
-        # y_p_2_1_2 = [0, (math.sqrt(2) / 2) * (1 * r), (math.sqrt(2) / 2) * (1 * r)]
-        # z_p_2_1_2 = [h / t, -h / t, h / t]
-        #
-        # # Pfeil_1_2_1
-        # x_p_2_2_1 = [(math.sqrt(2) / 2) * (1 * r), 0, (math.sqrt(2) / 2) * (1 * r)]
-        # y_p_2_2_1 = [(math.sqrt(2) / 2) * (1 * r), (1 * r), (math.sqrt(2) / 2) * (1 * r)]
-        # z_p_2_2_1 = [h / t, -h / t, -h / t]
-        #
-        # # Pfeil_1_2_2
-        # x_p_2_2_2 = [(math.sqrt(2) / 2) * (1 * r), 0, 0]
-        # y_p_2_2_2 = [(math.sqrt(2) / 2) * (1 * r), (1 * r), (1 * r)]
-        # z_p_2_2_2 = [h / t, -h / t, h / t]
-        #
-        # # Pfeilspitze_1
-        # x_ps_2 = [0, 0, -(math.sqrt(2) / 2) * (1 * r)]
-        # y_ps_2 = [(1 * r), (1 * r), (math.sqrt(2) / 2) * (1 * r)]
-        # z_ps_2 = [2 * (h / t), -2 * (h / t), 0]
+
 
         # 1_1. Teilseitenflaeche
         x_1_1 = [0, 0, (math.sqrt(2) / 2) * r]
