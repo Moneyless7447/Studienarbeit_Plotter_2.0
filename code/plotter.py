@@ -80,20 +80,15 @@ class Plotter:
         self.axes.clear()
         self.plot(self.robot.root, self.axes, root=True)
         self.axes.grid(False)
-        self.axes.set(xlim3d=(-10, 10), xlabel='x')
-        self.axes.set(ylim3d=(-10, 10), ylabel='y')
-        self.axes.set(zlim3d=(-10, 10), zlabel='z')
-             #plt.show()
-        # self.fig.show()
+        self.axes.set(xlim3d=(-7, 7), xlabel='x')
+        self.axes.set(ylim3d=(-7, 7), ylabel='y')
+        self.axes.set(zlim3d=(-7, 7), zlabel='z')
         plt.draw()
-        #plt.pause(2)
         plt.show(block=False)
-        #plt.show()
 
 
 
     def plotter_show(self):
-
         plt.show(block=True)
 
     def wait(self, time_in_sec):
@@ -199,7 +194,6 @@ class Plotter:
         self.plot_triangle(trans_matrix, x_6_2, y_6_2, z_6_2, 0.2, None)
         self.plot_triangle(trans_matrix, x_7_1, y_7_1, z_7_1, 0.4, None)
         self.plot_triangle(trans_matrix, x_7_2, y_7_2, z_7_2, 0.4, None)
-
 
     def plot_cylinder(self, trans_matrix):
         r = 0.3
@@ -465,3 +459,36 @@ class Plotter:
 
         poly_1 = Poly3DCollection(vertices_1, alpha=alpha, facecolors=col)
         self.axes.add_collection3d(poly_1)
+
+
+
+    def move_view(self, event):
+        #self.axes.autoscale(enable=False, axis='both')  # I have no idea, it this line have some effect at all
+
+        ## Set nearly similar speed of motion in dependency on zoom
+        koef = 8.  ## speed for 3D should be lower
+        zkoef = (self.axes.get_zbound()[0] - self.axes.get_zbound()[1]) / koef
+
+        xkoef = (self.axes.get_xbound()[0] - self.axes.get_xbound()[1]) / koef
+        ykoef = (self.axes.get_ybound()[0] - self.axes.get_ybound()[1]) / koef
+
+        ## Map an motion to keyboard shortcuts
+        if event.key == "ctrl+down":
+            self.axes.set_ybound(self.axes.get_ybound()[0] + xkoef, self.axes.get_ybound()[1] + xkoef)
+        if event.key == "ctrl+up":
+            self.axes.set_ybound(self.axes.get_ybound()[0] - xkoef, self.axes.get_ybound()[1] - xkoef)
+        if event.key == "ctrl+right":
+            self.axes.set_xbound(self.axes.get_xbound()[0] + ykoef, self.axes.get_xbound()[1] + ykoef)
+        if event.key == "ctrl+left":
+            self.axes.set_xbound(self.axes.get_xbound()[0] - ykoef, self.axes.get_xbound()[1] - ykoef)
+        if event.key == "down":
+            self.axes.set_zbound(self.axes.get_zbound()[0] - zkoef, self.axes.get_zbound()[1] - zkoef)
+        if event.key == "up":
+            self.axes.set_zbound(self.axes.get_zbound()[0] + zkoef, self.axes.get_zbound()[1] + zkoef)
+
+        # self.axes.figure.canvas.draw()
+        print(event.key)
+        plt.draw()
+
+        plt.show(block=False)
+
