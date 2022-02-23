@@ -16,7 +16,7 @@ dazugehörigen Plotter Objekte erzeugt werden.
 """
 
 if __name__ == '__main__':
-    robot2 = Robot("test_roboter", "example_robot_dh_fakechildren.json")
+    robot2 = Robot("test_roboter", "example_robot_dh.json")
 
     # print(f"robot2: {robot2.root}")
     # print(f"dh to A: {robot2.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")

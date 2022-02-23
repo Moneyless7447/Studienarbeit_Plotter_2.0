@@ -65,8 +65,12 @@ class Robot:
 
             if is_angle_pi == True:
                 if is_angle_div == True:
-                    tmp_float = float(child['angle'][3:])
-                    tmp_angle = float(np.pi / tmp_float)
+                    if child['angle'][0] == "-":
+                        tmp_float = float(child['angle'][4:])
+                        tmp_angle = float(-(np.pi / tmp_float))
+                    else:
+                        tmp_float = float(child['angle'][3:])
+                        tmp_angle = float(np.pi / tmp_float)
                 else:
                     if len(child['angle']) >= 4:
                         tmp_float = float(child['angle'][0:-3])
@@ -87,8 +91,12 @@ class Robot:
 
             if is_twist_pi == True:
                 if is_twist_div == True:
-                    tmp_float = float(child['twist'][3:])
-                    tmp_twist = float(np.pi / tmp_float)
+                    if child['twist'][0] == "-":
+                        tmp_float = float(child['twist'][4:])
+                        tmp_twist = float(-(np.pi / tmp_float))
+                    else:
+                        tmp_float = float(child['twist'][3:])
+                        tmp_twist = float(np.pi / tmp_float)
                 else:
                     if len(child['twist']) >= 4:
                         tmp_float = float(child['twist'][0:-3])

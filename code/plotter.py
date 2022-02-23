@@ -1,6 +1,6 @@
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 import time
 from matplotlib.widgets import Button
 import math
@@ -29,7 +29,7 @@ class Plotter:
         self.bnext = Button(self.axnext, 'Next')
         self.bnext.on_clicked(self.set_joint_and_update)
 
-
+        print('matplotlib: {}'.format(matplotlib.__version__))
         plt.ion()
         plt.show()
         plt.draw()
@@ -462,12 +462,12 @@ class Plotter:
 
 
 
-    def move_view(self, event):
+    def move_view(event):
         #self.axes.autoscale(enable=False, axis='both')  # I have no idea, it this line have some effect at all
 
         ## Set nearly similar speed of motion in dependency on zoom
         koef = 8.  ## speed for 3D should be lower
-        zkoef = (self.axes.get_zbound()[0] - self.axes.get_zbound()[1]) / koef
+        zkoef = (plotter.axes.get_zbound()[0] - self.axes.get_zbound()[1]) / koef
 
         xkoef = (self.axes.get_xbound()[0] - self.axes.get_xbound()[1]) / koef
         ykoef = (self.axes.get_ybound()[0] - self.axes.get_ybound()[1]) / koef
