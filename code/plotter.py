@@ -462,33 +462,4 @@ class Plotter:
 
 
 
-    def move_view(event):
-        #self.axes.autoscale(enable=False, axis='both')  # I have no idea, it this line have some effect at all
-
-        ## Set nearly similar speed of motion in dependency on zoom
-        koef = 8.  ## speed for 3D should be lower
-        zkoef = (plotter.axes.get_zbound()[0] - self.axes.get_zbound()[1]) / koef
-
-        xkoef = (self.axes.get_xbound()[0] - self.axes.get_xbound()[1]) / koef
-        ykoef = (self.axes.get_ybound()[0] - self.axes.get_ybound()[1]) / koef
-
-        ## Map an motion to keyboard shortcuts
-        if event.key == "ctrl+down":
-            self.axes.set_ybound(self.axes.get_ybound()[0] + xkoef, self.axes.get_ybound()[1] + xkoef)
-        if event.key == "ctrl+up":
-            self.axes.set_ybound(self.axes.get_ybound()[0] - xkoef, self.axes.get_ybound()[1] - xkoef)
-        if event.key == "ctrl+right":
-            self.axes.set_xbound(self.axes.get_xbound()[0] + ykoef, self.axes.get_xbound()[1] + ykoef)
-        if event.key == "ctrl+left":
-            self.axes.set_xbound(self.axes.get_xbound()[0] - ykoef, self.axes.get_xbound()[1] - ykoef)
-        if event.key == "down":
-            self.axes.set_zbound(self.axes.get_zbound()[0] - zkoef, self.axes.get_zbound()[1] - zkoef)
-        if event.key == "up":
-            self.axes.set_zbound(self.axes.get_zbound()[0] + zkoef, self.axes.get_zbound()[1] + zkoef)
-
-        # self.axes.figure.canvas.draw()
-        print(event.key)
-        plt.draw()
-
-        plt.show(block=False)
 

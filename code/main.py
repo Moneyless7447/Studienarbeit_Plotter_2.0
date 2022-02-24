@@ -1,13 +1,5 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import math
 from robot import *
-from joint import *
 from plotter import *
-import json
-from mpl_toolkits.mplot3d import Axes3D
-import os
-import time
 
 
 """
@@ -16,6 +8,8 @@ dazugehörigen Plotter Objekte erzeugt werden.
 """
 
 if __name__ == '__main__':
+    # *** Hier Name des Roboters (derzeit irrelevant und kann auf "test_roboter" gesetzt bleiben)
+    # und JSON-Datei des Roboters angeben ***
     robot2 = Robot("test_roboter", "example_robot_dh.json")
 
     # print(f"robot2: {robot2.root}")
