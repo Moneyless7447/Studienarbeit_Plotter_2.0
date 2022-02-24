@@ -11,24 +11,24 @@
         {
           "title": "Beta1-Gelenk",
           "type": "rotation",
-          "angle": "2*pi",
+          "angle": "pi/2",
           "length": "0",
           "offset": "0",
-          "twist": "-pi/2",
+          "twist": "pi/2",
           "children": [
             {
               "title": "Gamma1-Gelenk",
               "type": "rotation",
               "angle": "0",
-              "length": "4",
+              "length": "-4",
               "offset": "3",
               "twist": "0",
               "children": [
                 {
                   "title": "TCP",
-                  "type": "rotation",
+                  "type": "TCP",
                   "angle": "0",
-                  "length": "5",
+                  "length": "-5",
                   "offset": "0",
                   "twist": "0"
                 }

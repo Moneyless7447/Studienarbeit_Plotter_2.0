@@ -1,8 +1,4 @@
-from dataclasses import dataclass
-from pprint import pprint
 import numpy as np
-
-
 
 class Joint:
     def __init__(self, **kwargs):
@@ -30,6 +26,11 @@ class Joint:
     #     return self.children[iterator] #yield
 
     def __getitem__(self, title):
+        """
+        Definition des Zugriffsoperators. Rekursive Suche des Joints mit angegebenem Titel.
+        Liefert Knoten mit angegebenem Titel aus dem Unterbaum.
+        :return: Jointobjekt
+        """
         if self.title == title:
             return self
         if not len(self.children):
@@ -50,13 +51,19 @@ class Joint:
         return f"Title: {self.title}, Children: {self.children}"
 
     def generate_dh_matrices_to_children(self):
+        """
+        Berechnet die Transformationsmatrizen eines Knoten zu seinen Kindern und trägt sie in eine Liste ein.
+        :return:
+        """
         if not self.children:
             return
         for index, child in enumerate(self.children):
+            # Wenn kein Referenzkind mit angegebenem Titel besteht:
             if not self.has_reference_child(child.title):
+                #DH-Transformationsmatrix
                 self.transformationmatrices_to_children[index] = \
                     np.array([[np.cos(child.angle+child.angle_offset),
-                               -np.sin(child.angle+child.angle_offset) *np.cos(child.twist),
+                               -np.sin(child.angle+child.angle_offset) * np.cos(child.twist),
                                np.sin(child.angle+child.angle_offset)*np.sin(child.twist),
                                (child.length+child.length_offset) * np.cos(child.angle+child.angle_offset)],
                                                                            [np.sin(child.angle+child.angle_offset), np.cos(child.angle+child.angle_offset)*np.cos(child.twist), -np.cos(child.angle+child.angle_offset)*np.sin(child.twist), (child.length+child.length_offset) * np.sin(child.angle+child.angle_offset)],
@@ -73,6 +80,9 @@ class Joint:
 
 
     def get_reference_dh_for_parent(self, title):
+        """
+        Gibt DH-Parameter zu einem Referenzelternknoten zurück.
+        """
         for parent, dh in zip(self.reference_parents, self.reference_dh_parameters):
             if parent.title == title:
                 return dh
@@ -82,7 +92,7 @@ class Joint:
         '''
         Sucht angegebenes Objekt mit dem angegebenem Titel.
         Erzeugt Transformationsmatrix bis zu diesem Objekt.
-        :param title: Titel vo. Zielobjekt
+        :param title: Titel von Zielobjekt
         :return: Transformationsmatrix von Objekt zu Zielobjekt
         '''
         if not self.children:

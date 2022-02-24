@@ -8,57 +8,14 @@ dazugehörigen Plotter Objekte erzeugt werden.
 """
 
 if __name__ == '__main__':
-    # *** Hier Name des Roboters (derzeit irrelevant und kann auf "test_roboter" gesetzt bleiben)
-    # und JSON-Datei des Roboters angeben ***
-    robot2 = Robot("test_roboter", "example_robot_dh.json")
+    """Hier Name des Roboters (derzeit irrelevant und kann auf "test_roboter" gesetzt bleiben)
+    und JSON-Datei des Roboters angeben"""
+    robot = Robot("test_roboter", "example_robot_dh_egal.json")
 
-    # print(f"robot2: {robot2.root}")
-    # print(f"dh to A: {robot2.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
+    # Hier können Transformationsmatrizen ausgegeben werden, Beispiel:
+    print(f"Beispiel: DH-Matrix von 'root' zu Beta1-Gelenk:\n{robot.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
 
-    # robot2.set_joint("Alpha1-Gelenk", math.radians(45))
-
-    # print(f"dh to A: {robot2.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
-    plotter = Plotter(robot2)
-    #plotter.update()
-
-
+    # Plotter Objekt wird erzeugt, eingerichtet und angezeigt
+    plotter = Plotter(robot)
     plotter.plot(plotter.robot.root, plotter.axes, root=True)
-    # plotter.set_joint_and_update()
     plotter.plotter_show()
-    print("+n+n+n+n+n+")
-
-    # while True:
-    #     robot2.set_joint("Alpha1-Gelenk", math.radians(45))
-    #     plotter.update()
-    #     robot2.reset_joint_offsets("Alpha1-Gelenk")
-    #     plotter.update()
-    #     #plotter.plotter_show()
-    #     #plotter.update()
-
-    #funktioniert:
-    #robot2.set_joint("Alpha1-Gelenk", math.radians(45))
-    #plotter.update("bla")
-
-
-
-    plotter.plotter_show()
-    # time.sleep(3)
-    # plotter.wait(3)
-    #plotter.update()
-    # counter = 0
-    # direction = 1
-    # plotter.fig.show()
-    # while True:
-    #     plotter.fig.show()
-
-        #plotter.fig.canvas.draw()
-
-    #     robot2.set_joint("Alpha1-Gelenk", math.radians(90)*counter)
-    #     print(f"dh to A: {robot2.generate_dh_matrix_from_to('root', 'Beta1-Gelenk')}")
-    #     plotter.update()
-    #     counter = counter+(0.1*direction)
-    #     if counter >= 1:
-    #         direction = -1
-    #     elif counter <= 0:
-    #         direction = 1
-    #     print(counter)
