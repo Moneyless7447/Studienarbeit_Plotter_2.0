@@ -7,7 +7,7 @@ from matplotlib.widgets import RadioButtons
 from matplotlib.widgets import TextBox
 import math
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-
+from tkinter import *
 
 class Plotter:
     def __init__(self, robot):
@@ -16,6 +16,8 @@ class Plotter:
         self.axes = self.fig.add_subplot(111, projection='3d')
         self.show_title = False
         self.show_name = False
+        self.show_3d_symbol = True
+
         origin_points = self.plot(self.robot.root, self.axes, root=True)
         calculated_limits = self.calc_limits(origin_points)
         self.axes.set(xlim3d=(calculated_limits[0], calculated_limits[1]), xlabel='X')
@@ -23,26 +25,31 @@ class Plotter:
         self.axes.set(zlim3d=(calculated_limits[0], calculated_limits[1]), zlabel='Z')
         self.axes.grid(False)
         # "Next" Button
-        self.axnext = plt.axes([0.81, 0.05, 0.1, 0.075])
+        self.axnext = plt.axes([0.23, 0.05, 0.08, 0.075])
         self.bnext = Button(self.axnext, 'Next')
         self.bnext.on_clicked(self.set_joint_and_update)
         # Checkboxen
-        self.axes_checkboxes = plt.axes([0.7, 0.05, 0.1, 0.075])
-        self.check_options = CheckButtons(self.axes_checkboxes, ["Titel", "Name"])
+        self.axes_checkboxes = plt.axes([0.01, 0.82, 0.18, 0.16])
+        self.check_options = CheckButtons(self.axes_checkboxes, ["Titel", "Name", "3D Symbole"], [False, False, True])
         self.check_options.on_clicked(self.set_show_options)
         print(robot.get_joint_titles(robot.root))
+
         # Radiobuttons
         self.title_list = self.robot.get_joint_titles(self.robot.root)
         self.axes_radiobox = plt.axes([0.01, 0.126, 0.3, 0.06*len(self.title_list)])
         self.radio_joints = RadioButtons(self.axes_radiobox, self.title_list)
         # "Apply" Button
-        self.axes_apply = plt.axes([0.23, 0.05, 0.08, 0.075])
+        self.axes_apply = plt.axes([0.15, 0.05, 0.08, 0.075])
         self.b_apply = Button(self.axes_apply, 'Apply')
         self.b_apply.on_clicked(self.apply_joint_change)
         # Text Box
-        self.axes_textbox = plt.axes([0.01, 0.05, 0.22, 0.075])
-        self.text_value = TextBox(self.axes_textbox, '')
-        #self.text_value.on_submit()
+        self.axes_textbox = plt.axes([0.01, 0.05, 0.14, 0.075])
+        self.text_value = TextBox(self.axes_textbox, '', initial="Test")
+        print(f"test Textbox: {self.text_value.get_active()}")
+        # self.text_value.on_text_change(self.test_func)
+        # self.text_value.on_submit(self.test_func)
+
+
 
         plt.ion()
         plt.show()
@@ -69,10 +76,10 @@ class Plotter:
         z_axis_point = np.dot(matrix, [0, 0, scale, 1])[:3]
 
         # Ursprünge als Punkte plotten
-        if joint.type == "TCP":
+        if joint.type == "TCP" and self.show_3d_symbol:
             axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'ko')
         else:
-            axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'k.')
+            axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'k,')
         # Achsen als Geraden plotten (Verbindungslinien von Ursprungspunkten zu Hilfspunkten der Achsen)
         axes.plot([origin_point[0], x_axis_point[0]], [origin_point[1], x_axis_point[1]],
                   [origin_point[2], x_axis_point[2]], 'r-', linewidth=0.5*scale)
@@ -86,11 +93,12 @@ class Plotter:
         if self.show_name:
             axes.text(origin_point[0], origin_point[1], origin_point[2], joint.name, fontsize = 'small')
 
-        # Unterscheidung der Simbolik je nach Angabe der Gelenktypen
-        if joint.type == "rotation":
-            self.plot_cylinder(matrix)
-        elif joint.type == "translation":
-            self.plot_quader(matrix)
+        # Unterscheidung der Symbolik je nach Angabe der Gelenktypen
+        if self.show_3d_symbol:
+            if joint.type == "rotation":
+                self.plot_cylinder(matrix)
+            elif joint.type == "translation":
+                self.plot_quader(matrix)
 
 
         # Abbruchkriterium für rekursiven Aufruf
@@ -144,7 +152,7 @@ class Plotter:
         # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         # self.robot.set_joint("Beta2-Gelenk", math.radians(-20))
         # Falls es Referenzgelenke gibt, können die Winkel der Duplikate unabhängig geändert werden
-        # self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
+        self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
         self.update(None)
 
     def plot_quader(self, trans_matrix):
@@ -502,8 +510,11 @@ class Plotter:
     def set_show_options(self, *args):
         self.show_title = self.check_options.get_status()[0]
         self.show_name = self.check_options.get_status()[1]
+        self.show_3d_symbol = self.check_options.get_status()[2]
         self.update(None)
 
     def apply_joint_change(self, *args):
         self.robot.set_joint(self.title_list[self.radio_joints.active], float(self.text_value.text))
 
+    def test_func(self, *args):
+        print("text changed")
