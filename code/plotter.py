@@ -7,7 +7,7 @@ from matplotlib.widgets import RadioButtons
 from matplotlib.widgets import TextBox
 import math
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from tkinter import *
+#from tkinter import *
 
 class Plotter:
     def __init__(self, robot):
@@ -36,7 +36,7 @@ class Plotter:
 
         # Radiobuttons
         self.title_list = self.robot.get_joint_titles(self.robot.root)
-        self.axes_radiobox = plt.axes([0.01, 0.126, 0.3, 0.06*len(self.title_list)])
+        self.axes_radiobox = plt.axes([0.01, 0.126, 0.3, 0.04*len(self.title_list)])
         self.radio_joints = RadioButtons(self.axes_radiobox, self.title_list)
         # "Apply" Button
         self.axes_apply = plt.axes([0.15, 0.05, 0.08, 0.075])
@@ -156,7 +156,7 @@ class Plotter:
         self.update(None)
 
     def plot_quader(self, trans_matrix):
-        h = 0.3
+        h = 0.5
 
         # 1_1 Teilflaeche
         x_1_1 = [h, -h, h]
@@ -244,8 +244,8 @@ class Plotter:
         self.plot_triangle(trans_matrix, x_7_2, y_7_2, z_7_2, 0.5, None)
 
     def plot_cylinder(self, trans_matrix):
-        r = 0.45
-        h = 0.6
+        r = 0.6
+        h = 0.8
         t = 5
         p = 1.05
 
@@ -516,5 +516,5 @@ class Plotter:
     def apply_joint_change(self, *args):
         self.robot.set_joint(self.title_list[self.radio_joints.active], float(self.text_value.text))
 
-    def test_func(self, *args):
-        print("text changed")
+    # def test_func(self, *args):
+    #     print("text changed")

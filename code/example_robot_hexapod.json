@@ -1,0 +1,252 @@
+{
+  "robot": [
+    {
+      "title": "Dummy-R",
+      "type": "none",
+      "angle": "-pi/2",
+      "length": "3.2",
+      "offset": "0",
+      "twist": "0",
+      "children": [
+        {
+          "title": "Leg-1_Alpha-Joint",
+          "type": "rotation",
+          "angle": "pi/2",
+          "length": "7.5",
+          "offset": "-3.8",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Leg-1_Beta-Joint",
+              "type": "rotation",
+              "angle": "0",
+              "length": "4.9",
+              "offset": "0",
+              "twist": "pi/2",
+              "children": [
+                {
+                  "title": "Leg-1_Gamma-Joint",
+                  "type": "rotation",
+                  "angle": "-0.34195",
+                  "length": "6.26259",
+                  "offset": "0",
+                  "twist": "0",
+                  "children": [
+                    {
+                      "title": "Leg-1_Fusspunkt",
+                      "type": "TCP",
+                      "angle": "-1.0885",
+                      "length": "9.2914",
+                      "offset": "0",
+                      "twist": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Leg-6_Alpha-Joint",
+          "type": "rotation",
+          "angle": "0",
+          "length": "4.45",
+          "offset": "-3.8",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Leg-6_Beta-Joint",
+              "type": "rotation",
+              "angle": "0",
+              "length": "4.9",
+              "offset": "0",
+              "twist": "pi/2",
+              "children": [
+                {
+                  "title": "Leg-6_Gamma-Joint",
+                  "type": "rotation",
+                  "angle": "-0.34195",
+                  "length": "6.26259",
+                  "offset": "0",
+                  "twist": "0",
+                  "children": [
+                    {
+                      "title": "Leg-6_Fusspunkt",
+                      "type": "TCP",
+                      "angle": "-1.0885",
+                      "length": "9.2914",
+                      "offset": "0",
+                      "twist": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Leg-5_Alpha-Joint",
+          "type": "rotation",
+          "angle": "-pi/2",
+          "length": "7.5",
+          "offset": "-3.8",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Leg-5_Beta-Joint",
+              "type": "rotation",
+              "angle": "0",
+              "length": "4.9",
+              "offset": "0",
+              "twist": "pi/2",
+              "children": [
+                {
+                  "title": "Leg-5_Gamma-Joint",
+                  "type": "rotation",
+                  "angle": "-0.34195",
+                  "length": "6.26259",
+                  "offset": "0",
+                  "twist": "0",
+                  "children": [
+                    {
+                      "title": "Leg-5_Fusspunkt",
+                      "type": "TCP",
+                      "angle": "-1.0885",
+                      "length": "9.2914",
+                      "offset": "0",
+                      "twist": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Dummy-L",
+      "type": "none",
+      "angle": "pi/2",
+      "length": "3.2",
+      "offset": "0",
+      "twist": "0",
+      "children": [
+        {
+          "title": "Leg-2_Alpha-Joint",
+          "type": "rotation",
+          "angle": "-pi/2",
+          "length": "7.5",
+          "offset": "-3.8",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Leg-2_Beta-Joint",
+              "type": "rotation",
+              "angle": "0",
+              "length": "4.9",
+              "offset": "0",
+              "twist": "pi/2",
+              "children": [
+                {
+                  "title": "Leg-2_Gamma-Joint",
+                  "type": "rotation",
+                  "angle": "-0.34195",
+                  "length": "6.26259",
+                  "offset": "0",
+                  "twist": "0",
+                  "children": [
+                    {
+                      "title": "Leg-2_Fusspunkt",
+                      "type": "TCP",
+                      "angle": "-1.0885",
+                      "length": "9.2914",
+                      "offset": "0",
+                      "twist": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Leg-3_Alpha-Joint",
+          "type": "rotation",
+          "angle": "0",
+          "length": "4.45",
+          "offset": "-3.8",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Leg-3_Beta-Joint",
+              "type": "rotation",
+              "angle": "0",
+              "length": "4.9",
+              "offset": "0",
+              "twist": "pi/2",
+              "children": [
+                {
+                  "title": "Leg-3_Gamma-Joint",
+                  "type": "rotation",
+                  "angle": "-0.34195",
+                  "length": "6.26259",
+                  "offset": "0",
+                  "twist": "0",
+                  "children": [
+                    {
+                      "title": "Leg-3_Fusspunkt",
+                      "type": "TCP",
+                      "angle": "-1.0885",
+                      "length": "9.2914",
+                      "offset": "0",
+                      "twist": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Leg-4_Alpha-Joint",
+          "type": "rotation",
+          "angle": "pi/2",
+          "length": "7.5",
+          "offset": "-3.8",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Leg-4_Beta-Joint",
+              "type": "rotation",
+              "angle": "0",
+              "length": "4.9",
+              "offset": "0",
+              "twist": "pi/2",
+              "children": [
+                {
+                  "title": "Leg-4_Gamma-Joint",
+                  "type": "rotation",
+                  "angle": "-0.34195",
+                  "length": "6.26259",
+                  "offset": "0",
+                  "twist": "0",
+                  "children": [
+                    {
+                      "title": "Leg-4_Fusspunkt",
+                      "type": "TCP",
+                      "angle": "-1.0885",
+                      "length": "9.2914",
+                      "offset": "0",
+                      "twist": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
