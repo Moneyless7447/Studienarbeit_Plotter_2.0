@@ -17,13 +17,15 @@ class Plotter:
         self.show_title = False
         self.show_name = False
         self.show_3d_symbol = True
-
+        self.geometry_scaling = self.get_max_dh_param(self.robot.root) / 5
         origin_points = self.plot(self.robot.root, self.axes, root=True)
         calculated_limits = self.calc_limits(origin_points)
         self.axes.set(xlim3d=(calculated_limits[0], calculated_limits[1]), xlabel='X')
         self.axes.set(ylim3d=(calculated_limits[0], calculated_limits[1]), ylabel='Y')
         self.axes.set(zlim3d=(calculated_limits[0], calculated_limits[1]), zlabel='Z')
         self.axes.grid(False)
+
+
         # "Next" Button
         self.axnext = plt.axes([0.23, 0.05, 0.08, 0.075])
         self.bnext = Button(self.axnext, 'Next')
@@ -34,18 +36,18 @@ class Plotter:
         self.check_options.on_clicked(self.set_show_options)
         print(robot.get_joint_titles(robot.root))
 
-        # Radiobuttons
-        self.title_list = self.robot.get_joint_titles(self.robot.root)
-        self.axes_radiobox = plt.axes([0.01, 0.126, 0.3, 0.04*len(self.title_list)])
-        self.radio_joints = RadioButtons(self.axes_radiobox, self.title_list)
-        # "Apply" Button
-        self.axes_apply = plt.axes([0.15, 0.05, 0.08, 0.075])
-        self.b_apply = Button(self.axes_apply, 'Apply')
-        self.b_apply.on_clicked(self.apply_joint_change)
-        # Text Box
-        self.axes_textbox = plt.axes([0.01, 0.05, 0.14, 0.075])
-        self.text_value = TextBox(self.axes_textbox, '', initial="Test")
-        print(f"test Textbox: {self.text_value.get_active()}")
+        # # Radiobuttons
+        # self.title_list = self.robot.get_joint_titles(self.robot.root)
+        # self.axes_radiobox = plt.axes([0.01, 0.126, 0.3, 0.04*len(self.title_list)])
+        # self.radio_joints = RadioButtons(self.axes_radiobox, self.title_list)
+        # # "Apply" Button
+        # self.axes_apply = plt.axes([0.15, 0.05, 0.08, 0.075])
+        # self.b_apply = Button(self.axes_apply, 'Apply')
+        # self.b_apply.on_clicked(self.apply_joint_change)
+        # # Text Box
+        # self.axes_textbox = plt.axes([0.01, 0.05, 0.14, 0.075])
+        # self.text_value = TextBox(self.axes_textbox, '', initial="Test")
+        # print(f"test Textbox: {self.text_value.get_active()}")
         # self.text_value.on_text_change(self.test_func)
         # self.text_value.on_submit(self.test_func)
 
@@ -54,6 +56,16 @@ class Plotter:
         plt.ion()
         plt.show()
         plt.draw()
+
+    def get_max_dh_param(self, joint):
+        if not joint.children:
+            return max(abs(joint.length), abs(joint.offset))
+        else:
+            child_max = max([self.get_max_dh_param(child) for child in joint.children])
+            if child_max > abs(joint.length) or child_max > abs(joint.offset):
+                return child_max
+            else:
+                return max(abs(joint.length), abs(joint.offset))
 
     def plot(self, joint, axes, matrix=np.identity(4), root=False):
         """
@@ -148,15 +160,19 @@ class Plotter:
         Hier können Winkeländerungen angegeben werden.
         :param args:
         """
-        # self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
+        self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
         # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         # self.robot.set_joint("Beta2-Gelenk", math.radians(-20))
         # Falls es Referenzgelenke gibt, können die Winkel der Duplikate unabhängig geändert werden
-        self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
+        # self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
+
+        # self.robot.set_joint("Leg-2_Beta-Joint", math.radians(20))
+        # self.robot.set_joint("Leg-2_Gamma-Joint", math.radians(20))
+        # self.robot.set_joint("Leg-3_Gamma-Joint", math.radians(40))
         self.update(None)
 
     def plot_quader(self, trans_matrix):
-        h = 0.5
+        h = 0.5 * self.geometry_scaling
 
         # 1_1 Teilflaeche
         x_1_1 = [h, -h, h]
@@ -244,8 +260,8 @@ class Plotter:
         self.plot_triangle(trans_matrix, x_7_2, y_7_2, z_7_2, 0.5, None)
 
     def plot_cylinder(self, trans_matrix):
-        r = 0.6
-        h = 0.8
+        r = 0.6 * self.geometry_scaling
+        h = 0.8 * self.geometry_scaling
         t = 5
         p = 1.05
 
