@@ -158,6 +158,20 @@ class Robot:
         # Zugriff auf __getitem__
         return self.root[_from].generate_dh_matrix_to(_to)
 
+    def calc_inverse_dh_matrix(self, trans_matrix):
+        #Rotationsanteil
+        rotation_matrix = np.transpose(trans_matrix[:3, :3])
+        #Translationsanteil
+        translation_matrix = trans_matrix[:3, -1:]
+        translation_matrix = np.dot(-rotation_matrix, translation_matrix)
+        inverse_matrix = np.eye(4)
+        inverse_matrix[0:3, 0:3] = rotation_matrix[0:3]
+        inverse_matrix[0:3, 3] = translation_matrix[0:3, 0]
+        #print(f"rotation_matrix:\n{rotation_matrix}")
+        #print(f"translation_matrix:\n{translation_matrix}")
+        #print(f"Inverse Matrix:\n{inverse_matrix}")
+        return inverse_matrix
+
     # Funktion zum Aufrufen der set_joint Funktion für eines benannten Jointobjektes.
     def set_joint(self, title, *args):
         self.root[title].set_joint(args)
