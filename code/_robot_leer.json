@@ -1,0 +1,12 @@
+{
+  "robot": [
+    {
+      "title": "r",
+      "type": "translation",
+      "angle": "0",
+      "length": "0",
+      "offset": "0",
+      "twist": "0"
+    }
+  ]
+}
