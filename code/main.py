@@ -10,7 +10,7 @@ dazugehörigen Plotter Objekte erzeugt werden.
 if __name__ == '__main__':
     """Hier Name des Roboters (derzeit irrelevant und kann auf "test_roboter" gesetzt bleiben)
     und JSON-Datei des Roboters angeben"""
-    robot = Robot("test_roboter", "_robot_leer.json")
+    robot = Robot("test_roboter", "_extra_Kind.json")
     #robot = Robot("test_roboter", "example_robot_hexapod.json")
     #robot = Robot("test_roboter", "example_robot_dh_test_fuer_jonas.json")
     # Hier können Transformationsmatrizen ausgegeben werden, Beispiel:

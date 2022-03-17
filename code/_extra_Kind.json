@@ -23,14 +23,6 @@
               "length": "1",
               "offset": "3",
               "twist": "0.7854"
-            },
-            {
-              "title": "Gamma2-Gelenk",
-              "type": "rotation",
-              "angle": "-1.570796",
-              "length": "0.5",
-              "offset": "2",
-              "twist": "0"
             }
           ]
         },
@@ -43,14 +35,6 @@
           "twist": "-0.7854"
         }
       ]
-    },
-    {
-      "title": "Alpha2-Gelenk",
-      "type": "rotation",
-      "angle": "3.14159",
-      "length": "2.4",
-      "offset": "3",
-      "twist": "0"
     }
   ]
 }
