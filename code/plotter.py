@@ -19,7 +19,7 @@ class Plotter:
         self.axes = self.fig.add_subplot(111, projection='3d')
         self.show_title = False
         self.show_name = False
-        self.show_3d_symbol = True
+        self.show_3d_symbol = False
         self.geometry_scaling = self.get_max_dh_param(self.robot.root) / 5
         origin_points = self.plot(self.robot.root, self.axes, root=True)
         calculated_limits = self.calc_limits(origin_points)
@@ -34,10 +34,10 @@ class Plotter:
         # self.bnext = Button(self.axnext, 'Next')
         # self.bnext.on_clicked(self.set_joint_and_update)
         # Checkboxen
-        self.axes_checkboxes = plt.axes([0.01, 0.82, 0.18, 0.16])
-        self.check_options = CheckButtons(self.axes_checkboxes, ["Titel", "Name", "3D Symbole"], [False, False, True])
-        self.check_options.on_clicked(self.set_show_options)
-        print(robot.get_joint_titles(robot.root))
+        # self.axes_checkboxes = plt.axes([0.01, 0.82, 0.18, 0.16])
+        # self.check_options = CheckButtons(self.axes_checkboxes, ["Titel", "Name", "3D Symbole"], [False, False, True])
+        # self.check_options.on_clicked(self.set_show_options)
+        # print(robot.get_joint_titles(robot.root))
 
         # # Radiobuttons
         # self.title_list = self.robot.get_joint_titles(self.robot.root)
@@ -57,7 +57,7 @@ class Plotter:
 
 
         plt.ion()
-        plt.show()
+        #plt.show()
         plt.draw()
 
     def get_max_dh_param(self, joint):
@@ -149,10 +149,11 @@ class Plotter:
         self.axes.set(ylim3d=(ylims), ylabel='y')
         self.axes.set(zlim3d=(zlims), zlabel='z')
         plt.draw()
-        plt.show(block=False)
+        #plt.show(block=False)
 
     def plotter_show(self):
-        plt.show(block=True)
+        #plt.show(block=True)
+        pass
 
     def print_button_clicked(self, *args):
         """Funktion zum Überprüfen und Testen des Buttons"""
@@ -528,9 +529,9 @@ class Plotter:
         return (minimum, maximum)
 
     def set_show_options(self, *args):
-        self.show_title = self.check_options.get_status()[0]
-        self.show_name = self.check_options.get_status()[1]
-        self.show_3d_symbol = self.check_options.get_status()[2]
+        self.show_title = args[1]
+        self.show_name = args[0]
+        self.show_3d_symbol = args[2]
         self.update(None)
 
     def apply_joint_change(self, *args):

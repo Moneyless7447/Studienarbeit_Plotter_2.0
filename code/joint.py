@@ -116,7 +116,8 @@ class Joint:
             self.angle_offset += args[0][0]
         elif self.type == "translation":
             self.length_offset += args[0][0]
-        self.previous.generate_dh_matrices_to_children()
+        if self.previous is not None:
+            self.previous.generate_dh_matrices_to_children()
         for index, arg in enumerate(args[0][1:]):
             if self.reference_dh_parameters:
                 if self.reference_dh_parameters[index]["type"] == "rotation":
