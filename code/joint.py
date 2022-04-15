@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 class Joint:
@@ -107,6 +109,9 @@ class Joint:
 
 
     def set_joint(self, *args):
+        if type(args[0][0]) == list:
+            args = ([math.radians(float(v)) for v in args[0][0]], )
+        print(args)
         if self.type == "rotation":
             self.angle_offset += args[0][0]
         elif self.type == "translation":

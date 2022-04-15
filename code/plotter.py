@@ -10,9 +10,12 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 #from tkinter import *
 
 class Plotter:
-    def __init__(self, robot):
+    def __init__(self, robot, fig=None):
         self.robot = robot
-        self.fig = plt.figure()
+        if fig is not None:
+            self.fig = fig
+        else:
+            self.fig = plt.figure()
         self.axes = self.fig.add_subplot(111, projection='3d')
         self.show_title = False
         self.show_name = False
@@ -27,9 +30,9 @@ class Plotter:
 
 
         # "Next" Button
-        self.axnext = plt.axes([0.23, 0.05, 0.08, 0.075])
-        self.bnext = Button(self.axnext, 'Next')
-        self.bnext.on_clicked(self.set_joint_and_update)
+        # self.axnext = plt.axes([0.23, 0.05, 0.08, 0.075])
+        # self.bnext = Button(self.axnext, 'Next')
+        # self.bnext.on_clicked(self.set_joint_and_update)
         # Checkboxen
         self.axes_checkboxes = plt.axes([0.01, 0.82, 0.18, 0.16])
         self.check_options = CheckButtons(self.axes_checkboxes, ["Titel", "Name", "3D Symbole"], [False, False, True])
@@ -160,7 +163,8 @@ class Plotter:
         Hier können Winkeländerungen angegeben werden.
         :param args:
         """
-        self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
+        self.robot.set_joint(args[0], args[1])
+        #self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
         # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         # self.robot.set_joint("Beta2-Gelenk", math.radians(-20))
         # Falls es Referenzgelenke gibt, können die Winkel der Duplikate unabhängig geändert werden
