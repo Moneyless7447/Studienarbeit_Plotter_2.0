@@ -174,7 +174,7 @@ class Robot:
 
     # Funktion zum Aufrufen der set_joint Funktion für eines benannten Jointobjektes.
     def set_joint(self, title, *args):
-        print(title,args)
+        print(title, args)
         self.root[title].set_joint(args)
 
     # Funktion zum Aufrufen der set_joint_to_absolute Funktion eines benannten Jointobjektes.
