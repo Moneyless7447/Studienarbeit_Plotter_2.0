@@ -141,7 +141,7 @@ class Robot:
                 # Aktueller Knoten wird als Referenzelter des Kindes eingetragen
                 reference_child.reference_parents.append(parent)
                 reference_child.reference_dh_parameters.append({"angle": float(tmp_angle), "length": float(child["length"]),
-                                                                "offset": float(child["offset"]), "twist": float(tmp_twist), "type": child["type"], "angle_offset": 0.0, "length_offset": 0.0})
+                                                                "offset": float(child["offset"]), "twist": float(tmp_twist), "type": child["type"], "angle_offset": 0.0, "offset_offset": 0.0})
                 # Existierendes Kind wird an den aktuellen Knoten als Kind angehängt
                 parent.children.append(reference_child)
                 parent.transformationmatrices_to_children.append(None)

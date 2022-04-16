@@ -10,7 +10,7 @@ import plotter
 
 class GUI:
     def __init__(self):
-        self.robot = robot.Robot("test_roboter", "_extra_Kind.json")
+        self.robot = robot.Robot("test_roboter", "example_robot_dh_linear.json")
         self.fig = plt.figure(figsize=(6, 6), dpi=80, tight_layout=True)
         self.plotter = plotter.Plotter(self.robot, self.fig)
         self.window = tk.Tk()
