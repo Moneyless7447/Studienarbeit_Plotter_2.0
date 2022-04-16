@@ -15,7 +15,7 @@ class GUI:
         self.plotter = plotter.Plotter(self.robot, self.fig)
         self.window = tk.Tk()
         self.window.geometry('800x500')
-        self.window.configure(bg="white")
+        #self.window.configure(bg="white")
         self.window.title("RoboPlot")
 
         def on_close():
@@ -29,12 +29,15 @@ class GUI:
         self.node_selection.set(self.node_selection['values'][0])
 
         self.input_text = tk.StringVar()
-        self.label_value_input = ttk.Label(self.window, text='Value (deg):')#, background='#36373d', foreground='white')
+        self.label_value_input = ttk.Label(self.window, text='Value (deg or distance):')#, background='#36373d', foreground='white')
         self.value_input = ttk.Entry(self.window, textvariable=self.input_text, width=33)
 
-        self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, bg='#76798a', fg='white',
-                                      width=28)
+        # self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, bg='#76798a', fg='white',
+        #                               width=28)
+        self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, width=28)
+        self.reset_button = tk.Button(self.window, text='Reset', command=self.reset_changes, width=28)
         self.view = FigureCanvasTkAgg(self.fig, self.window)
+
 
         self.bool_title = True
         # self.bool_title.set(0)
@@ -60,6 +63,7 @@ class GUI:
         self.label_value_input.grid(column=1, row=10, padx=2, pady=5, sticky='w')
         self.value_input.grid(column=2, row=10, padx=2, pady=1, sticky='w')
         self.apply_button.grid(column=2, row=11, padx=2, pady=5, sticky='w')
+        self.reset_button.grid(column=2, row=12, padx=2, pady=5, sticky='w')
         self.view.get_tk_widget().grid(columnspan=1, rowspan=40, row=1, column=3, padx=10, pady=10)
         self.check_name.grid(column=1, row=2, sticky='w')
         self.check_title.grid(column=1, row=3, sticky='w')
@@ -68,6 +72,11 @@ class GUI:
     def apply_changes(self):
         # print(self.value_input.get())
         self.plotter.set_joint_and_update(self.node_selection.get(), self.value_input.get().split(','))
+
+    def reset_changes(self):
+        titles = robot.get_joint_titles()
+        for title in titles:
+            self.plotter.reset_joint_offsets(title)
 
     def set_show_options(self):
         # print(self.bool_title, self.bool_name, self.bool_symbols)
