@@ -23,19 +23,20 @@ class GUI:
             exit(0)
         self.window.protocol("WM_DELETE_WINDOW", on_close)
 
-        self.label_node_selection = ttk.Label(self.window, text='Joint:')#, background='#36373d', foreground='white')
-        self.node_selection = ttk.Combobox(self.window, width=30)
+        self.label_node_selection = ttk.Label(self.window, text='Joint (title):')#, background='#36373d', foreground='white')
+        self.node_selection = ttk.Combobox(self.window, width=17)
         self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection.set(self.node_selection['values'][0])
 
         self.input_text = tk.StringVar()
         self.label_value_input = ttk.Label(self.window, text='Value (deg or distance):')#, background='#36373d', foreground='white')
-        self.value_input = ttk.Entry(self.window, textvariable=self.input_text, width=33)
+        self.value_input = ttk.Entry(self.window, textvariable=self.input_text, width=20)
 
         # self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, bg='#76798a', fg='white',
         #                               width=28)
-        self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, width=28)
-        self.reset_button = tk.Button(self.window, text='Reset', command=self.reset_changes, width=28)
+        self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, width=20)
+        self.reset_button = tk.Button(self.window, text='Reset', command=self.reset_changes, width=5)
+        self.reset_all_button = tk.Button(self.window, text='Reset all', command=self.reset_all_changes, width=20)
         self.view = FigureCanvasTkAgg(self.fig, self.window)
 
 
@@ -57,26 +58,38 @@ class GUI:
                                             # background='#36373d', foreground='white')
         self.check_symbols.select()
         self.set_show_options()
+        
+
+
 
         self.label_node_selection.grid(column=1, row=9, padx=2, pady=1, sticky='w')
-        self.node_selection.grid(column=2, row=9, padx=2, pady=5, sticky='w')
-        self.label_value_input.grid(column=1, row=10, padx=2, pady=5, sticky='w')
-        self.value_input.grid(column=2, row=10, padx=2, pady=1, sticky='w')
-        self.apply_button.grid(column=2, row=11, padx=2, pady=5, sticky='w')
-        self.reset_button.grid(column=2, row=12, padx=2, pady=5, sticky='w')
-        self.view.get_tk_widget().grid(columnspan=1, rowspan=40, row=1, column=3, padx=10, pady=10)
+        self.node_selection.grid(column=3, row=9, padx=3, pady=5, sticky='w')
+        self.label_value_input.grid(columnspan=2, column=1, row=10, padx=1, pady=5, sticky='w')
+        self.value_input.grid(column=3, row=10, padx=2, pady=5, sticky='w')
+        self.apply_button.grid(column=3, row=11, padx=2, pady=5, sticky='w')
+        self.reset_button.grid(column=1, columnspan=2, row=9, padx=1, pady=5, sticky='e')
+        self.reset_all_button.grid(column=1, columnspan=2, row=11, padx=2, pady=5, sticky='w')
+        self.view.get_tk_widget().grid(columnspan=1, rowspan=40, row=1, column=4, padx=10, pady=10)
         self.check_name.grid(column=1, row=2, sticky='w')
         self.check_title.grid(column=1, row=3, sticky='w')
         self.check_symbols.grid(column=1, row=4, sticky='w')
+
 
     def apply_changes(self):
         # print(self.value_input.get())
         self.plotter.set_joint_and_update(self.node_selection.get(), self.value_input.get().split(','))
 
-    def reset_changes(self):
+    def reset_all_changes(self):
         titles = robot.get_joint_titles()
         for title in titles:
-            self.plotter.reset_joint_offsets(title)
+            self.plotter.reset_joints_offsets_update(titles)
+
+    def reset_changes(self):
+
+        print("hiiiiiiiier")
+        print(f"nodeselection: {self.node_selection.get()}")
+        self.plotter.reset_joints_offsets_update(self.node_selection.get())
+        print("342214")
 
     def set_show_options(self):
         # print(self.bool_title, self.bool_name, self.bool_symbols)

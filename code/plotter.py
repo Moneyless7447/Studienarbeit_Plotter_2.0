@@ -133,7 +133,7 @@ class Plotter:
 
     def update(self, *args):
         """
-        Funktion wird bei Änderungen aufgerufen, z.B. bei dem Benutzen des "Next"-Buttons
+        Funktion wird bei Änderungen aufgerufen, z.B. bei dem Benutzen des "Apply"-Buttons
         :param *args: Platzhalter
         """
         # Speichern der aktuellen Achsenbegrenzung (damit die Zoomstufe übernommen wird)
@@ -174,6 +174,10 @@ class Plotter:
         # self.robot.set_joint("Leg-2_Beta-Joint", math.radians(20))
         # self.robot.set_joint("Leg-2_Gamma-Joint", math.radians(20))
         # self.robot.set_joint("Leg-3_Gamma-Joint", math.radians(40))
+        self.update(None)
+
+    def reset_joints_offsets_update(self, title):
+        self.robot.reset_joint_offsets(title)
         self.update(None)
 
     def plot_quader(self, trans_matrix):
@@ -529,8 +533,8 @@ class Plotter:
         return (minimum, maximum)
 
     def set_show_options(self, *args):
-        self.show_title = args[1]
-        self.show_name = args[0]
+        self.show_title = args[0]
+        self.show_name = args[1]
         self.show_3d_symbol = args[2]
         self.update(None)
 
