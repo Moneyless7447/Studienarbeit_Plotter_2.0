@@ -541,5 +541,8 @@ class Plotter:
     def apply_joint_change(self, *args):
         self.robot.set_joint(self.title_list[self.radio_joints.active], float(self.text_value.text))
 
+    def generate_dh_matrix_from_to(self, _from, _to):
+        matrix = self.robot.generate_dh_matrix_from_to(_from, _to)
+        return matrix
     # def test_func(self, *args):
     #     print("text changed")

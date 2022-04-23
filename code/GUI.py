@@ -4,6 +4,7 @@ import tkinter.font as font
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
 import robot
 import plotter
 
@@ -35,7 +36,8 @@ class GUI:
         # self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, bg='#76798a', fg='white',
         #                               width=28)
         self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, width=20)
-        self.reset_button = tk.Button(self.window, text='Reset', command=self.reset_changes, width=5)
+        self.reset_button_img = tk.PhotoImage(file="reset_button.png", master=self.window)
+        self.reset_button = tk.Button(self.window, image=self.reset_button_img, command=self.reset_changes, width=32, height=32)
         self.reset_all_button = tk.Button(self.window, text='Reset all', command=self.reset_all_changes, width=20)
         self.view = FigureCanvasTkAgg(self.fig, self.window)
 
@@ -58,9 +60,19 @@ class GUI:
                                             # background='#36373d', foreground='white')
         self.check_symbols.select()
         self.set_show_options()
-        
 
-
+        self.label_hyphen = ttk.Label(self.window, text='______________________________________________________')
+        self.label_headline = ttk.Label(self.window, text='Transformation Matrices from A to B')
+        self.label_joint_A = ttk.Label(self.window, text='Joint A: ')
+        self.label_joint_B = ttk.Label(self.window, text='Joint B: ')
+        self.calculate_button_img = tk.PhotoImage(file='T_A_B.png', master=self.window)
+        self.calculate_button = tk.Button(self.window, image=self.calculate_button_img, command=self.calculate_AtoB)
+        self.node_selection_A = ttk.Combobox(self.window, width=17)
+        self.node_selection_A['values'] = self.robot.get_joint_titles()[1:]
+        self.node_selection_A.set(self.node_selection_A['values'][0])
+        self.node_selection_B = ttk.Combobox(self.window, width=17)
+        self.node_selection_B['values'] = self.robot.get_joint_titles()[1:]
+        self.node_selection_B.set(self.node_selection_B['values'][0])
 
         self.label_node_selection.grid(column=1, row=9, padx=2, pady=1, sticky='w')
         self.node_selection.grid(column=3, row=9, padx=3, pady=5, sticky='w')
@@ -73,14 +85,21 @@ class GUI:
         self.check_name.grid(column=1, row=2, sticky='w')
         self.check_title.grid(column=1, row=3, sticky='w')
         self.check_symbols.grid(column=1, row=4, sticky='w')
-
+        self.label_hyphen.grid(column=1, columnspan=3, row=14, padx=1, pady=1, sticky='n')
+        self.label_headline.grid(column=1, columnspan=3, row=15, padx=1, pady=1, sticky='n')
+        self.label_joint_A.grid(column=2, row=16, padx=1, pady=1, sticky='w')
+        self.label_joint_B.grid(column=2, row=17, padx=1, pady=1, sticky='w')
+        self.calculate_button.grid(column=1, row=16, padx=40, pady=1, sticky='w', columnspan='2', rowspan='2')
+        self.node_selection_A.grid(column=3, columnspan=1, row=16, padx=1, pady=1, sticky='w')
+        self.node_selection_B.grid(column=3, columnspan=1, row=17, padx=1, pady=1, sticky='w')
 
     def apply_changes(self):
         # print(self.value_input.get())
         self.plotter.set_joint_and_update(self.node_selection.get(), self.value_input.get().split(','))
 
     def reset_all_changes(self):
-        titles = robot.get_joint_titles()
+        titles = self.robot.get_joint_titles()[1:]
+        #self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         for title in titles:
             self.plotter.reset_joints_offsets_update(titles)
 
@@ -110,6 +129,15 @@ class GUI:
         self.bool_symbols = not self.bool_symbols
         # self.check_symbols.select() if self.bool_symbols else self.check_symbols.deselect()
         self.set_show_options()
+
+    def calculate_AtoB(self):
+        a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_A.get(), self.node_selection_B.get())
+        for i in range(3):
+            for j in range(3):
+                a_to_b[i][j] = round(a_to_b[i][j], 2)
+
+        print(f"Matrix from A to B: \n{a_to_b}")
+        print(f"test: \n{a_to_b[0][0]}")
 
 
 if __name__ == '__main__':
