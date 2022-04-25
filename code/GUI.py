@@ -3,7 +3,7 @@ from tkinter import ttk
 import tkinter.font as font
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+import numpy as np
 
 import robot
 import plotter
@@ -18,6 +18,7 @@ class GUI:
         self.window.geometry('800x500')
         #self.window.configure(bg="white")
         self.window.title("RoboPlot")
+        self.transformationmatrix_A_B = np.array([[1, 0, 0, 0],[0, 1, 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
 
         def on_close():
             self.window.destroy()
@@ -73,6 +74,8 @@ class GUI:
         self.node_selection_B = ttk.Combobox(self.window, width=17)
         self.node_selection_B['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection_B.set(self.node_selection_B['values'][0])
+        self.node_transformationmatrix_A_B = tk.Text(self.window, width=25, height=5)
+        self.node_transformationmatrix_A_B.insert(tk.END, self.transformationmatrix_A_B)
 
         self.label_node_selection.grid(column=1, row=9, padx=2, pady=1, sticky='w')
         self.node_selection.grid(column=3, row=9, padx=3, pady=5, sticky='w')
@@ -89,9 +92,10 @@ class GUI:
         self.label_headline.grid(column=1, columnspan=3, row=15, padx=1, pady=1, sticky='n')
         self.label_joint_A.grid(column=2, row=16, padx=1, pady=1, sticky='w')
         self.label_joint_B.grid(column=2, row=17, padx=1, pady=1, sticky='w')
-        self.calculate_button.grid(column=1, row=16, padx=40, pady=1, sticky='w', columnspan='2', rowspan='2')
+        self.calculate_button.grid(column=1, row=16, padx=20, pady=1, sticky='w', columnspan=2, rowspan=2)
         self.node_selection_A.grid(column=3, columnspan=1, row=16, padx=1, pady=1, sticky='w')
         self.node_selection_B.grid(column=3, columnspan=1, row=17, padx=1, pady=1, sticky='w')
+        self.node_transformationmatrix_A_B.grid(column=2, row=18, sticky='n', columnspan=2)
 
     def apply_changes(self):
         # print(self.value_input.get())
@@ -131,13 +135,17 @@ class GUI:
         self.set_show_options()
 
     def calculate_AtoB(self):
-        a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_A.get(), self.node_selection_B.get())
-        for i in range(3):
-            for j in range(3):
-                a_to_b[i][j] = round(a_to_b[i][j], 2)
-
+        if self.node_selection_A.get() == self.node_selection_B.get():
+            a_to_b = np.array([[1, 0, 0, 0],[0, 1, 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
+        else:
+            a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_A.get(), self.node_selection_B.get())
+            for i in range(3):
+                for j in range(3):
+                    a_to_b[i][j] = round(a_to_b[i][j], 2)
         print(f"Matrix from A to B: \n{a_to_b}")
         print(f"test: \n{a_to_b[0][0]}")
+        self.node_transformationmatrix_A_B.delete()
+        self.node_transformationmatrix_A_B.insert(tk.END, a_to_b)
 
 
 if __name__ == '__main__':
