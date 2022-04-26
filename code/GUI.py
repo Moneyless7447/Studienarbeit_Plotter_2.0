@@ -17,49 +17,52 @@ class GUI:
         self.plotter = plotter.Plotter(self.robot, self.fig)
         self.window = tk.Tk()
         self.window.geometry('800x500')
-        #self.window.configure(bg="white")
+        # self.window.configure(bg="white")
         self.window.title("RoboPlot")
-        self.transformationmatrix_A_B = np.array([[1, 0, 0, 0],[0, 1, 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
+        self.transformationmatrix_A_B = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
         def on_close():
             self.window.destroy()
             exit(0)
+
         self.window.protocol("WM_DELETE_WINDOW", on_close)
 
-        self.label_node_selection = ttk.Label(self.window, text='Joint (title):')#, background='#36373d', foreground='white')
+        self.label_node_selection = ttk.Label(self.window,
+                                              text='Joint (title):')  # , background='#36373d', foreground='white')
         self.node_selection = ttk.Combobox(self.window, width=17)
         self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection.set(self.node_selection['values'][0])
 
         self.input_text = tk.StringVar()
-        self.label_value_input = ttk.Label(self.window, text='Value (deg or distance):')#, background='#36373d', foreground='white')
+        self.label_value_input = ttk.Label(self.window,
+                                           text='Value (deg or distance):')  # , background='#36373d', foreground='white')
         self.value_input = ttk.Entry(self.window, textvariable=self.input_text, width=20)
 
         # self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, bg='#76798a', fg='white',
         #                               width=28)
         self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, width=20)
         self.reset_button_img = tk.PhotoImage(file="reset_button.png", master=self.window)
-        self.reset_button = tk.Button(self.window, image=self.reset_button_img, command=self.reset_changes, width=32, height=32)
+        self.reset_button = tk.Button(self.window, image=self.reset_button_img, command=self.reset_changes, width=32,
+                                      height=32)
         self.reset_all_button = tk.Button(self.window, text='Reset all', command=self.reset_all_changes, width=20)
         self.view = FigureCanvasTkAgg(self.fig, self.window)
-
 
         self.bool_title = True
         # self.bool_title.set(0)
         self.check_title = tk.Checkbutton(self.window,
                                           text='Titles',
-                                          command=self.toggle_title)#,
-                                          # background='#36373d', foreground='white')
+                                          command=self.toggle_title)  # ,
+        # background='#36373d', foreground='white')
         self.check_title.select()
         self.bool_name = False
         # self.bool_name.set(0)
-        self.check_name = tk.Checkbutton(self.window, text='Name', command=self.toggle_name)#, background='#36373d',
-                                         # foreground='white')
+        self.check_name = tk.Checkbutton(self.window, text='Name', command=self.toggle_name)  # , background='#36373d',
+        # foreground='white')
         self.check_name.deselect()
         self.bool_symbols = True
         # self.bool_symbols.set(0)
-        self.check_symbols = tk.Checkbutton(self.window, text='3D-Symbols', command=self.toggle_symbols)#,
-                                            # background='#36373d', foreground='white')
+        self.check_symbols = tk.Checkbutton(self.window, text='3D-Symbols', command=self.toggle_symbols)  # ,
+        # background='#36373d', foreground='white')
         self.check_symbols.select()
         self.set_show_options()
 
@@ -77,11 +80,16 @@ class GUI:
         self.node_selection_B = ttk.Combobox(self.window, width=17)
         self.node_selection_B['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection_B.set(self.node_selection_B['values'][0])
-        self.node_transformationmatrix_A_B = tk.Text(self.window, width=30, height=5, yscrollcommand=True, padx=2)
-        self.node_transformationmatrix_A_B.insert(tk.END, self.transformationmatrix_A_B)
+        self.scrollbar_transformationmatrix = tk.Scrollbar(self.window)
+        self.node_transformationmatrix_A_B = tk.Text(self.window, width=30, height=9, yscrollcommand=self.scrollbar_transformationmatrix.set, padx=2)
+        self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(self.transformationmatrix_A_B))
+        self.scrollbar_transformationmatrix.config(command=self.node_transformationmatrix_A_B.yview)
 
-        self.label_json.grid(column=1, columnspan=1,row=1, sticky='w', rowspan=2, padx=10)
-        self.json.grid(column=1, columnspan=3,row=1, sticky='w', rowspan=2, padx=130)
+
+
+
+        self.label_json.grid(column=1, columnspan=1, row=1, sticky='w', rowspan=2, padx=10)
+        self.json.grid(column=1, columnspan=3, row=1, sticky='w', rowspan=2, padx=130)
         self.label_node_selection.grid(column=1, row=10, padx=10, pady=1, sticky='w')
         self.node_selection.grid(column=3, row=10, padx=3, pady=5, sticky='w')
         self.label_value_input.grid(columnspan=2, column=1, row=11, padx=10, pady=5, sticky='w')
@@ -97,10 +105,11 @@ class GUI:
         self.label_headline.grid(column=1, columnspan=3, row=16, padx=1, pady=1, sticky='n')
         self.label_joint_A.grid(column=2, row=17, padx=1, pady=1, sticky='w')
         self.label_joint_B.grid(column=2, row=18, padx=1, pady=1, sticky='w')
-        self.calculate_button.grid(column=1, row=17, padx=20, pady=1, sticky='w', columnspan=2, rowspan=2)
+        self.calculate_button.grid(column=1, row=17, padx=20, pady=1, sticky='we', columnspan=2, rowspan=2)
         self.node_selection_A.grid(column=3, columnspan=1, row=17, padx=1, pady=1, sticky='w')
         self.node_selection_B.grid(column=3, columnspan=1, row=18, padx=1, pady=1, sticky='w')
         self.node_transformationmatrix_A_B.grid(column=1, row=19, sticky='n', columnspan=3)
+        self.scrollbar_transformationmatrix.grid(column=3, row=19, sticky='ns', rowspan=3, columnspan=2, padx=10)
 
     def apply_changes(self):
         # print(self.value_input.get())
@@ -108,7 +117,7 @@ class GUI:
 
     def reset_all_changes(self):
         titles = self.robot.get_joint_titles()[1:]
-        #self.node_selection['values'] = self.robot.get_joint_titles()[1:]
+        # self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         for title in titles:
             self.plotter.reset_joints_offsets_update(titles)
 
@@ -139,17 +148,53 @@ class GUI:
         # self.check_symbols.select() if self.bool_symbols else self.check_symbols.deselect()
         self.set_show_options()
 
+    @staticmethod
+    def strip_matrix_string(matrix):
+        lines = str(matrix).split("\n")
+        res = []
+        for line in lines:
+            res.append("|"+line.lstrip().rstrip().replace("[", "").replace("]", "")+"|")
+
+        res.insert(0, "┌"+" "* (len(res[0])-2)+"┐")
+        res.append("└" + " " * (len(res[0])-2) + "┘")
+        return "\n".join(res)
+
     def calculate_AtoB(self):
         if self.node_selection_A.get() == self.node_selection_B.get():
-            a_to_b = np.array([[1, 0, 0, 0],[0, 1, 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
+            a_to_b = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
+            self.node_transformationmatrix_A_B.insert(tk.END,
+                                                      f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
+            self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
+            self.node_transformationmatrix_A_B.insert(tk.END, "\n\n")
+            self.node_transformationmatrix_A_B.see(tk.END)
         else:
-            a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_A.get(), self.node_selection_B.get())
-            for i in range(4):
-                for j in range(4):
-                    a_to_b[i][j] = round(a_to_b[i][j], 2)
-        self.node_transformationmatrix_A_B.insert(tk.END, f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
-        self.node_transformationmatrix_A_B.insert(tk.END, a_to_b)
-        self.node_transformationmatrix_A_B.see(tk.END)
+            try:
+                a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_A.get(),
+                                                                 self.node_selection_B.get())
+                for i in range(4):
+                    for j in range(4):
+                        a_to_b[i][j] = round(a_to_b[i][j], 2)
+                self.node_transformationmatrix_A_B.insert(tk.END,
+                                                          f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
+                self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
+                self.node_transformationmatrix_A_B.insert(tk.END, "\n\n")
+                self.node_transformationmatrix_A_B.see(tk.END)
+            except TypeError:
+                try:
+                    a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_B.get(),
+                                                                     self.node_selection_A.get())
+                    for i in range(4):
+                        for j in range(4):
+                            a_to_b[i][j] = round(a_to_b[i][j], 2)
+                    self.node_transformationmatrix_A_B.insert(tk.END,
+                                                              f"\n\nT_A_B is not calculatable,\ninstead:\nT_{self.node_selection_B.get()}_{self.node_selection_A.get()}:\n")
+                    self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
+                    # inverse?
+                    self.node_transformationmatrix_A_B.see(tk.END)
+                except TypeError:
+                    self.node_transformationmatrix_A_B.insert(tk.END,
+                                                              f"\n\nNot calculatable in this\nversion, maybe there is no\ndirect kinetic chain between\nthose two joints.\n\n\n\n\n")
+                    self.node_transformationmatrix_A_B.see(tk.END)
 
 
 if __name__ == '__main__':
