@@ -81,7 +81,7 @@ class GUI:
         self.node_selection_B['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection_B.set(self.node_selection_B['values'][0])
         self.scrollbar_transformationmatrix = tk.Scrollbar(self.window)
-        self.node_transformationmatrix_A_B = tk.Text(self.window, width=30, height=9, yscrollcommand=self.scrollbar_transformationmatrix.set, padx=2)
+        self.node_transformationmatrix_A_B = tk.Text(self.window, width=33, height=15, yscrollcommand=self.scrollbar_transformationmatrix.set, padx=2, pady=7)
         self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(self.transformationmatrix_A_B))
         self.scrollbar_transformationmatrix.config(command=self.node_transformationmatrix_A_B.yview)
 
@@ -108,8 +108,8 @@ class GUI:
         self.calculate_button.grid(column=1, row=17, padx=20, pady=1, sticky='we', columnspan=2, rowspan=2)
         self.node_selection_A.grid(column=3, columnspan=1, row=17, padx=1, pady=1, sticky='w')
         self.node_selection_B.grid(column=3, columnspan=1, row=18, padx=1, pady=1, sticky='w')
-        self.node_transformationmatrix_A_B.grid(column=1, row=19, sticky='n', columnspan=3)
-        self.scrollbar_transformationmatrix.grid(column=3, row=19, sticky='ns', rowspan=3, columnspan=2, padx=10)
+        self.node_transformationmatrix_A_B.grid(column=1, row=19, sticky='nw', columnspan=3, padx=20)
+        self.scrollbar_transformationmatrix.grid(column=3, row=19, sticky='ns', rowspan=3, columnspan=2, padx=1)
 
     def apply_changes(self):
         # print(self.value_input.get())
@@ -165,7 +165,7 @@ class GUI:
             self.node_transformationmatrix_A_B.insert(tk.END,
                                                       f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
             self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
-            self.node_transformationmatrix_A_B.insert(tk.END, "\n\n")
+            self.node_transformationmatrix_A_B.insert(tk.END, "\n\n\n\n\n\n\n\n")
             self.node_transformationmatrix_A_B.see(tk.END)
         else:
             try:
@@ -177,7 +177,7 @@ class GUI:
                 self.node_transformationmatrix_A_B.insert(tk.END,
                                                           f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
                 self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
-                self.node_transformationmatrix_A_B.insert(tk.END, "\n\n")
+                self.node_transformationmatrix_A_B.insert(tk.END, "\n\n\n\n\n\n\n\n")
                 self.node_transformationmatrix_A_B.see(tk.END)
             except TypeError:
                 try:
@@ -187,13 +187,14 @@ class GUI:
                         for j in range(4):
                             a_to_b[i][j] = round(a_to_b[i][j], 2)
                     self.node_transformationmatrix_A_B.insert(tk.END,
-                                                              f"\n\nT_A_B is not calculatable,\ninstead:\nT_{self.node_selection_B.get()}_{self.node_selection_A.get()}:\n")
+                                                              f"\n\nT_A_B is not directly\ncalculatable, instead:\nT_{self.node_selection_B.get()}_{self.node_selection_A.get()}:\n")
                     self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
+                    self.node_transformationmatrix_A_B.insert(tk.END, "\nCalculated inverse (T_A_B):")
                     # inverse?
                     self.node_transformationmatrix_A_B.see(tk.END)
                 except TypeError:
                     self.node_transformationmatrix_A_B.insert(tk.END,
-                                                              f"\n\nNot calculatable in this\nversion, maybe there is no\ndirect kinetic chain between\nthose two joints.\n\n\n\n\n")
+                                                              f"\n\nNot calculatable in this\nversion, maybe there is no\ndirect kinetic chain between\nthose two joints.\n\n\n\n\n\n\n\n\n\n\n")
                     self.node_transformationmatrix_A_B.see(tk.END)
 
 
