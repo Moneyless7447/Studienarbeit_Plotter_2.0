@@ -74,7 +74,7 @@ class GUI:
         self.node_selection_B = ttk.Combobox(self.window, width=17)
         self.node_selection_B['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection_B.set(self.node_selection_B['values'][0])
-        self.node_transformationmatrix_A_B = tk.Text(self.window, width=25, height=5)
+        self.node_transformationmatrix_A_B = tk.Text(self.window, width=30, height=5, yscrollcommand=True, padx=2)
         self.node_transformationmatrix_A_B.insert(tk.END, self.transformationmatrix_A_B)
 
         self.label_node_selection.grid(column=1, row=9, padx=2, pady=1, sticky='w')
@@ -95,7 +95,7 @@ class GUI:
         self.calculate_button.grid(column=1, row=16, padx=20, pady=1, sticky='w', columnspan=2, rowspan=2)
         self.node_selection_A.grid(column=3, columnspan=1, row=16, padx=1, pady=1, sticky='w')
         self.node_selection_B.grid(column=3, columnspan=1, row=17, padx=1, pady=1, sticky='w')
-        self.node_transformationmatrix_A_B.grid(column=2, row=18, sticky='n', columnspan=2)
+        self.node_transformationmatrix_A_B.grid(column=1, row=18, sticky='n', columnspan=3)
 
     def apply_changes(self):
         # print(self.value_input.get())
@@ -144,8 +144,10 @@ class GUI:
                     a_to_b[i][j] = round(a_to_b[i][j], 2)
         print(f"Matrix from A to B: \n{a_to_b}")
         print(f"test: \n{a_to_b[0][0]}")
-        self.node_transformationmatrix_A_B.delete()
+        #self.node_transformationmatrix_A_B.delete(tk.FIRST, tk.LAST)
+        self.node_transformationmatrix_A_B.insert(tk.END, f"\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
         self.node_transformationmatrix_A_B.insert(tk.END, a_to_b)
+        self.node_transformationmatrix_A_B.see(tk.END)
 
 
 if __name__ == '__main__':
