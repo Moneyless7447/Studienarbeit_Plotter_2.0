@@ -139,13 +139,13 @@ class GUI:
             a_to_b = np.array([[1, 0, 0, 0],[0, 1, 0, 0],[0, 0, 1, 0],[0, 0, 0, 1]])
         else:
             a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_A.get(), self.node_selection_B.get())
-            for i in range(3):
-                for j in range(3):
+            for i in range(4):
+                for j in range(4):
                     a_to_b[i][j] = round(a_to_b[i][j], 2)
         print(f"Matrix from A to B: \n{a_to_b}")
         print(f"test: \n{a_to_b[0][0]}")
         #self.node_transformationmatrix_A_B.delete(tk.FIRST, tk.LAST)
-        self.node_transformationmatrix_A_B.insert(tk.END, f"\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
+        self.node_transformationmatrix_A_B.insert(tk.END, f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
         self.node_transformationmatrix_A_B.insert(tk.END, a_to_b)
         self.node_transformationmatrix_A_B.see(tk.END)
 
