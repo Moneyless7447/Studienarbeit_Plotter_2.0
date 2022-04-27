@@ -20,7 +20,9 @@ class Plotter:
         self.show_title = False
         self.show_name = False
         self.show_3d_symbol = False
-        self.geometry_scaling = self.get_max_dh_param(self.robot.root) / 5
+        self.geometry_scaling_factor = 5
+        self.geometry_scaling_factor_2 = 25
+        self.geometry_scaling = self.get_max_dh_param(self.robot.root) * self.geometry_scaling_factor / self.geometry_scaling_factor_2
         origin_points = self.plot(self.robot.root, self.axes, root=True)
         calculated_limits = self.calc_limits(origin_points)
         self.axes.set(xlim3d=(calculated_limits[0], calculated_limits[1]), xlabel='X')
@@ -59,6 +61,19 @@ class Plotter:
         plt.ion()
         #plt.show()
         plt.draw()
+
+    def set_geometry_scaling_factor(self, factor):
+        #print(f"in set_geometry_scaling_factor: {self.geometry_scaling}")
+        self.geometry_scaling_factor = factor
+        self.set_geometry_scaling()
+        self.update(None)
+
+    def set_geometry_scaling(self):
+        self.geometry_scaling = self.get_max_dh_param(self.robot.root) * self.geometry_scaling_factor / self.geometry_scaling_factor_2
+
+    def get_geometry_scaling_factor(self):
+        return self.geometry_scaling_factor
+
 
     def get_max_dh_param(self, joint):
         if not joint.children:
@@ -269,6 +284,7 @@ class Plotter:
         self.plot_triangle(trans_matrix, x_7_2, y_7_2, z_7_2, 0.5, None)
 
     def plot_cylinder(self, trans_matrix):
+        #print(f"in plot cylinder: {self.geometry_scaling=}")
         r = 0.6 * self.geometry_scaling
         h = 0.8 * self.geometry_scaling
         t = 5
@@ -544,5 +560,7 @@ class Plotter:
     def generate_dh_matrix_from_to(self, _from, _to):
         matrix = self.robot.generate_dh_matrix_from_to(_from, _to)
         return matrix
-    # def test_func(self, *args):
-    #     print("text changed")
+
+    def calc_inverse_dh_matrix(self, trans_matrix):
+        inverse_matrix = self.robot.calc_inverse_dh_matrix(trans_matrix)
+        return inverse_matrix

@@ -13,10 +13,10 @@ class GUI:
     def __init__(self):
         self.robot_json = "example_robot_dh_linear_2.json"
         self.robot = robot.Robot("test_roboter", self.robot_json)
-        self.fig = plt.figure(figsize=(6, 6), dpi=80, tight_layout=True)
+        self.fig = plt.figure(figsize=(7, 7), dpi=80, tight_layout=True)
         self.plotter = plotter.Plotter(self.robot, self.fig)
         self.window = tk.Tk()
-        self.window.geometry('800x500')
+        self.window.geometry('1800x1200')
         # self.window.configure(bg="white")
         self.window.title("RoboPlot")
         self.transformationmatrix_A_B = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
@@ -56,7 +56,7 @@ class GUI:
         self.check_title.select()
         self.bool_name = False
         # self.bool_name.set(0)
-        self.check_name = tk.Checkbutton(self.window, text='Name', command=self.toggle_name)  # , background='#36373d',
+        self.check_name = tk.Checkbutton(self.window, text='Names (generated)', command=self.toggle_name)  # , background='#36373d',
         # foreground='white')
         self.check_name.deselect()
         self.bool_symbols = True
@@ -81,11 +81,11 @@ class GUI:
         self.node_selection_B['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection_B.set(self.node_selection_B['values'][0])
         self.scrollbar_transformationmatrix = tk.Scrollbar(self.window)
-        self.node_transformationmatrix_A_B = tk.Text(self.window, width=33, height=15, yscrollcommand=self.scrollbar_transformationmatrix.set, padx=2, pady=7)
-        self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(self.transformationmatrix_A_B))
+        self.node_transformationmatrix_A_B = tk.Text(self.window, width=36, height=16, yscrollcommand=self.scrollbar_transformationmatrix.set, padx=2, pady=7)
+        self.node_transformationmatrix_A_B.insert(tk.END, "┌          ┐\n|┌     ┐┌ ┐|  R is the 3x3 R_A_B\n|          |  rotation matrix.\n|   R    V |\n|          |  V is the 3x1 V_B\n|└     ┘└ ┘|  translation vector.\n| 0 0 0  1 |\n└          ┘\n┌          ┐\n|┌     ┐┌ ┐|  This transformation\n| 1 0 0  0 |  matrix equals a\n| 0 1 0  0 |  transformation with\n| 0 0 1  0 |  no rotation\n|└     ┘└ ┘|  nor translation.\n| 0 0 0  1 |\n└          ┘")
         self.scrollbar_transformationmatrix.config(command=self.node_transformationmatrix_A_B.yview)
-
-
+        self.geometry_scale = tk.Scale(self.window, from_=1, to=10, orient='horizontal', command=self.set_geometry_scaling_factor, resolution=0.5, length=300, width=30)
+        self.geometry_scale.set(self.plotter.get_geometry_scaling_factor())
 
 
         self.label_json.grid(column=1, columnspan=1, row=1, sticky='w', rowspan=2, padx=10)
@@ -97,19 +97,26 @@ class GUI:
         self.apply_button.grid(column=3, row=12, padx=2, pady=5, sticky='w')
         self.reset_button.grid(column=1, columnspan=2, row=10, padx=10, pady=5, sticky='e')
         self.reset_all_button.grid(column=1, columnspan=2, row=12, padx=2, pady=5, sticky='w')
-        self.view.get_tk_widget().grid(columnspan=4, rowspan=40, row=2, column=4, padx=10, pady=10, sticky='w')
-        self.check_name.grid(column=1, row=3, sticky='w', padx=10)
+        self.view.get_tk_widget().grid(columnspan=4, rowspan=40, row=1, column=4, padx=20, pady=10, sticky='w')
+        self.check_name.grid(column=1, row=3, sticky='w', padx=10, columnspan=2)
         self.check_title.grid(column=1, row=4, sticky='w', padx=10)
         self.check_symbols.grid(column=1, row=5, sticky='w', padx=10)
+        self.geometry_scale.grid(column=2, row=4, sticky='nw', padx=0, pady=50, columnspan=2, rowspan=4)
         self.label_hyphen.grid(column=1, columnspan=3, row=15, padx=1, pady=1, sticky='n')
         self.label_headline.grid(column=1, columnspan=3, row=16, padx=1, pady=1, sticky='n')
         self.label_joint_A.grid(column=2, row=17, padx=1, pady=1, sticky='w')
         self.label_joint_B.grid(column=2, row=18, padx=1, pady=1, sticky='w')
-        self.calculate_button.grid(column=1, row=17, padx=20, pady=1, sticky='we', columnspan=2, rowspan=2)
+        self.calculate_button.grid(column=1, row=17, padx=20, pady=1, sticky='we', columnspan=1, rowspan=2)
         self.node_selection_A.grid(column=3, columnspan=1, row=17, padx=1, pady=1, sticky='w')
         self.node_selection_B.grid(column=3, columnspan=1, row=18, padx=1, pady=1, sticky='w')
         self.node_transformationmatrix_A_B.grid(column=1, row=19, sticky='nw', columnspan=3, padx=20)
         self.scrollbar_transformationmatrix.grid(column=3, row=19, sticky='ns', rowspan=3, columnspan=2, padx=1)
+
+    def set_geometry_scaling_factor(self, *args):
+        factor = self.geometry_scale.get()
+        self.plotter.set_geometry_scaling_factor(factor)
+        #print(f"{factor=}")
+
 
     def apply_changes(self):
         # print(self.value_input.get())
@@ -123,10 +130,10 @@ class GUI:
 
     def reset_changes(self):
 
-        print("hiiiiiiiier")
-        print(f"nodeselection: {self.node_selection.get()}")
+        print("Trying to reset specific joint:")
+        print(f"nodeselection: {self.node_selection.get()=}")
         self.plotter.reset_joints_offsets_update(self.node_selection.get())
-        print("342214")
+        print("reached end")
 
     def set_show_options(self):
         # print(self.bool_title, self.bool_name, self.bool_symbols)
@@ -146,6 +153,11 @@ class GUI:
     def toggle_symbols(self):
         self.bool_symbols = not self.bool_symbols
         # self.check_symbols.select() if self.bool_symbols else self.check_symbols.deselect()
+
+        if not self.bool_symbols:
+            self.geometry_scale.config(state=tk.DISABLED, takefocus=0, fg='lightgrey')
+        else:
+            self.geometry_scale.config(state=tk.ACTIVE, takefocus=1, fg='black')
         self.set_show_options()
 
     @staticmethod
@@ -165,7 +177,7 @@ class GUI:
             self.node_transformationmatrix_A_B.insert(tk.END,
                                                       f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
             self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
-            self.node_transformationmatrix_A_B.insert(tk.END, "\n\n\n\n\n\n\n\n")
+            self.node_transformationmatrix_A_B.insert(tk.END, "\n\n\n\n\n\n\n\n\n")
             self.node_transformationmatrix_A_B.see(tk.END)
         else:
             try:
@@ -177,24 +189,25 @@ class GUI:
                 self.node_transformationmatrix_A_B.insert(tk.END,
                                                           f"\n\nT_{self.node_selection_A.get()}_{self.node_selection_B.get()}:\n")
                 self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
-                self.node_transformationmatrix_A_B.insert(tk.END, "\n\n\n\n\n\n\n\n")
+                self.node_transformationmatrix_A_B.insert(tk.END, "\n\n\n\n\n\n\n\n\n")
                 self.node_transformationmatrix_A_B.see(tk.END)
             except TypeError:
                 try:
-                    a_to_b = self.plotter.generate_dh_matrix_from_to(self.node_selection_B.get(),
+                    b_to_a = self.plotter.generate_dh_matrix_from_to(self.node_selection_B.get(),
                                                                      self.node_selection_A.get())
                     for i in range(4):
                         for j in range(4):
-                            a_to_b[i][j] = round(a_to_b[i][j], 2)
+                            b_to_a[i][j] = round(b_to_a[i][j], 2)
                     self.node_transformationmatrix_A_B.insert(tk.END,
                                                               f"\n\nT_A_B is not directly\ncalculatable, instead:\nT_{self.node_selection_B.get()}_{self.node_selection_A.get()}:\n")
+                    self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(b_to_a))
+                    self.node_transformationmatrix_A_B.insert(tk.END, "\nCalculated inverse (T_A_B):\n")
+                    a_to_b = self.plotter.calc_inverse_dh_matrix(b_to_a)
                     self.node_transformationmatrix_A_B.insert(tk.END, self.strip_matrix_string(a_to_b))
-                    self.node_transformationmatrix_A_B.insert(tk.END, "\nCalculated inverse (T_A_B):")
-                    # inverse?
                     self.node_transformationmatrix_A_B.see(tk.END)
                 except TypeError:
                     self.node_transformationmatrix_A_B.insert(tk.END,
-                                                              f"\n\nNot calculatable in this\nversion, maybe there is no\ndirect kinetic chain between\nthose two joints.\n\n\n\n\n\n\n\n\n\n\n")
+                                                              f"\n\nNot calculatable in this\nversion, maybe there is no\ndirect kinetic chain between\nthose two joints\nor the program can not find\nthe path from one joint to another.\n\n\n\n\n\n\n\n\n")
                     self.node_transformationmatrix_A_B.see(tk.END)
 
 
