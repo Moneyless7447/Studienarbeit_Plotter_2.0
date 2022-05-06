@@ -170,9 +170,9 @@ class Plotter:
         #plt.show(block=True)
         pass
 
-    def print_button_clicked(self, *args):
-        """Funktion zum Überprüfen und Testen des Buttons"""
-        print("button_clicked")
+    #def print_button_clicked(self, *args):
+    #    """Funktion zum Überprüfen und Testen des Buttons"""
+    #    print("button_clicked")
 
     def set_joint_and_update(self, *args):
         """
@@ -191,8 +191,9 @@ class Plotter:
         # self.robot.set_joint("Leg-3_Gamma-Joint", math.radians(40))
         self.update(None)
 
-    def reset_joints_offsets_update(self, title):
-        self.robot.reset_joint_offsets(title)
+    def reset_joints_offsets_update(self, title, *args):
+        #print(f"{title=}")
+        self.robot.reset_joint_offsets(title=title)
         self.update(None)
 
     def plot_quader(self, trans_matrix):
@@ -564,3 +565,6 @@ class Plotter:
     def calc_inverse_dh_matrix(self, trans_matrix):
         inverse_matrix = self.robot.calc_inverse_dh_matrix(trans_matrix)
         return inverse_matrix
+
+    def get_joint_offsets(self, joint):
+        return self.robot.get_joint_offsets(joint)

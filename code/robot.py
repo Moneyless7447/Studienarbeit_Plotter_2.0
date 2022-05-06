@@ -174,16 +174,21 @@ class Robot:
 
     # Funktion zum Aufrufen der set_joint Funktion für eines benannten Jointobjektes.
     def set_joint(self, title, *args):
-        print(title, args)
+        # print(title, args)
         self.root[title].set_joint(args)
 
     # Funktion zum Aufrufen der set_joint_to_absolute Funktion eines benannten Jointobjektes.
     def set_joint_to_absolute(self, title, value):
         self.root[title].set_joint_to_absolute(value)
 
-    # Funktion zum Aufrufen der reset_joint_offsets Funktion eines benannten Jointobjektes.
-    def reset_joint_offsets(self, title):
-        self.root[title].reset_joint_offsets()
+    # Funktion zum Aufrufen der reset_joint_offsets Funktion für Kinder eines benannten Jointobjektes.
+    def reset_joint_offsets(self, title, *args):
+        #if self.root[title].children is not None:
+        if hasattr(self.root[title],"children"):
+            for child in range(len(self.root[title].children)):
+                self.root[title].children[child].reset_joint_offsets()
+        return
+
 
     def get_joint_titles(self, joint=None):
         if joint is None:
@@ -193,3 +198,6 @@ class Robot:
             if not joint.has_reference_child(child.title):
                 titles_list += self.get_joint_titles(child)
         return titles_list
+
+    def get_joint_offsets(self, title):
+        return self.root[title].get_joint_offsets()

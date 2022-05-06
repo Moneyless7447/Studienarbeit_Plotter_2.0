@@ -13,7 +13,7 @@ class Joint:
         self.twist = float(kwargs["twist"])
         self.title = kwargs["title"]
         self.type = kwargs["type"]
-        self.children = kwargs["children"]
+        self.children = kwargs["children"] #if kwargs["children"] else []
         self.previous = kwargs["previous"]
         self.transformationmatrices_to_children = []
         self.angle_offset = 0
@@ -169,8 +169,12 @@ class Joint:
             else:
                 break
 
-    def reset_joint_offsets(self):
-        self.angle_offset = 0
+    def set_angle_offset(self, value):
+        self.angle_offset = value
+
+    def reset_joint_offsets(self, *args):
+        #self.angle_offset = 0
+        self.set_angle_offset(0)
         self.offset_offset = 0
         for dh in self.reference_dh_parameters:
             dh["angle_offset"] = 0
@@ -184,3 +188,6 @@ class Joint:
             if child.title == title:
                 return child.previous.title != self.title
         return True
+
+    def get_joint_offsets(self):
+        return [self.angle_offset, self.offset_offset]

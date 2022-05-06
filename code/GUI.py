@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-import tkinter.font as font
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
@@ -27,19 +26,15 @@ class GUI:
 
         self.window.protocol("WM_DELETE_WINDOW", on_close)
 
-        self.label_node_selection = ttk.Label(self.window,
-                                              text='Joint (title):')  # , background='#36373d', foreground='white')
+        self.label_node_selection = ttk.Label(self.window, text='Joint (title):')
         self.node_selection = ttk.Combobox(self.window, width=17)
         self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         self.node_selection.set(self.node_selection['values'][0])
 
         self.input_text = tk.StringVar()
-        self.label_value_input = ttk.Label(self.window,
-                                           text='Value (deg or distance):')  # , background='#36373d', foreground='white')
+        self.label_value_input = ttk.Label(self.window, text='Value (deg or distance):')
         self.value_input = ttk.Entry(self.window, textvariable=self.input_text, width=20)
 
-        # self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, bg='#76798a', fg='white',
-        #                               width=28)
         self.apply_button = tk.Button(self.window, text='Apply', command=self.apply_changes, width=20)
         self.reset_button_img = tk.PhotoImage(file="reset_button.png", master=self.window)
         self.reset_button = tk.Button(self.window, image=self.reset_button_img, command=self.reset_changes, width=32,
@@ -48,21 +43,14 @@ class GUI:
         self.view = FigureCanvasTkAgg(self.fig, self.window)
 
         self.bool_title = True
-        # self.bool_title.set(0)
-        self.check_title = tk.Checkbutton(self.window,
-                                          text='Titles',
-                                          command=self.toggle_title)  # ,
-        # background='#36373d', foreground='white')
+        self.check_title = tk.Checkbutton(self.window, text='Titles', command=self.toggle_title)
+
         self.check_title.select()
         self.bool_name = False
-        # self.bool_name.set(0)
-        self.check_name = tk.Checkbutton(self.window, text='Names (generated)', command=self.toggle_name)  # , background='#36373d',
-        # foreground='white')
+        self.check_name = tk.Checkbutton(self.window, text='Names (generated)', command=self.toggle_name)
         self.check_name.deselect()
         self.bool_symbols = True
-        # self.bool_symbols.set(0)
         self.check_symbols = tk.Checkbutton(self.window, text='3D-Symbols', command=self.toggle_symbols)  # ,
-        # background='#36373d', foreground='white')
         self.check_symbols.select()
         self.set_show_options()
 
@@ -88,7 +76,7 @@ class GUI:
         self.geometry_scale.set(self.plotter.get_geometry_scaling_factor())
 
 
-        self.label_json.grid(column=1, columnspan=1, row=1, sticky='w', rowspan=2, padx=10)
+        self.label_json.grid(column=1, columnspan=1, row=1, sticky='w', rowspan=2, padx=10, pady=20)
         self.json.grid(column=1, columnspan=3, row=1, sticky='w', rowspan=2, padx=130)
         self.label_node_selection.grid(column=1, row=10, padx=10, pady=1, sticky='w')
         self.node_selection.grid(column=3, row=10, padx=3, pady=5, sticky='w')
@@ -123,17 +111,17 @@ class GUI:
         self.plotter.set_joint_and_update(self.node_selection.get(), self.value_input.get().split(','))
 
     def reset_all_changes(self):
-        titles = self.robot.get_joint_titles()[1:]
+        titles = self.robot.get_joint_titles()[0:]
         # self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         for title in titles:
-            self.plotter.reset_joints_offsets_update(titles)
+            self.plotter.reset_joints_offsets_update(title)
 
     def reset_changes(self):
-
-        print("Trying to reset specific joint:")
-        print(f"nodeselection: {self.node_selection.get()=}")
+        #print("Trying to reset specific joint:")
+        #print(f"nodeselection: {self.node_selection.get()=}")
+        #print(f"TEST: {self.plotter.get_joint_offsets(self.node_selection.get())}")
         self.plotter.reset_joints_offsets_update(self.node_selection.get())
-        print("reached end")
+        #print("reached end")
 
     def set_show_options(self):
         # print(self.bool_title, self.bool_name, self.bool_symbols)
