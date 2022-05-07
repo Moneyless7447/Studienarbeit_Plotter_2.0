@@ -191,6 +191,9 @@ class Robot:
 
 
     def get_joint_titles(self, joint=None):
+        '''
+        Gibt eine Liste mit den "Titles" aller Gelenke (Joints) dieses Roboters (Robot) zurück.
+        '''
         if joint is None:
             joint = self.root
         titles_list = [joint.title]

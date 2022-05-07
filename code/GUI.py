@@ -10,6 +10,7 @@ import plotter
 
 class GUI:
     def __init__(self):
+        # HIER JSON DATEI ANGEBEN
         self.robot_json = "example_robot_dh_linear_2.json"
         self.robot = robot.Robot("test_roboter", self.robot_json)
         self.fig = plt.figure(figsize=(7, 7), dpi=80, tight_layout=True)
@@ -111,12 +112,19 @@ class GUI:
         self.plotter.set_joint_and_update(self.node_selection.get(), self.value_input.get().split(','))
 
     def reset_all_changes(self):
+        '''
+        Setzt die Veränderungen durch Eingaben in dem Eingabefenster für alle Gelenke (Joints) zurück.
+        '''
         titles = self.robot.get_joint_titles()[0:]
         # self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         for title in titles:
             self.plotter.reset_joints_offsets_update(title)
 
     def reset_changes(self):
+        '''
+        Setzt die Veränderungen durch Eingaben in dem Eingabefenster für ein spezifisches Gelenk (Joint) zurück.
+        :return:
+        '''
         #print("Trying to reset specific joint:")
         #print(f"nodeselection: {self.node_selection.get()=}")
         #print(f"TEST: {self.plotter.get_joint_offsets(self.node_selection.get())}")
@@ -150,6 +158,9 @@ class GUI:
 
     @staticmethod
     def strip_matrix_string(matrix):
+        '''
+        Zerlegt und formatiert eine Matrix um sie mit Klammern in dem Dialogfenster anzeigen lassen zu können.
+        '''
         lines = str(matrix).split("\n")
         res = []
         for line in lines:
@@ -160,6 +171,10 @@ class GUI:
         return "\n".join(res)
 
     def calculate_AtoB(self):
+        '''
+        Berechnet die Transformationsmatrix von einem Gelenk zu einem anderen, nutzt dafür die Auswahl der Gelenke in der GUI.
+        :return:
+        '''
         if self.node_selection_A.get() == self.node_selection_B.get():
             a_to_b = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
             self.node_transformationmatrix_A_B.insert(tk.END,

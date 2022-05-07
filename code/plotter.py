@@ -63,6 +63,9 @@ class Plotter:
         plt.draw()
 
     def set_geometry_scaling_factor(self, factor):
+        '''
+        Setzt einen Skalierungsfaktor für die 3D_Symbole zur unterscheidung von Rotations- und Translationsgelenken.
+        '''
         #print(f"in set_geometry_scaling_factor: {self.geometry_scaling}")
         self.geometry_scaling_factor = factor
         self.set_geometry_scaling()
@@ -76,6 +79,10 @@ class Plotter:
 
 
     def get_max_dh_param(self, joint):
+        '''
+        Gibt den maximalen Wert aller Längen (Length) und Offsets zurück,
+        wird für den Startwert des Skalierungsfaktor genutzt.
+        '''
         if not joint.children:
             return max(abs(joint.length), abs(joint.offset))
         else:
@@ -176,13 +183,13 @@ class Plotter:
 
     def set_joint_and_update(self, *args):
         """
-        Hier können Winkeländerungen angegeben werden.
-        :param args:
+        Hier können manuelle Winkeländerungen angegeben werden.
         """
         self.robot.set_joint(args[0], args[1])
         #self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
         # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         # self.robot.set_joint("Beta2-Gelenk", math.radians(-20))
+
         # Falls es Referenzgelenke gibt, können die Winkel der Duplikate unabhängig geändert werden
         # self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
 
