@@ -6,6 +6,10 @@ import numpy as np
 Verwaltende Klasse für ein Gelenk (Joint). Mehrere Joints werden von einem Robotobjekt (Roboter) verwaltet. 
 Enthält die Informationen der DH Parameter für dieses eine Gelenk und kennt (Referenz-)Elter und Kindjointobjekte 
 bzw. erzeugt die Transformationsmatrizen zu den Kindern.
+
+Managing class for a joint. Several joints are managed by one robot object (robot). 
+Contains the information of the DH parameters for this one joint and knows (reference) parent and child joint objects. 
+or generates the transformation matrices for the children.
 '''
 class Joint:
     def __init__(self, **kwargs):
@@ -32,6 +36,10 @@ class Joint:
         Definition des Zugriffsoperators. Rekursive Suche des Joints mit angegebenem Titel.
         Liefert Knoten mit angegebenem Titel aus dem Unterbaum.
         :return: Jointobjekt
+
+        Definition of the access operator. Recursive search of the join with specified title.
+        Returns nodes with specified title from the subtree.
+        :return: Jointobject
         """
         if self.title == title:
             return self
@@ -55,6 +63,8 @@ class Joint:
     def generate_dh_matrices_to_children(self):
         """
         Berechnet die Transformationsmatrizen eines Knoten zu seinen Kindern und trägt sie in eine Liste ein.
+
+        Calculates the transformation matrices of a node to its children and enters them in a list.
         """
         if not self.children:
             return
@@ -106,6 +116,8 @@ class Joint:
     def get_reference_dh_for_parent(self, title):
         """
         Gibt DH-Parameter zu einem Referenzelternknoten zurück.
+
+        Returns DH parameters to a reference parent node.
         """
         for parent, dh in zip(self.reference_parents, self.reference_dh_parameters):
             if parent.title == title:
@@ -118,6 +130,11 @@ class Joint:
         Erzeugt Transformationsmatrix bis zu diesem Objekt.
         :param title: Titel von Zielobjekt
         :return: Transformationsmatrix von Objekt zu Zielobjekt
+
+        Searches for the specified object with the specified title.
+        Generates transformation matrix up to this object.
+        :param title: Title of target
+        :return: Transformation matrix from object to target object
         '''
         if not self.children:
             return None
@@ -133,6 +150,10 @@ class Joint:
         '''
         Setzt die zugehörigen Offsetparameter bei einer Veränderung (Rotation/Verschiebung) durch z.B. die Nutzung der GUI
         und berechnet die Transformationsmatrizen der Elter zu sich selbst neu.
+
+        Sets the associated offset parameters in case of a change (rotation/shift) through e.g. the use of the GUI.
+        and recalculates the transformation matrices of the parents to itself.
+
         '''
         if type(args[0][0]) == list:
             args = ([float(v) for v in args[0][0]],)
@@ -150,6 +171,11 @@ class Joint:
         '''
         Setzt neue DH Paramter für dieses Gelenk (Joint) und
         berechnet die Transformationsmatrix von dem Elter zu sich selbst neu.
+
+
+        Sets new DH parameters for this joint and
+        recalculates the transformation matrix from the parent to itself.
+
         '''
         if self.type == "rotation":
             self.angle_offset = args[0][0]
@@ -173,6 +199,10 @@ class Joint:
         '''
         Setzt die Offsetwerte (durch Veränderungen) dieses Gelenks (Joints) zurück und
         berechnet die Transformationsmatrix von dem zugehöreigen Elter zu sich selbst neu.
+
+        Resets the offset values (by changes) of this joint (Joints) and
+        recalculates the transformation matrix from the associated parent to itself.
+
         '''
         self.set_angle_offset(0)
         self.offset_offset = 0
@@ -184,7 +214,11 @@ class Joint:
         self.previous.generate_dh_matrices_to_children()
 
     def has_reference_child(self, title):
-        '''Untersucht, ob dieses Gelenk (Joint) ein Referenzelter des gegebenen Kindes (title) ist.'''
+        '''
+        Untersucht, ob dieses Gelenk (Joint) ein Referenzelter des gegebenen Kindes (title) ist.
+
+        Investigates whether this joint is a reference parent of the given child (title).
+        '''
         for child in self.children:
             if child.title == title:
                 return child.previous.title != self.title
