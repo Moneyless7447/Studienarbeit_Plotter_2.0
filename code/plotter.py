@@ -64,7 +64,9 @@ class Plotter:
 
     def set_geometry_scaling_factor(self, factor):
         '''
-        Setzt einen Skalierungsfaktor für die 3D_Symbole zur unterscheidung von Rotations- und Translationsgelenken.
+        Setzt einen Skalierungsfaktor für die 3D-Symbole zur unterscheidung von Rotations- und Translationsgelenken.
+
+        Sets a scaling factor for the 3D-symbols to distinguish between rotational and translational joints.
         '''
         #print(f"in set_geometry_scaling_factor: {self.geometry_scaling}")
         self.geometry_scaling_factor = factor
@@ -82,6 +84,9 @@ class Plotter:
         '''
         Gibt den maximalen Wert aller Längen (Length) und Offsets zurück,
         wird für den Startwert des Skalierungsfaktor genutzt.
+
+        Returns the maximum value of all lengths and offsets,
+        is used for the start value of the scaling factor.
         '''
         if not joint.children:
             return max(abs(joint.length), abs(joint.offset))
@@ -100,24 +105,39 @@ class Plotter:
         :param axes: Achsenobjekt in dem geplottet wird.
         :param matrix: Transformationsmatrix für dieses Gelenk(Joint).
         :param root: Boolean, zum ermitteln, ob das aktuelle Gelenk(Joint) ein Wurzelknoten ist.
+
+        Recursive plotting of the coordinate systems, joint lines, display names/titles
+        and call the function for plotting the 3D symbolism, for current joint.
+        param joint: Current joint in the recursive call.
+        :param axes: Axis object in which to plot.
+        :param matrix: Transformation matrix for this joint.
+        :param root: Boolean to determine whether the current joint is a root node.
         """
         # Skalierungsfaktor, Koordinatensystem des Basiskoordinatensystem(root)
         # nutzt einen größeren Skalierungsfaktor
+        #Scale factor, coordinate system of the base coordinate system(root)
+        # uses a larger scaling factor
         scale = 1 if not root else 2.1
         # Punkte für Ursprung und Koordinatenachsen für Koordinatenursprünge.
         # Matrixmultiplikation der Transformationsmatrix und der Punkte
         # (Ursprung und Hilfspunkte für Koordinatenachsen).
+
+        # Points for origin and coordinate axes for coordinate origins.
+        # Matrix multiplication of the transformation matrix and points.
+        # (origin and auxiliary points for coordinate axes).
         origin_point = np.dot(matrix, [0, 0, 0, 1])[:3]
         x_axis_point = np.dot(matrix, [scale, 0, 0, 1])[:3]
         y_axis_point = np.dot(matrix, [0, scale, 0, 1])[:3]
         z_axis_point = np.dot(matrix, [0, 0, scale, 1])[:3]
 
         # Ursprünge als Punkte plotten
+        # Plot origins as points
         if joint.type == "TCP" and self.show_3d_symbol:
             axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'ko')
         else:
             axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'k,')
         # Achsen als Geraden plotten (Verbindungslinien von Ursprungspunkten zu Hilfspunkten der Achsen)
+        # Plot axes as straight lines (connecting lines from origin points to auxiliary points of the axes)
         axes.plot([origin_point[0], x_axis_point[0]], [origin_point[1], x_axis_point[1]],
                   [origin_point[2], x_axis_point[2]], 'r-', linewidth=0.5*scale)
         axes.plot([origin_point[0], y_axis_point[0]], [origin_point[1], y_axis_point[1]],
@@ -125,12 +145,14 @@ class Plotter:
         axes.plot([origin_point[0], z_axis_point[0]], [origin_point[1], z_axis_point[1]],
                   [origin_point[2], z_axis_point[2]], 'b-', linewidth=0.5*scale)
         # Namen bzw. Titel anzeigen
+        # Display name or title
         if self.show_title:
             axes.text(origin_point[0], origin_point[1], origin_point[2], joint.title)
         if self.show_name:
             axes.text(origin_point[0], origin_point[1], origin_point[2], joint.name, fontsize = 'small')
 
         # Unterscheidung der Symbolik je nach Angabe der Gelenktypen
+        # Differentiation of the symbolism depending on the indication of the joint types
         if self.show_3d_symbol:
             if joint.type == "rotation":
                 self.plot_cylinder(matrix)
@@ -139,10 +161,12 @@ class Plotter:
 
 
         # Abbruchkriterium für rekursiven Aufruf
+        # Abort criterion for recursive call
         if joint.children is None:
             return
 
         # Verbindungslinien zwischen Koordinatenursprüngen
+        # Connecting lines between coordinate origins
         origin_points = (list(origin_point),)
         for index, child in enumerate(joint.children):
             child_matrix = np.dot(matrix, joint.transformationmatrices_to_children[index])
@@ -157,14 +181,20 @@ class Plotter:
         """
         Funktion wird bei Änderungen aufgerufen, z.B. bei dem Benutzen des "Apply"-Buttons
         :param *args: Platzhalter
+
+        Function is called when changes are made, e.g. when the "Apply" button is used.
+        :param *args: Placeholder
         """
         # Speichern der aktuellen Achsenbegrenzung (damit die Zoomstufe übernommen wird)
+        # Save the current axis limit (so that the zoom level is adopted)
         xlims = self.axes.get_xlim3d()
         ylims = self.axes.get_ylim3d()
         zlims = self.axes.get_zlim3d()
         # Löschen der aktuellen Darstellung im Plotter
+        # Delete the current representation in the plotter
         self.axes.clear()
         # Plotten der neuen Konfiguration
+        # Plotting the new configuration
         self.plot(self.robot.root, self.axes, root=True)
         self.axes.grid(False)
         self.axes.set(xlim3d=(xlims), xlabel='x')
@@ -184,6 +214,8 @@ class Plotter:
     def set_joint_and_update(self, *args):
         """
         Hier können manuelle Winkeländerungen angegeben werden.
+
+        Manual angle changes can be specified here.
         """
         self.robot.set_joint(args[0], args[1])
         #self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
@@ -528,6 +560,9 @@ class Plotter:
     def plot_triangle(self, trans_matrix, points_x: list, points_y: list, points_z: list, alpha, col: str):
         # Transformation zu homogenen Koordinaten und
         # Matrixmultiplikation von Transformationsmatrix mit Punkt
+
+        # transformation to homogeneous coordinates and
+        # Matrix multiplication of transformation matrix with point
         vertices_1 = [np.dot(trans_matrix, [points_x[0], points_y[0], points_z[0], 1]),
                         np.dot(trans_matrix, [points_x[1], points_y[1], points_z[1], 1]),
                         np.dot(trans_matrix, [points_x[2], points_y[2], points_z[2], 1])]
