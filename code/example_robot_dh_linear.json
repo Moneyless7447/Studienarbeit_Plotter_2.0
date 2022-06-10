@@ -1,7 +1,7 @@
 {
   "robot": [
     {
-      "title": "Alpha1-Gelenk",
+      "title": "Alpha",
       "type": "rotation",
       "angle": "pi/2",
       "length": "1.2",
@@ -9,15 +9,15 @@
       "twist": "0",
       "children": [
         {
-          "title": "Beta1-Gelenk",
-          "type": "translation",
+          "title": "Beta",
+          "type": "rotation",
           "angle": "0",
           "length": "2.3",
           "offset": "1",
           "twist": "pi",
           "children": [
             {
-              "title": "Gamma1-Gelenk",
+              "title": "Gamma",
               "type": "rotation",
               "angle": "0",
               "length": "1",

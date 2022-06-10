@@ -7,26 +7,32 @@ import numpy as np
 import robot
 import plotter
 
-
+'''
+GUI class 
+It contains attributes and methods to visualize a given "plotter" object and features 
+to interact with it such as allowing inputs from a user to call specific functions from other classes.
+'''
 class GUI:
     def __init__(self):
-        # HIER JSON DATEI ANGEBEN
-        self.robot_json = "example_robot_dh_linear_2.json"
+        # INSERT JSON FILE HERE (no user input via GUI for this feature implemented yet)
+        self.robot_json = "example_robot_hexapod.json"
         self.robot = robot.Robot("test_roboter", self.robot_json)
         self.fig = plt.figure(figsize=(7, 7), dpi=80, tight_layout=True)
         self.plotter = plotter.Plotter(self.robot, self.fig)
         self.window = tk.Tk()
         self.window.geometry('1800x1200')
-        # self.window.configure(bg="white")
         self.window.title("RoboPlot")
+
+        #Default matrix, this attribute gets manipulated when
+        #calculating transformation matrices when the user uses the corresponding method(s)
         self.transformationmatrix_A_B = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
         def on_close():
             self.window.destroy()
             exit(0)
-
         self.window.protocol("WM_DELETE_WINDOW", on_close)
 
+        '''Visual settings and design elements'''
         self.label_node_selection = ttk.Label(self.window, text='Joint (title):')
         self.node_selection = ttk.Combobox(self.window, width=17)
         self.node_selection['values'] = self.robot.get_joint_titles()[1:]
@@ -43,15 +49,14 @@ class GUI:
         self.reset_all_button = tk.Button(self.window, text='Reset all', command=self.reset_all_changes, width=20)
         self.view = FigureCanvasTkAgg(self.fig, self.window)
 
-        self.bool_title = True
+        self.bool_title = True #Initinal value of the title checkbox
         self.check_title = tk.Checkbutton(self.window, text='Titles', command=self.toggle_title)
-
         self.check_title.select()
-        self.bool_name = False
+        self.bool_name = False #Initinal value of the name checkbox
         self.check_name = tk.Checkbutton(self.window, text='Names (generated)', command=self.toggle_name)
         self.check_name.deselect()
-        self.bool_symbols = True
-        self.check_symbols = tk.Checkbutton(self.window, text='3D-Symbols', command=self.toggle_symbols)  # ,
+        self.bool_symbols = True #Initinal value of the 3D-symbol checkbox
+        self.check_symbols = tk.Checkbutton(self.window, text='3D-Symbols', command=self.toggle_symbols)
         self.check_symbols.select()
         self.set_show_options()
 
@@ -71,12 +76,20 @@ class GUI:
         self.node_selection_B.set(self.node_selection_B['values'][0])
         self.scrollbar_transformationmatrix = tk.Scrollbar(self.window)
         self.node_transformationmatrix_A_B = tk.Text(self.window, width=36, height=16, yscrollcommand=self.scrollbar_transformationmatrix.set, padx=2, pady=7)
-        self.node_transformationmatrix_A_B.insert(tk.END, "┌          ┐\n|┌     ┐┌ ┐|  R is the 3x3 R_A_B\n|          |  rotation matrix.\n|   R    V |\n|          |  V is the 3x1 V_B\n|└     ┘└ ┘|  translation vector.\n| 0 0 0  1 |\n└          ┘\n┌          ┐\n|┌     ┐┌ ┐|  This transformation\n| 1 0 0  0 |  matrix equals a\n| 0 1 0  0 |  transformation with\n| 0 0 1  0 |  no rotation\n|└     ┘└ ┘|  nor translation.\n| 0 0 0  1 |\n└          ┘")
+        self.node_transformationmatrix_A_B.insert(tk.END, "┌          ┐\n|┌     ┐┌ ┐|  R is the 3x3 R_A_B\n"
+                                                          "|          |  "
+                                                          "rotation matrix.\n|   R    V |\n|          |  "
+                                                          "V is the 3x1 V_B\n|└     ┘└ ┘|  translation vector.\n"
+                                                          "| 0 0 0  1 |\n└          ┘\n┌          ┐\n|┌     ┐┌ ┐|  "
+                                                          "This transformation\n| 1 0 0  0 |  matrix equals a\n"
+                                                          "| 0 1 0  0 |  transformation with\n| 0 0 1  0 |  "
+                                                          "no rotation\n|└     ┘└ ┘|  nor translation.\n| 0 0 0  1 |"
+                                                          "\n└          ┘") #Initial input for the output text field
         self.scrollbar_transformationmatrix.config(command=self.node_transformationmatrix_A_B.yview)
         self.geometry_scale = tk.Scale(self.window, from_=1, to=10, orient='horizontal', command=self.set_geometry_scaling_factor, resolution=0.5, length=300, width=30)
         self.geometry_scale.set(self.plotter.get_geometry_scaling_factor())
 
-
+        '''Positioning of the visual elements on the GUI grid'''
         self.label_json.grid(column=1, columnspan=1, row=1, sticky='w', rowspan=2, padx=10, pady=20)
         self.json.grid(column=1, columnspan=3, row=1, sticky='w', rowspan=2, padx=130)
         self.label_node_selection.grid(column=1, row=10, padx=10, pady=1, sticky='w')
@@ -101,18 +114,18 @@ class GUI:
         self.node_transformationmatrix_A_B.grid(column=1, row=19, sticky='nw', columnspan=3, padx=20)
         self.scrollbar_transformationmatrix.grid(column=3, row=19, sticky='ns', rowspan=3, columnspan=2, padx=1)
 
+
     def set_geometry_scaling_factor(self, *args):
         factor = self.geometry_scale.get()
         self.plotter.set_geometry_scaling_factor(factor)
-        #print(f"{factor=}")
 
-
+    #apply user input changes for a selected joint
     def apply_changes(self):
         # print(self.value_input.get())
         self.plotter.set_joint_and_update(self.node_selection.get(), self.value_input.get().split(','))
 
     def reset_all_changes(self):
-        '''
+        ''' Resets all changes which were applied by a user via
         Setzt die Veränderungen durch Eingaben in dem Eingabefenster für alle Gelenke (Joints) zurück.
         '''
         titles = self.robot.get_joint_titles()[0:]

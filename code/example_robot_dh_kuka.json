@@ -1,0 +1,42 @@
+{
+  "robot": [
+    {
+      "title": "Alpha",
+      "type": "rotation",
+      "angle": "pi/2",
+      "length": "0",
+      "offset": "0.5",
+      "twist": "pi/2",
+      "children": [
+        {
+          "title": "Beta",
+          "type": "rotation",
+          "angle": "1.9",
+          "length": "0.8",
+          "offset": "0",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Gamma",
+              "type": "rotation",
+              "angle": "-1.7",
+              "length": "0.7",
+              "offset": "0",
+              "twist": "0",
+              "children": [
+                {
+                  "title": "TCP",
+                  "type": "none",
+                  "angle": "0",
+                  "length": "0.4",
+                  "offset": "0",
+                  "twist": "0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

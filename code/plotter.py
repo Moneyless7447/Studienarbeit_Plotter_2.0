@@ -56,8 +56,6 @@ class Plotter:
         # self.text_value.on_text_change(self.test_func)
         # self.text_value.on_submit(self.test_func)
 
-
-
         plt.ion()
         #plt.show()
         plt.draw()
@@ -103,7 +101,7 @@ class Plotter:
         """
         # Skalierungsfaktor, Koordinatensystem des Basiskoordinatensystem(root)
         # nutzt einen größeren Skalierungsfaktor
-        scale = 1 if not root else 2.1
+        scale = 0.5 if not root else 1.5
         # Punkte für Ursprung und Koordinatenachsen für Koordinatenursprünge.
         # Matrixmultiplikation der Transformationsmatrix und der Punkte
         # (Ursprung und Hilfspunkte für Koordinatenachsen).
