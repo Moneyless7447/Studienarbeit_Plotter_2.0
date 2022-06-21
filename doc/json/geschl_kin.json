@@ -10,19 +10,19 @@
       "children": [
         {
           "title": "Beta1-Gelenk",
-          "type": "translation",
+          "type": "rotation",
           "angle": "0",
-          "length": "2.3",
-          "offset": "3",
-          "twist": "pi",
+          "length": "2",
+          "offset": "1",
+          "twist": "0",
           "children": [
             {
               "title": "Gamma1-Gelenk",
               "type": "rotation",
               "angle": "0",
-              "length": "1",
-              "offset": "3",
-              "twist": "0.7854"
+              "length": "2",
+              "offset": "-1",
+              "twist": "0"
             }
           ]
         },
@@ -30,17 +30,17 @@
           "title": "Beta2-Gelenk",
           "type": "rotation",
           "angle": "0",
-          "length": "2.3",
-          "offset": "1",
-          "twist": "pi",
+          "length": "2",
+          "offset": "-1",
+          "twist": "0",
           "children": [
             {
               "title": "Gamma1-Gelenk",
               "type": "rotation",
-              "angle": "30",
-              "length": "1",
-              "offset": "3",
-              "twist": "0.7854"
+              "angle": "0",
+              "length": "2",
+              "offset": "1",
+              "twist": "0"
             }
             ]
         }
