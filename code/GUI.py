@@ -7,15 +7,17 @@ import numpy as np
 import robot
 import plotter
 
+
 '''
-GUI class 
-It contains attributes and methods to visualize a given "plotter" object and features 
-to interact with it such as allowing inputs from a user to call specific functions from other classes.
+GUI-Klasse
+Enthält Attribute und Methoden um ein gegebenes Plotter-Objekt abzubilden und 
+eine Benutzer-Programm-Schnittstelle zu Verfügung zu stellen in der bestimmte Funktionen von 
+anderen Klassen aufgerufen werden können
 '''
 class GUI:
     def __init__(self):
         # INSERT JSON FILE HERE (no user input via GUI for this feature implemented yet)
-        self.robot_json = "example_robot_hexapod.json"
+        self.robot_json = "roboter_beispiel_einleitung.json"
         self.robot = robot.Robot("test_roboter", self.robot_json)
         self.fig = plt.figure(figsize=(7, 7), dpi=80, tight_layout=True)
         self.plotter = plotter.Plotter(self.robot, self.fig)

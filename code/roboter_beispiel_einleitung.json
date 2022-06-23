@@ -1,0 +1,72 @@
+{
+  "robot": [
+    {
+      "title": "Alpha1-Gelenk",
+      "type": "rotation",
+      "angle": "pi/2",
+      "length": "1",
+      "offset": "1",
+      "twist": "pi/2",
+      "children": [
+        {
+          "title": "Beta1-Gelenk",
+          "type": "rotation",
+          "angle": "pi/4",
+          "length": "1",
+          "offset": "0",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Gamma1-Gelenk",
+              "type": "rotation",
+              "angle": "pi/2",
+              "length": "1",
+              "offset": "0",
+              "twist": "0",
+              "children":
+              [
+                {
+                  "title": "Delta1-Gelenk",
+                  "type": "translation",
+                  "angle": "-pi/4",
+                  "length": "1",
+                  "offset": "0",
+                  "twist": "pi/2",
+                  "children":
+                  [
+                    {
+                      "title": "TCP",
+                      "type": "TCP",
+                      "angle": "0",
+                      "length": "0",
+                      "offset": "1",
+                      "twist": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Beta2-Gelenk",
+          "type": "rotation",
+          "angle": "2.356",
+          "length": "1",
+          "offset": "0",
+          "twist": "0",
+          "children": [
+            {
+              "title": "Gamma1-Gelenk",
+              "type": "rotation",
+              "angle": "-pi/2",
+              "length": "1",
+              "offset": "0",
+              "twist": "0"
+            }
+            ]
+        }
+      ]
+    }
+  ]
+}

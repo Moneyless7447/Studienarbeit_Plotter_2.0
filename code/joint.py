@@ -3,10 +3,10 @@ import math
 import numpy as np
 
 '''
-Verwaltende Klasse für ein Gelenk (Joint). Mehrere Joints werden von einem Robotobjekt (Roboter) verwaltet. 
-Enthält die Informationen der DH Parameter für dieses eine Gelenk und kennt (Referenz-)Elter und Kindjointobjekte 
-bzw. erzeugt die Transformationsmatrizen zu den Kindern.
-'''
+Joint class, one initialized joint object represents one real joint. Multiple joint objects are 
+managed by a robot object. The joint object contains the parameters of the given joint, such as the 
+DH-parameters and the degree of freedom. The object also knows its (reference) parent and its children.
+The transformationmatrices to the own children are calculated within the joint object.'''
 class Joint:
     def __init__(self, **kwargs):
         # self.iterator = 0
@@ -32,6 +32,9 @@ class Joint:
         Definition des Zugriffsoperators. Rekursive Suche des Joints mit angegebenem Titel.
         Liefert Knoten mit angegebenem Titel aus dem Unterbaum.
         :return: Jointobjekt
+        """
+        """
+        
         """
         if self.title == title:
             return self
