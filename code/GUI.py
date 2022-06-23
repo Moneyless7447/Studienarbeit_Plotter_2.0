@@ -9,14 +9,15 @@ import plotter
 
 
 '''
-GUI-Klasse
+GUI-Klasse     [ANGABE DER JSON-DATEI]
 Enthält Attribute und Methoden um ein gegebenes Plotter-Objekt abzubilden und 
-eine Benutzer-Programm-Schnittstelle zu Verfügung zu stellen in der bestimmte Funktionen von 
-anderen Klassen aufgerufen werden können
+eine Benutzer-Programm-Schnittstelle zu Verfügung zu stellen, in der bestimmte Funktionen von 
+anderen Klassen aufgerufen werden können.
 '''
 class GUI:
     def __init__(self):
         # INSERT JSON FILE HERE (no user input via GUI for this feature implemented yet)
+        # HIER JSON DATEI ANGEBEN (bislang keine Benutzereingabe durch die GUI moeglich)
         self.robot_json = "roboter_beispiel_einleitung.json"
         self.robot = robot.Robot("test_roboter", self.robot_json)
         self.fig = plt.figure(figsize=(7, 7), dpi=80, tight_layout=True)
@@ -27,6 +28,7 @@ class GUI:
 
         #Default matrix, this attribute gets manipulated when
         #calculating transformation matrices when the user uses the corresponding method(s)
+        #Standardmatrix, dieses Attribut wird verändert 
         self.transformationmatrix_A_B = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
         def on_close():
