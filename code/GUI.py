@@ -10,9 +10,9 @@ import plotter
 
 '''
 GUI-Klasse     [ANGABE DER JSON-DATEI]
-Enthält Attribute und Methoden um ein gegebenes Plotter-Objekt abzubilden und 
-eine Benutzer-Programm-Schnittstelle zu Verfügung zu stellen, in der bestimmte Funktionen von 
-anderen Klassen aufgerufen werden können.
+Enthaelt Attribute und Methoden um ein gegebenes Plotter-Objekt abzubilden und 
+eine Benutzer-Programm-Schnittstelle zu Verfuegung zu stellen, in der bestimmte Funktionen von 
+anderen Klassen aufgerufen werden koennen.
 '''
 class GUI:
     def __init__(self):
@@ -26,9 +26,8 @@ class GUI:
         self.window.geometry('1800x1200')
         self.window.title("RoboPlot")
 
-        #Default matrix, this attribute gets manipulated when
-        #calculating transformation matrices when the user uses the corresponding method(s)
-        #Standardmatrix, dieses Attribut wird verändert 
+        #Standardmatrix, dieses Attribut wird veraendert Transformationen stattfinden,
+        # sobald der Benutzer die dazugehoerigen Methoden aufruft
         self.transformationmatrix_A_B = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
 
         def on_close():
@@ -36,7 +35,8 @@ class GUI:
             exit(0)
         self.window.protocol("WM_DELETE_WINDOW", on_close)
 
-        '''Visual settings and design elements'''
+
+        '''Visuelle Einstellungen und Designelemente'''
         self.label_node_selection = ttk.Label(self.window, text='Joint (title):')
         self.node_selection = ttk.Combobox(self.window, width=17)
         self.node_selection['values'] = self.robot.get_joint_titles()[1:]
@@ -53,13 +53,13 @@ class GUI:
         self.reset_all_button = tk.Button(self.window, text='Reset all', command=self.reset_all_changes, width=20)
         self.view = FigureCanvasTkAgg(self.fig, self.window)
 
-        self.bool_title = True #Initinal value of the title checkbox
+        self.bool_title = True #Initiale Werte der Checkbox: title
         self.check_title = tk.Checkbutton(self.window, text='Titles', command=self.toggle_title)
         self.check_title.select()
-        self.bool_name = False #Initinal value of the name checkbox
+        self.bool_name = False #Initiale Werte der Checkbox: name
         self.check_name = tk.Checkbutton(self.window, text='Names (generated)', command=self.toggle_name)
         self.check_name.deselect()
-        self.bool_symbols = True #Initinal value of the 3D-symbol checkbox
+        self.bool_symbols = True #Initiale Werte der Checkbox: 3D Symbole
         self.check_symbols = tk.Checkbutton(self.window, text='3D-Symbols', command=self.toggle_symbols)
         self.check_symbols.select()
         self.set_show_options()
@@ -93,7 +93,8 @@ class GUI:
         self.geometry_scale = tk.Scale(self.window, from_=1, to=10, orient='horizontal', command=self.set_geometry_scaling_factor, resolution=0.5, length=300, width=30)
         self.geometry_scale.set(self.plotter.get_geometry_scaling_factor())
 
-        '''Positioning of the visual elements on the GUI grid'''
+
+        '''Positionierung der visuellen Elemente auf dem GUI Raster'''
         self.label_json.grid(column=1, columnspan=1, row=1, sticky='w', rowspan=2, padx=10, pady=20)
         self.json.grid(column=1, columnspan=3, row=1, sticky='w', rowspan=2, padx=130)
         self.label_node_selection.grid(column=1, row=10, padx=10, pady=1, sticky='w')
@@ -123,49 +124,36 @@ class GUI:
         factor = self.geometry_scale.get()
         self.plotter.set_geometry_scaling_factor(factor)
 
-    #apply user input changes for a selected joint
+
+    #Anwendung von Benutzereingaben fuer ein ausgewaehltes Gelenk
     def apply_changes(self):
         # print(self.value_input.get())
         self.plotter.set_joint_and_update(self.node_selection.get(), self.value_input.get().split(','))
 
     def reset_all_changes(self):
-        ''' Resets all changes which were applied by a user via
-        Setzt die Veränderungen durch Eingaben in dem Eingabefenster für alle Gelenke (Joints) zurück.
-        '''
+        '''Setzt die Veraenderungen durch Eingaben in dem Eingabefenster fuer alle Gelenke (Joints) zurueck.'''
         titles = self.robot.get_joint_titles()[0:]
         # self.node_selection['values'] = self.robot.get_joint_titles()[1:]
         for title in titles:
             self.plotter.reset_joints_offsets_update(title)
 
     def reset_changes(self):
-        '''
-        Setzt die Veränderungen durch Eingaben in dem Eingabefenster für ein spezifisches Gelenk (Joint) zurück.
-        :return:
-        '''
-        #print("Trying to reset specific joint:")
-        #print(f"nodeselection: {self.node_selection.get()=}")
-        #print(f"TEST: {self.plotter.get_joint_offsets(self.node_selection.get())}")
+        '''Setzt die Veraenderungen durch Eingaben in dem Eingabefenster fuer ein spezifisches Gelenk (Joint) zurueck.'''
         self.plotter.reset_joints_offsets_update(self.node_selection.get())
-        #print("reached end")
 
     def set_show_options(self):
-        # print(self.bool_title, self.bool_name, self.bool_symbols)
         self.plotter.set_show_options(self.bool_title, self.bool_name, self.bool_symbols)
-        # self.plotter.set_show_options(self.bool_title.get(), self.bool_name.get(), self.bool_symbols.get())
 
     def toggle_title(self):
         self.bool_title = not self.bool_title
-        # self.check_title.select() if self.bool_title else self.check_title.deselect()
         self.set_show_options()
 
     def toggle_name(self):
         self.bool_name = not self.bool_name
-        # self.check_name.select() if self.bool_name else self.check_name.deselect()
         self.set_show_options()
 
     def toggle_symbols(self):
         self.bool_symbols = not self.bool_symbols
-        # self.check_symbols.select() if self.bool_symbols else self.check_symbols.deselect()
 
         if not self.bool_symbols:
             self.geometry_scale.config(state=tk.DISABLED, takefocus=0, fg='lightgrey')
@@ -175,9 +163,7 @@ class GUI:
 
     @staticmethod
     def strip_matrix_string(matrix):
-        '''
-        Zerlegt und formatiert eine Matrix um sie mit Klammern in dem Dialogfenster anzeigen lassen zu können.
-        '''
+        '''Zerlegt und formatiert eine Matrix um sie mit Klammern in dem Dialogfenster anzeigen lassen zu koennen.'''
         lines = str(matrix).split("\n")
         res = []
         for line in lines:
@@ -188,10 +174,7 @@ class GUI:
         return "\n".join(res)
 
     def calculate_AtoB(self):
-        '''
-        Berechnet die Transformationsmatrix von einem Gelenk zu einem anderen, nutzt dafür die Auswahl der Gelenke in der GUI.
-        :return:
-        '''
+        '''Berechnet die Transformationsmatrix von einem Gelenk zu einem anderen, nutzt dafuer die Auswahl der Gelenke in der GUI. '''
         if self.node_selection_A.get() == self.node_selection_B.get():
             a_to_b = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
             self.node_transformationmatrix_A_B.insert(tk.END,

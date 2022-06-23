@@ -3,10 +3,13 @@ import math
 import numpy as np
 
 '''
-Joint class, one initialized joint object represents one real joint. Multiple joint objects are 
-managed by a robot object. The joint object contains the parameters of the given joint, such as the 
-DH-parameters and the degree of freedom. The object also knows its (reference) parent and its children.
-The transformationmatrices to the own children are calculated within the joint object.'''
+Joint-Klasse
+
+Ein instanziiertes Joint-Objekt repraesentiert ein echtes Gelenk.
+Mehrere Joint-Objekte werden von einem Robot-Objekt verwaltet. 
+Das Joint-Object besitzt die Parameter des Gelenkobjekts(DH-Parameter, DOF).
+Doppelte Verkettung zu Elter- und Kindknoten, mit Berechnung der Transformationsmatrizen zu Kindern.
+'''
 class Joint:
     def __init__(self, **kwargs):
         # self.iterator = 0
@@ -33,9 +36,6 @@ class Joint:
         Liefert Knoten mit angegebenem Titel aus dem Unterbaum.
         :return: Jointobjekt
         """
-        """
-        
-        """
         if self.title == title:
             return self
         if not len(self.children):
@@ -46,7 +46,7 @@ class Joint:
                 return res
 
     def append(self, joint):
-        # setzt Elter als Elter für Kind
+        # setzt Elter als Elter fuer Kind
         joint.previous = self
         # Setzt Kind als Kind von Elter (Eintragen von Objekt in Liste Children)
         self.children.append(joint)
@@ -57,7 +57,7 @@ class Joint:
 
     def generate_dh_matrices_to_children(self):
         """
-        Berechnet die Transformationsmatrizen eines Knoten zu seinen Kindern und trägt sie in eine Liste ein.
+        Berechnet die Transformationsmatrizen eines Knoten zu seinen Kindern und traegt sie in eine Liste ein.
         """
         if not self.children:
             return
@@ -108,7 +108,7 @@ class Joint:
 
     def get_reference_dh_for_parent(self, title):
         """
-        Gibt DH-Parameter zu einem Referenzelternknoten zurück.
+        Gibt DH-Parameter zu einem Referenzelternknoten zurueck.
         """
         for parent, dh in zip(self.reference_parents, self.reference_dh_parameters):
             if parent.title == title:
@@ -134,7 +134,7 @@ class Joint:
 
     def set_joint(self, *args):
         '''
-        Setzt die zugehörigen Offsetparameter bei einer Veränderung (Rotation/Verschiebung) durch z.B. die Nutzung der GUI
+        Setzt die zugehoerigen Offsetparameter bei einer Veraenderung (Rotation/Verschiebung) durch z.B. die Nutzung der GUI
         und berechnet die Transformationsmatrizen der Elter zu sich selbst neu.
         '''
         if type(args[0][0]) == list:
@@ -151,7 +151,7 @@ class Joint:
 
     def set_joint_to_absolute(self, *args):
         '''
-        Setzt neue DH Paramter für dieses Gelenk (Joint) und
+        Setzt neue DH-Parameter fuer dieses Gelenk (Joint) und
         berechnet die Transformationsmatrix von dem Elter zu sich selbst neu.
         '''
         if self.type == "rotation":
@@ -174,8 +174,8 @@ class Joint:
 
     def reset_joint_offsets(self, *args):
         '''
-        Setzt die Offsetwerte (durch Veränderungen) dieses Gelenks (Joints) zurück und
-        berechnet die Transformationsmatrix von dem zugehöreigen Elter zu sich selbst neu.
+        Setzt die Offsetwerte (durch Veraenderungen) dieses Gelenks (Joints) zurueck und
+        berechnet die Transformationsmatrix von dem zugehoerigen Elter zu sich selbst neu.
         '''
         self.set_angle_offset(0)
         self.offset_offset = 0

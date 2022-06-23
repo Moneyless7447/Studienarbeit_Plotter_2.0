@@ -36,7 +36,7 @@
                     # Eintragen der Rootelemente in rootelements (Liste)
                     if previous_key == "0":
                         self.rootelements.append(key)
-                    # Rekursiver Funktionsaufruf für Kinder
+                    # Rekursiver Funktionsaufruf fuer Kinder
                     for index, value in enumerate(data['children']):
                         new_key = f"{key}.{index + 1}"
                         child = _build_tree(data=value, result=result, key=new_key, previous_key=key)
@@ -45,7 +45,7 @@
                     return
 
             result = list()
-            # iteratives Aufrufen der rekursiven Funktion für jedes Kind der Wurzel
+            # iteratives Aufrufen der rekursiven Funktion fuer jedes Kind der Wurzel
             for index, value in enumerate(data_list):
                 _build_tree(data=value, result=result, key=f"{index + 1}")
             return result
@@ -88,7 +88,7 @@
                     # Eintragen der Rootelemente in rootelements (Liste)
                     if previous_key == "0":
                         self.rootelements.append(key)
-                    # Rekursiver Funktionsaufruf für Kinder
+                    # Rekursiver Funktionsaufruf fuer Kinder
                     for index, value in enumerate(data['children']):
                         new_key = f"{key}.{index + 1}"
                         child = _build_tree(data=value, result=result, key=new_key, previous_key=key)
@@ -97,7 +97,7 @@
                     return
 
             result = dict()
-            # iteratives Aufrufen der rekursiven Funktion für jedes Kind der Wurzel
+            # iteratives Aufrufen der rekursiven Funktion fuer jedes Kind der Wurzel
             for index, value in enumerate(data_list):
                 _build_tree(data=value, result=result, key=f"{index + 1}")
             return result

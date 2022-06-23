@@ -4,8 +4,9 @@ from joint import Joint
 import os
 
 '''
+Robot-Klasse
 Konvertiert eine gegebene Baumstruktur (JSON Format) in eine Objektbaumstruktur (Robot)
-mit Doppelverlinkungen (nutzt die Klasse Joints). 
+mit Doppelverlinkungen (nutzt die Klasse Joint). 
 '''
 
 class Robot:
@@ -44,12 +45,12 @@ class Robot:
         for index, child in enumerate(children_list):
             # str:"pi" in json zu float:np.pi umwandeln
             # <editor-fold desc="str:"pi" in json zu float:np.pi umwandeln">
-            # Möglichkeiten: 2*pi  pi/6 pi und andere Vorzeichen
+            # Moeglichkeiten: 2*pi  pi/6 pi und andere Vorzeichen
             #### ANGLE ####
             tmp_angle = child['angle']
             is_angle_pi = False
             is_angle_div = False
-            #Prüfen, ob "pi" im String vorkommt
+            #Pruefen, ob "pi" im String vorkommt
             for i in range(len(child['angle'])):
                 if (child['angle'][i] == "p") and (child['angle'][i + 1] is not None and "i"):
                     is_angle_pi = True
@@ -75,7 +76,7 @@ class Robot:
             tmp_twist = child['twist']
             is_twist_pi = False
             is_twist_div = False
-            # Prüfen, ob "pi" im String vorkommt
+            # Pruefen, ob "pi" im String vorkommt
             for i in range(len(child['twist'])):
                 if (child['twist'][i] == "p") and (child['twist'][i + 1] is not None and "i"):
                     is_twist_pi = True
@@ -99,7 +100,7 @@ class Robot:
             #########################################################################
             # </editor-fold>
             """Benennung der Joints"""
-            # Hilfsvariable für Benennung der Joints
+            # Hilfsvariable fuer Benennung der Joints
             parent_dh_depth = parent.name.split("_")[-1]
             if parent.title != "root":
                 if len(children_list) == 1:
@@ -128,12 +129,12 @@ class Robot:
                                   twist=tmp_twist, title=child["title"],
                                   type=child["type"], children=list(), previous=None)
 
-                # Neues Kind an Elternknoten anhängen
+                # Neues Kind an Elternknoten anhaengen
                 # Doppelte Verlinkung: Neues Kind wird als Kind von Elter gesetzt und Elter wird als Elter von neuem Kind gesetzt
                 parent.append(child_object)
                 # Wenn Kindknoten vorhanden:
                 if "children" in child:
-                    # Rekursives Anhängen der Kindknoten
+                    # Rekursives Anhaengen der Kindknoten
                     self.append_children(child_object, child["children"])
 
             # Kind existiert schon -> Duplikat:
@@ -142,7 +143,7 @@ class Robot:
                 reference_child.reference_parents.append(parent)
                 reference_child.reference_dh_parameters.append({"angle": float(tmp_angle), "length": float(child["length"]),
                                                                 "offset": float(child["offset"]), "twist": float(tmp_twist), "type": child["type"], "angle_offset": 0.0, "offset_offset": 0.0})
-                # Existierendes Kind wird an den aktuellen Knoten als Kind angehängt
+                # Existierendes Kind wird an den aktuellen Knoten als Kind angehaengt
                 parent.children.append(reference_child)
                 parent.transformationmatrices_to_children.append(None)
 
@@ -172,7 +173,7 @@ class Robot:
         #print(f"Inverse Matrix:\n{inverse_matrix}")
         return inverse_matrix
 
-    # Funktion zum Aufrufen der set_joint Funktion für eines benannten Jointobjektes.
+    # Funktion zum Aufrufen der set_joint Funktion fuer eines benannten Jointobjektes.
     def set_joint(self, title, *args):
         # print(title, args)
         self.root[title].set_joint(args)
@@ -181,9 +182,8 @@ class Robot:
     def set_joint_to_absolute(self, title, value):
         self.root[title].set_joint_to_absolute(value)
 
-    # Funktion zum Aufrufen der reset_joint_offsets Funktion für Kinder eines benannten Jointobjektes.
+    # Funktion zum Aufrufen der reset_joint_offsets Funktion fuer Kinder eines benannten Jointobjektes.
     def reset_joint_offsets(self, title, *args):
-        #if self.root[title].children is not None:
         if hasattr(self.root[title],"children"):
             for child in range(len(self.root[title].children)):
                 self.root[title].children[child].reset_joint_offsets()
@@ -192,7 +192,7 @@ class Robot:
 
     def get_joint_titles(self, joint=None):
         '''
-        Gibt eine Liste mit den "Titles" aller Gelenke (Joints) dieses Roboters (Robot) zurück.
+        Gibt eine Liste mit den "Titles" aller Gelenke (Joints) dieses Roboters (Robot) zurueck.
         '''
         if joint is None:
             joint = self.root

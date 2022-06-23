@@ -9,6 +9,11 @@ import math
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 #from tkinter import *
 
+'''
+Plotter-Klasse     
+Klasse fuer ein Plotfenster.
+Hier auch Anwendung ohne GUI ueber Konsole (oder Code ab Zeile 161) moeglich.
+'''
 class Plotter:
     def __init__(self, robot, fig=None):
         self.robot = robot
@@ -30,39 +35,13 @@ class Plotter:
         self.axes.set(zlim3d=(calculated_limits[0], calculated_limits[1]), zlabel='Z')
         self.axes.grid(False)
 
-
-        # "Next" Button
-        # self.axnext = plt.axes([0.23, 0.05, 0.08, 0.075])
-        # self.bnext = Button(self.axnext, 'Next')
-        # self.bnext.on_clicked(self.set_joint_and_update)
-        # Checkboxen
-        # self.axes_checkboxes = plt.axes([0.01, 0.82, 0.18, 0.16])
-        # self.check_options = CheckButtons(self.axes_checkboxes, ["Titel", "Name", "3D Symbole"], [False, False, True])
-        # self.check_options.on_clicked(self.set_show_options)
-        # print(robot.get_joint_titles(robot.root))
-
-        # # Radiobuttons
-        # self.title_list = self.robot.get_joint_titles(self.robot.root)
-        # self.axes_radiobox = plt.axes([0.01, 0.126, 0.3, 0.04*len(self.title_list)])
-        # self.radio_joints = RadioButtons(self.axes_radiobox, self.title_list)
-        # # "Apply" Button
-        # self.axes_apply = plt.axes([0.15, 0.05, 0.08, 0.075])
-        # self.b_apply = Button(self.axes_apply, 'Apply')
-        # self.b_apply.on_clicked(self.apply_joint_change)
-        # # Text Box
-        # self.axes_textbox = plt.axes([0.01, 0.05, 0.14, 0.075])
-        # self.text_value = TextBox(self.axes_textbox, '', initial="Test")
-        # print(f"test Textbox: {self.text_value.get_active()}")
-        # self.text_value.on_text_change(self.test_func)
-        # self.text_value.on_submit(self.test_func)
-
         plt.ion()
         #plt.show()
         plt.draw()
 
     def set_geometry_scaling_factor(self, factor):
         '''
-        Setzt einen Skalierungsfaktor für die 3D_Symbole zur unterscheidung von Rotations- und Translationsgelenken.
+        Setzt einen Skalierungsfaktor fuer die 3D_Symbole zur unterscheidung von Rotations- und Translationsgelenken.
         '''
         #print(f"in set_geometry_scaling_factor: {self.geometry_scaling}")
         self.geometry_scaling_factor = factor
@@ -78,8 +57,8 @@ class Plotter:
 
     def get_max_dh_param(self, joint):
         '''
-        Gibt den maximalen Wert aller Längen (Length) und Offsets zurück,
-        wird für den Startwert des Skalierungsfaktor genutzt.
+        Gibt den maximalen Wert aller Laengen (Length) und Offsets zurueck,
+        wird fuer den Startwert des Skalierungsfaktor genutzt.
         '''
         if not joint.children:
             return max(abs(joint.length), abs(joint.offset))
@@ -93,24 +72,24 @@ class Plotter:
     def plot(self, joint, axes, matrix=np.identity(4), root=False):
         """
         Rekursives Plotten der Koordinatensysteme, Verbindungslinien, Anzeigenamen/Titel
-        und Aufrufen der Funktion zum Plotten der 3D Symbolik, für aktuelles Gelenk(Joint).
+        und Aufrufen der Funktion zum Plotten der 3D Symbolik, fuer aktuelles Gelenk(Joint).
         :param joint: Aktuelles Gelenk im rekursiven Aufruf.
         :param axes: Achsenobjekt in dem geplottet wird.
-        :param matrix: Transformationsmatrix für dieses Gelenk(Joint).
+        :param matrix: Transformationsmatrix fuer dieses Gelenk(Joint).
         :param root: Boolean, zum ermitteln, ob das aktuelle Gelenk(Joint) ein Wurzelknoten ist.
         """
         # Skalierungsfaktor, Koordinatensystem des Basiskoordinatensystem(root)
-        # nutzt einen größeren Skalierungsfaktor
+        # nutzt einen groeßeren Skalierungsfaktor
         scale = 0.5 if not root else 1.5
-        # Punkte für Ursprung und Koordinatenachsen für Koordinatenursprünge.
+        # Punkte fuer Ursprung und Koordinatenachsen fuer Koordinatenurspruenge.
         # Matrixmultiplikation der Transformationsmatrix und der Punkte
-        # (Ursprung und Hilfspunkte für Koordinatenachsen).
+        # (Ursprung und Hilfspunkte fuer Koordinatenachsen).
         origin_point = np.dot(matrix, [0, 0, 0, 1])[:3]
         x_axis_point = np.dot(matrix, [scale, 0, 0, 1])[:3]
         y_axis_point = np.dot(matrix, [0, scale, 0, 1])[:3]
         z_axis_point = np.dot(matrix, [0, 0, scale, 1])[:3]
 
-        # Ursprünge als Punkte plotten
+        # Urspruenge als Punkte plotten
         if joint.type == "TCP" and self.show_3d_symbol:
             axes.plot([origin_point[0]], [origin_point[1]], [origin_point[2]], 'ko')
         else:
@@ -136,11 +115,11 @@ class Plotter:
                 self.plot_quader(matrix)
 
 
-        # Abbruchkriterium für rekursiven Aufruf
+        # Abbruchkriterium fuer rekursiven Aufruf
         if joint.children is None:
             return
 
-        # Verbindungslinien zwischen Koordinatenursprüngen
+        # Verbindungslinien zwischen Koordinatenurspruengen
         origin_points = (list(origin_point),)
         for index, child in enumerate(joint.children):
             child_matrix = np.dot(matrix, joint.transformationmatrices_to_children[index])
@@ -153,14 +132,14 @@ class Plotter:
 
     def update(self, *args):
         """
-        Funktion wird bei Änderungen aufgerufen, z.B. bei dem Benutzen des "Apply"-Buttons
+        Funktion wird bei Aenderungen aufgerufen, z.B. bei dem Benutzen des "Apply"-Buttons
         :param *args: Platzhalter
         """
-        # Speichern der aktuellen Achsenbegrenzung (damit die Zoomstufe übernommen wird)
+        # Speichern der aktuellen Achsenbegrenzung (damit die Zoomstufe uebernommen wird)
         xlims = self.axes.get_xlim3d()
         ylims = self.axes.get_ylim3d()
         zlims = self.axes.get_zlim3d()
-        # Löschen der aktuellen Darstellung im Plotter
+        # Loeschen der aktuellen Darstellung im Plotter
         self.axes.clear()
         # Plotten der neuen Konfiguration
         self.plot(self.robot.root, self.axes, root=True)
@@ -176,19 +155,19 @@ class Plotter:
         pass
 
     #def print_button_clicked(self, *args):
-    #    """Funktion zum Überprüfen und Testen des Buttons"""
+    #    """Funktion zum Ueberpruefen und Testen des Buttons"""
     #    print("button_clicked")
 
     def set_joint_and_update(self, *args):
         """
-        Hier können manuelle Winkeländerungen angegeben werden.
+        Hier koennen manuelle Winkelaenderungen angegeben werden.
         """
         self.robot.set_joint(args[0], args[1])
         #self.robot.set_joint("Alpha1-Gelenk", math.radians(20))
         # self.robot.set_joint("Beta1-Gelenk", math.radians(-20))
         # self.robot.set_joint("Beta2-Gelenk", math.radians(-20))
 
-        # Falls es Referenzgelenke gibt, können die Winkel der Duplikate unabhängig geändert werden
+        # Falls es Referenzgelenke gibt, koennen die Winkel der Duplikate unabhaengig geaendert werden
         # self.robot.set_joint("Gamma1-Gelenk", math.radians(90), math.radians(90))
 
         # self.robot.set_joint("Leg-2_Beta-Joint", math.radians(20))
@@ -197,7 +176,6 @@ class Plotter:
         self.update(None)
 
     def reset_joints_offsets_update(self, title, *args):
-        #print(f"{title=}")
         self.robot.reset_joint_offsets(title=title)
         self.update(None)
 
@@ -290,7 +268,6 @@ class Plotter:
         self.plot_triangle(trans_matrix, x_7_2, y_7_2, z_7_2, 0.5, None)
 
     def plot_cylinder(self, trans_matrix):
-        #print(f"in plot cylinder: {self.geometry_scaling=}")
         r = 0.6 * self.geometry_scaling
         h = 0.8 * self.geometry_scaling
         t = 5
